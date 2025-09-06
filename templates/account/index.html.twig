@@ -1,45 +1,114 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Account index{% endblock %}
+{% block title %}Account Management
+{% endblock %}
 
 {% block body %}
-    <h1>Account index</h1>
+    <div class="container mx-auto p-4">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">Account Management</h1>
+            <!-- Button to create a new account -->
+            <a href="{{ path('app_account_new') }}" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                New Account
+            </a>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Password</th>
-                <th>Role</th>
-                <th>IsVerified</th>
-                <th>Name</th>
-                <th>Lastname</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for account in accounts %}
-            <tr>
-                <td>{{ account.id }}</td>
-                <td>{{ account.email }}</td>
-                <td>{{ account.password }}</td>
-                <td>{{ account.role }}</td>
-                <td>{{ account.isVerified ? 'Yes' : 'No' }}</td>
-                <td>{{ account.name }}</td>
-                <td>{{ account.lastname }}</td>
-                <td>
-                    <a href="{{ path('app_account_show', {'id': account.id}) }}">show</a>
-                    <a href="{{ path('app_account_edit', {'id': account.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_account_new') }}">Create new</a>
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <div class="overflow-x-auto">
+                    <!-- Accounts table -->
+                    <table class="table table-zebra">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Boards</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for account in accounts %}
+                                <tr>
+                                    <td>
+                                        <!-- User avatar and info -->
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
+                                                    <!-- Initials from name and lastname -->
+                                                    <span class="text-xs">{{ account.name[:1]|upper }}{{ account.lastname[:1]|upper }}</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold">{{ account.fullName }}</div>
+                                                <div class="text-sm opacity-50">#{{ account.id }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ account.email }}</td>
+                                    <td>
+                                        <!-- Display role badge -->
+                                        {% if 'ADMIN' in account.role %}
+                                            <div class="badge badge-error">Admin</div>
+                                        {% else %}
+                                            <div class="badge badge-ghost">User</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <!-- Display verification status -->
+                                        {% if account.isVerified %}
+                                            <div class="badge badge-success">Verified</div>
+                                        {% else %}
+                                            <div class="badge badge-warning">Not verified</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <!-- Display number of boards -->
+                                        {% if account.boards|length > 0 %}
+                                            <div class="badge badge-info">{{ account.boards|length }}
+                                                board(s)</div>
+                                        {% else %}
+                                            <span class="text-base-content/50">None</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <!-- Action buttons: view and edit -->
+                                        <div class="flex space-x-2">
+                                            <a href="{{ path('app_account_show', {'id': account.id}) }}" class="btn btn-ghost btn-xs" title="View">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                                </svg>
+                                            </a>
+                                            <a href="{{ path('app_account_edit', {'id': account.id}) }}" class="btn btn-ghost btn-xs" title="Edit">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <!-- No accounts found row -->
+                                <tr>
+                                    <td colspan="6" class="text-center py-8">
+                                        <div class="flex flex-col items-center space-y-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-base-content/30" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                                            </svg>
+                                            <span class="text-base-content/50">No account found</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
