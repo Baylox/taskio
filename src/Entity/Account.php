@@ -160,6 +160,8 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // --- Name and Lastname ---
+
     public function getName(): ?string
     {
         return $this->name;
@@ -184,4 +186,8 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getFullName(): string
+    {
+        return trim(sprintf('%s %s', $this->name ?? '', $this->lastname ?? ''));
+    }
 }
