@@ -1,46 +1,153 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Account{% endblock %}
+{% block title %}
+	{{ account.fullName }}
+	- Account Details
+{% endblock %}
 
 {% block body %}
-    <h1>Account</h1>
+	<div
+		class="container mx-auto p-4">
+		<!-- Header with avatar and name -->
+		<div class="flex items-center justify-between mb-6">
+			<div class="flex items-center space-x-4">
+				<div class="avatar placeholder">
+					<div class="bg-primary text-primary-content rounded-full w-16">
+						<span class="text-xl">{{ account.name[:1]|upper }}{{ account.lastname[:1]|upper }}</span>
+					</div>
+				</div>
+				<div>
+					<h1 class="text-3xl font-bold">{{ account.fullName }}</h1>
+				</div>
+			</div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ account.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ account.email }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ account.password }}</td>
-            </tr>
-            <tr>
-                <th>Role</th>
-                <td>{{ account.role }}</td>
-            </tr>
-            <tr>
-                <th>IsVerified</th>
-                <td>{{ account.isVerified ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ account.name }}</td>
-            </tr>
-            <tr>
-                <th>Lastname</th>
-                <td>{{ account.lastname }}</td>
-            </tr>
-        </tbody>
-    </table>
+			<!-- Status badges -->
+			<div class="flex flex-col items-end space-y-2">
+				{% if 'ADMIN' in account.role %}
+					<div class="badge badge-error badge-lg">Administrator</div>
+				{% else %}
+					<div class="badge badge-ghost badge-lg">User</div>
+				{% endif %}
 
-    <a href="{{ path('app_account_index') }}">back to list</a>
+				{% if account.isVerified %}
+					<div class="badge badge-success">Email verified</div>
+				{% else %}
+					<div class="badge badge-warning">Email not verified</div>
+				{% endif %}
+			</div>
+		</div>
 
-    <a href="{{ path('app_account_edit', {'id': account.id}) }}">edit</a>
+		<div
+			class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+			<!-- Personal information -->
+			<div class="card bg-base-100 shadow-xl">
+				<div class="card-body">
+					<h2 class="card-title">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+						</svg>
+						Personal Information
+					</h2>
 
-    {{ include('account/_delete_form.html.twig') }}
+					<div class="space-y-4">
+						<div>
+							<label class="label">
+								<span class="label-text font-semibold">Email</span>
+							</label>
+							<div class="flex items-center space-x-2">
+								<span class="text-lg">{{ account.email }}</span>
+								{% if account.isVerified %}
+									<div class="badge badge-success badge-sm">✓</div>
+								{% endif %}
+							</div>
+						</div>
+
+						<div>
+							<label class="label">
+								<span class="label-text font-semibold">First Name</span>
+							</label>
+							<span class="text-lg">{{ account.name ?? 'Not provided' }}</span>
+						</div>
+
+						<div>
+							<label class="label">
+								<span class="label-text font-semibold">Last Name</span>
+							</label>
+							<span class="text-lg">{{ account.lastname ?? 'Not provided' }}</span>
+						</div>
+
+						<div>
+							<label class="label">
+								<span class="label-text font-semibold flex items-center gap-2">
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+									</svg>
+									Role
+								</span>
+							</label>
+							{% if 'ADMIN' in account.role %}
+								<span class="badge badge-error">Admin</span>
+							{% else %}
+								<span class="badge badge-ghost">User</span>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Associated boards -->
+			<div class="card bg-base-100 shadow-xl">
+				<div class="card-body">
+					<h2 class="card-title">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+						</svg>
+						Boards ({{ account.boards|length }})
+					</h2>
+
+					{% if account.boards|length > 0 %}
+						<div class="space-y-3">
+							{% for board in account.boards %}
+								<div class="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+									<div>
+										<h3 class="font-semibold">{{ board.name }}</h3>
+										<p class="text-sm text-base-content/70">{{ board.accounts|length }}
+											collaborator(s)</p>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					{% else %}
+						<div class="text-center py-8">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-base-content/30 mb-2" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+							</svg>
+							<p class="text-base-content/50">No associated board</p>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		<!-- Actions -->
+		<div class="flex justify-between items-center mt-8">
+			<a href="{{ path('app_account_index') }}" class="btn btn-ghost">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+				</svg>
+				Back to list
+			</a>
+
+			<div class="flex space-x-2">
+				<a href="{{ path('app_account_edit', {'id': account.id}) }}" class="btn btn-primary">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+					</svg>
+					Edit
+				</a>
+
+				{{ include('account/_delete_form.html.twig') }}
+			</div>
+		</div>
+	</div>
 {% endblock %}

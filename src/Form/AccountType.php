@@ -37,7 +37,7 @@ class AccountType extends AbstractType
             ->add('role')
             ->add('isVerified', CheckboxType::class, [
                 'disabled' => true,   // greyed out, cannot be changed
-                'label'    => 'Email vérifié',
+                'label'    => 'Email verified',
             ])
         ;
     }
