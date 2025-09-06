@@ -25,12 +25,12 @@ class AccountType extends AbstractType
                 ]
             ])
             ->add('name', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'label'    => 'First name',
                 'attr'     => ['autocomplete' => 'given-name'],
             ])
             ->add('lastname', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'label'    => 'Last name',
                 'attr'     => ['autocomplete' => 'family-name'],
             ])

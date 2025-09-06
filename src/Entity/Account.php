@@ -47,9 +47,11 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[Assert\NotBlank(message: 'First name is required')]
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
+    #[Assert\NotBlank(message: 'Last name is required')]
     #[ORM\Column(length: 50)]
     private ?string $lastname = null;
 
