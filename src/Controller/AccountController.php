@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+#[IsGranted('ROLE_ADMIN')]
 #[Route('/account', name: 'app_account_')]
 final class AccountController extends AbstractController
 {
@@ -23,7 +23,7 @@ final class AccountController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
+
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Account $account): Response
     {
@@ -31,7 +31,7 @@ final class AccountController extends AbstractController
             'account' => $account,
         ]);
     }
-    #[IsGranted('ROLE_ADMIN')]
+
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Account $account, EntityManagerInterface $entityManager): Response
     {
@@ -49,7 +49,7 @@ final class AccountController extends AbstractController
             'form' => $form,
         ]);
     }
-    #[IsGranted('ROLE_ADMIN')]
+
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Account $account, EntityManagerInterface $entityManager): Response
     {
