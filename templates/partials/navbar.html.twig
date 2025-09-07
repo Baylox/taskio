@@ -1,66 +1,102 @@
 <!-- FIXED HEADER, ABOVE EVERYTHING -->
 <header class="fixed top-0 inset-x-0 z-[999]">
-    <div class="navbar bg-base-100/20 backdrop-blur shadow-md px-4 md:px-6">
-        <!-- Left: logo -->
-        <div class="navbar-start flex-1">
-            <a href="{{ path('app_home') }}" class="flex items-center gap-2">
-                <img src="{{ asset('assets/images/logo/logo-taskio.svg') }}" alt="Taskio" class="h-7 w-auto">
-            </a>
-        </div>
+	<div
+		class="navbar bg-base-100/20 backdrop-blur shadow-md px-4 md:px-6">
+		<!-- Left: logo -->
+		<div class="navbar-start flex-1">
+			<a href="{{ path('app_home') }}" class="flex items-center gap-2">
+				<img src="{{ asset('assets/images/logo/logo-taskio.svg') }}" alt="Taskio" class="h-7 w-auto">
+			</a>
+		</div>
 
-        <!-- Center: BURGER opens drawer (mobile) -->
-        <div class="navbar-center">
-            <label for="main-drawer"
-                        class="btn btn-ghost btn-circle md:hidden aria-expanded:rotate-90 transition-transform duration-300"
-                        aria-label="Open menu" aria-expanded="false">
-                <div class="flex flex-col items-center justify-center space-y-1">
-                    <span class="block h-0.5 w-5 bg-base-content"></span>
-                    <span class="block h-0.5 w-5 bg-base-content"></span>
-                    <span class="block h-0.5 w-5 bg-base-content"></span>
-                </div>
-            </label>
+		<!-- Center: BURGER opens drawer (mobile) -->
+		<div class="navbar-center">
+			<label for="main-drawer" class="btn btn-ghost btn-circle md:hidden aria-expanded:rotate-90 transition-transform duration-300" aria-label="Open menu" aria-expanded="false">
+				<div class="flex flex-col items-center justify-center space-y-1">
+					<span class="block h-0.5 w-5 bg-base-content"></span>
+					<span class="block h-0.5 w-5 bg-base-content"></span>
+					<span class="block h-0.5 w-5 bg-base-content"></span>
+				</div>
+			</label>
 
-            <!-- Centered desktop menu -->
-            <ul class="menu menu-horizontal hidden md:flex px-1 font-medium text-base-content/90">
-                <li><a href="{{ path('app_home') }}" class="hover:underline">Home</a></li>
-                <li><a href="{{ path('app_solutions') }}" class="hover:underline">Solutions</a></li>
-                <li><a href= "{{ path('app_price') }}" class="hover:underline">Price</a></li>
-                <li><a href="{{ path('app_contact') }}" class="hover:underline">Contact</a></li>
-                <li><a href="{{ path('app_login') }}" class="hover:underline">Connexion</a></li>
-            </ul>
-        </div>
+			<!-- Centered desktop menu -->
+			<ul class="menu menu-horizontal hidden md:flex px-1 font-medium text-base-content/90">
+				<li>
+					<a href="{{ path('app_home') }}" class="hover:underline">Home</a>
+				</li>
+				<li>
+					<a href="{{ path('app_solutions') }}" class="hover:underline">Solutions</a>
+				</li>
+				<li>
+					<a href="{{ path('app_price') }}" class="hover:underline">Price</a>
+				</li>
+				<li>
+					<a href="{{ path('app_contact') }}" class="hover:underline">Contact</a>
+				</li>
+                {% if app.user %}
+                    {# Personal space #}
+                    <li>
+                        <a href="#" class="hover:underline">Dashboard</a>
+                    </li>
 
-        <!-- Right: profile -->
-        <div class="navbar-end flex-1 justify-end">
-        <a href="#account"
-            class="btn btn-ghost btn-circle transition-transform duration-200 hover:scale-105 active:scale-95"
-            aria-label="Account">
-            <i class="fa-solid fa-user text-lg text-base-content/90 hover:text-primary transition-colors duration-200"></i>
-            </a>
-        </div>
-    </div>
+                    {# Admin visible only for admin #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li>
+                            <a href="{{ path('app_account_index') }}" class="hover:underline">Accounts</a>
+                        </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ path('app_logout') }}" class="hover:underline">Logout</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ path('app_login') }}" class="hover:underline">Login</a>
+                    </li>
+                {% endif %}
+			</ul>
+		</div>
+
+		<!-- Right: profile -->
+		<div class="navbar-end flex-1 justify-end">
+			<a href="#account" class="btn btn-ghost btn-circle transition-transform duration-200 hover:scale-105 active:scale-95" aria-label="Account">
+				<i class="fa-solid fa-user text-lg text-base-content/90 hover:text-primary transition-colors duration-200"></i>
+			</a>
+		</div>
+	</div>
 </header>
 
 <!-- MOBILE DRAWER (full screen, goes ABOVE hero) -->
 <div class="drawer drawer-end md:hidden z-[1000]">
-    <input id="main-drawer" type="checkbox" class="drawer-toggle" />
-    <div class="drawer-side">
-        <!-- Backdrop -->
-        <label for="main-drawer" class="drawer-overlay"></label>
+	<input id="main-drawer" type="checkbox" class="drawer-toggle"/>
+	<div
+		class="drawer-side">
+		<!-- Backdrop -->
+		<label for="main-drawer" class="drawer-overlay"></label>
 
-        <!-- Panel slides from top ("sheet" design) -->
-        <div class="menu bg-base-200 text-base-content w-full max-w-sm rounded-b-box shadow-lg
-                                animate-[slideDown_200ms_ease-out]">
-            <div class="px-4 py-3 font-semibold">Menu</div>
-            <ul class="px-2 pb-4 space-y-1">
-                <li class="transition-all duration-200"><a href="{{ path('app_home') }}" class="hover:bg-base-300/30">Home</a></li>
-                <li class="transition-all duration-300"><a href="#" class="hover:bg-base-300/30">Solutions</a></li>
-                <li class="transition-all duration-500"><a href="#" class="hover:bg-base-300/30">Price</a></li>
-                <li class="transition-all duration-700"><a href="#" class="hover:bg-base-300/30">Contact</a></li>
-                <li class="transition-all duration-700"><a href="{{ path('app_login') }}" class="hover:bg-base-300/30">Connexion</a></li>
-            </ul>
-        </div>
-    </div>
+		<!-- Panel slides from top ("sheet" design) -->
+		<div class="menu bg-base-200 text-base-content w-full max-w-sm rounded-b-box shadow-lg
+		animate-[slideDown_200ms_ease-out]">
+			<div class="px-4 py-3 font-semibold">Menu</div>
+			<ul class="px-2 pb-4 space-y-1">
+				<li class="transition-all duration-200">
+					<a href="{{ path('app_home') }}" class="hover:bg-base-300/30">Home</a>
+				</li>
+				<li class="transition-all duration-300">
+					<a href="#" class="hover:bg-base-300/30">Solutions</a>
+				</li>
+				<li class="transition-all duration-500">
+					<a href="#" class="hover:bg-base-300/30">Price</a>
+				</li>
+				<li class="transition-all duration-700">
+					<a href="#" class="hover:bg-base-300/30">Contact</a>
+				</li>
+				<li class="transition-all duration-700">
+					<a href="{{ path('app_login') }}" class="hover:bg-base-300/30">Connexion</a>
+				</li>
+			</ul>
+		</div>
+	</div>
 </div>
 
 <!-- Adds some space below the fixed navbar -->
