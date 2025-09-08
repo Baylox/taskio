@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/account', name: 'app_account_')]
 final class AccountController extends AbstractController
 {
+    #[IsGranted('ROLE_ADMIN')]
     #[Route(name: 'index', methods: ['GET'])]
     public function index(AccountRepository $accountRepository): Response
     {
@@ -32,6 +33,7 @@ final class AccountController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Account $account, EntityManagerInterface $entityManager): Response
     {
@@ -50,6 +52,7 @@ final class AccountController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Account $account, EntityManagerInterface $entityManager): Response
     {
