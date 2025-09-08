@@ -24,7 +24,7 @@ final class AccountController extends AbstractController
         ]);
     }
 
-
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Account $account): Response
     {
