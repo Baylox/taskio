@@ -15,7 +15,7 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
-        // Second check: email verified
+        // check: email verified
         if (method_exists($user, 'isVerified') && !$user->isVerified()) {
             throw new CustomUserMessageAccountStatusException(
                 'Please verify your email address before logging in. A confirmation email was sent to you during registration.'
