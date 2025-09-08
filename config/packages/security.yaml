@@ -7,7 +7,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\Account
-                property: email  
+                property: email
 
     firewalls:
         dev:
@@ -16,6 +16,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            user_checker: App\Security\UserChecker
             form_login:
                 login_path: app_login
                 check_path: app_login
