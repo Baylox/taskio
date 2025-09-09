@@ -6,6 +6,7 @@ use App\Entity\Account;
 use App\Form\AccountType;
 use App\Repository\AccountRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,10 +18,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class AccountController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
-    public function index(AccountRepository $accountRepository): Response
+    public function index( AccountRepository $accountRepository, PaginatorInterface $paginator, Request $request ): Response
     {
+        $query = $accountRepository->createQueryBuilder('a')
+            ->orderBy('a.id', 'DESC')
+            ->getQuery();
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            15
+        );
+
         return $this->render('account/index.html.twig', [
-            'accounts' => $accountRepository->findAll(),
+            'accounts' => $pagination,
         ]);
     }
 
