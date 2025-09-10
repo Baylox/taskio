@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Account;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Account>
@@ -28,5 +29,18 @@ class AccountRepository extends ServiceEntityRepository
             ->getSingleColumnResult();
 
         return $results;
+    }
+
+    public function qbByRole(?string $role): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('a');
+
+        if ($role !== null && $role !== '') {
+            $qb->andWhere('a.role = :role')
+            ->setParameter('role', $role);
+        }
+
+        // default sorting
+        return $qb->orderBy('a.id', 'DESC');
     }
 }
