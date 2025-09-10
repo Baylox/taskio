@@ -27,7 +27,7 @@ final class AccountController extends AbstractController
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            15
+            10
         );
 
         return $this->render('account/index.html.twig', [
