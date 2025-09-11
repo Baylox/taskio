@@ -11,7 +11,7 @@ final class SolutionsController extends AbstractController
     #[Route('/solutions', name: 'app_solutions')]
     public function index(): Response
     {
-        return $this->render('solutions/index.html.twig', [
+        return $this->render('pages/solutions/index.html.twig', [
             'controller_name' => 'SolutionsController',
         ]);
     }
