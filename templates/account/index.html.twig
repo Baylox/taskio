@@ -18,6 +18,17 @@
 						</div>
 					</div>
 				</div>
+				<!-- Filtre rôle -->
+				<form method="get" class="mb-4 flex items-center gap-3">
+					<label for="role" class="text-sm opacity-70">Filtrer par rôle</label>
+					<select id="role" name="role" class="select select-bordered select-sm" onchange="this.form.submit()">
+						<option value="">Tous</option>
+						{% for r in available_roles %}
+							<option value="{{ r }}" {{ current_role == r ? 'selected' }}>{{ r }}</option>
+						{% endfor %}
+					</select>
+				</form>
+
 
 				<div
 					class="overflow-x-auto">
@@ -113,17 +124,20 @@
 
 				<!-- Pagination -->
 				{% if accounts.pageCount > 1 %}
+					{% set route = app.request.attributes.get('_route') %}
+					{% set q = app.request.query.all %}
+
 					<div class="flex justify-center mt-6">
 						<div class="join">
 							{% if accounts.currentPageNumber > 1 %}
-								<a href="{{ path(app.request.attributes.get('_route'), {'page': accounts.currentPageNumber - 1}) }}" class="join-item btn btn-sm">«</a>
+								<a href="{{ path(route, q|merge({'page': accounts.currentPageNumber - 1})) }}" class="join-item btn btn-sm">«</a>
 							{% endif %}
 
 							{% for page in 1..accounts.pageCount %}
 								{% if page == accounts.currentPageNumber %}
 									<span class="join-item btn btn-sm btn-active">{{ page }}</span>
 								{% elseif page <= 2 or page >= accounts.pageCount - 1 or (page >= accounts.currentPageNumber - 1 and page <= accounts.currentPageNumber + 1) %}
-									<a href="{{ path(app.request.attributes.get('_route'), {'page': page}) }}" class="join-item btn btn-sm">{{ page }}</a>
+									<a href="{{ path(route, q|merge({'page': page})) }}" class="join-item btn btn-sm">{{ page }}</a>
 								{% elseif page == 3 and accounts.currentPageNumber > 4 %}
 									<span class="join-item btn btn-sm btn-disabled">...</span>
 								{% elseif page == accounts.pageCount - 2 and accounts.currentPageNumber < accounts.pageCount - 3 %}
@@ -132,12 +146,11 @@
 							{% endfor %}
 
 							{% if accounts.currentPageNumber < accounts.pageCount %}
-								<a href="{{ path(app.request.attributes.get('_route'), {'page': accounts.currentPageNumber + 1}) }}" class="join-item btn btn-sm">»</a>
+								<a href="{{ path(route, q|merge({'page': accounts.currentPageNumber + 1})) }}" class="join-item btn btn-sm">»</a>
 							{% endif %}
 						</div>
 					</div>
 
-					<!-- Info pagination -->
 					<div class="text-center mt-4 text-sm opacity-70">
 						{% set startItem = (accounts.currentPageNumber - 1) * accounts.itemNumberPerPage + 1 %}
 						{% set endItem = startItem + accounts.count - 1 %}
@@ -150,6 +163,7 @@
 						accounts
 					</div>
 				{% endif %}
+
 			</div>
 		</div>
 	</div>

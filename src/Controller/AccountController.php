@@ -18,20 +18,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class AccountController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
-    public function index( AccountRepository $accountRepository, PaginatorInterface $paginator, Request $request ): Response
+    public function index(AccountRepository $accountRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        $query = $accountRepository->createQueryBuilder('a')
-            ->orderBy('a.id', 'DESC')
-            ->getQuery();
+        $availableRoles = $accountRepository->distinctRoles();
+        $role = $request->query->get('role');
 
-        $pagination = $paginator->paginate(
-            $query,
-            $request->query->getInt('page', 1),
-            10
-        );
+        // if the passed value does not exist in the database, we remove the filter
+        if ($role && !in_array($role, $availableRoles, true)) {
+            $role = null;
+        }
+
+        $qb = $accountRepository->qbByRole($role);
+        $accounts = $paginator->paginate($qb, $request->query->getInt('page', 1), 10);
 
         return $this->render('account/index.html.twig', [
-            'accounts' => $pagination,
+            'accounts'        => $accounts,
+            'current_role'    => $role,
+            'available_roles' => $availableRoles,
         ]);
     }
 
@@ -63,7 +66,7 @@ final class AccountController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Account $account, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$account->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $account->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($account);
             $entityManager->flush();
         }
