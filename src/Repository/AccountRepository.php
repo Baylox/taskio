@@ -43,4 +43,21 @@ class AccountRepository extends ServiceEntityRepository
         // default sorting
         return $qb->orderBy('a.id', 'DESC');
     }
+
+    /**
+     * List of distinct roles actually present in the database (to populate the <select>).
+     *
+     * @return string[]
+     */
+    public function distinctRoles(): array
+    {
+        return array_column(
+            $this->createQueryBuilder('a')
+                ->select('DISTINCT a.role AS role')
+                ->orderBy('a.role', 'ASC')
+                ->getQuery()
+                ->getScalarResult(),
+            'role'
+        );
+    }
 }
