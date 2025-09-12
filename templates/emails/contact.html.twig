@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>New Contact Message</title>
+    <style>
+        body {
+            font-family: Nunito, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .content {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+        }
+        .field {
+            margin-bottom: 15px;
+        }
+        .field label {
+            font-weight: bold;
+            color: #495057;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .field-value {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #007bff;
+        }
+        .message {
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>New Contact Message</h1>
+        <p>You have received a new message from your website contact form.</p>
+    </div>
+
+    <div class="content">
+        <div class="field">
+            <label>Name:</label>
+            <div class="field-value">{{ contact.name }}</div>
+        </div>
+
+        <div class="field">
+            <label>Email:</label>
+            <div class="field-value">{{ contact.email }}</div>
+        </div>
+
+        <div class="field">
+            <label>Subject:</label>
+            <div class="field-value">{{ contact.subject }}</div>
+        </div>
+
+        <div class="field">
+            <label>Message:</label>
+            <div class="field-value message">{{ contact.message }}</div>
+        </div>
+    </div>
+</body>
+</html>
