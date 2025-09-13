@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Homepage
+{% endblock %}
+
+{% block body %}
+
+{{ component('Hero', {
+  title: 'Capture, organize, and tackle your to-dos wherever you are.',
+  subtitle: 'Forget clunky and cheap. Unleash your productivity with Taskio!',
+  ctaHref: path('app_register'),
+  ctaLabel: "Sign me up — it's free!"
+}, { class: 'mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-purple-800 to-indigo-900 text-white' }) }}
+
+{% include 'pages/home/_features.html.twig' %}
+
+
+	{# CTA Section #}
+{% include 'pages/home/_cta.html.twig' %}
+
+{% endblock %}

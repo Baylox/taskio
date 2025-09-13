@@ -1,45 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
          colors="true"
-         failOnDeprecation="true"
-         failOnNotice="true"
-         failOnWarning="true"
-         bootstrap="tests/bootstrap.php"
          cacheDirectory=".phpunit.cache"
->
-    <php>
-        <ini name="display_errors" value="1" />
-        <ini name="error_reporting" value="-1" />
-        <server name="APP_ENV" value="test" force="true" />
-        <server name="SHELL_VERBOSITY" value="-1" />
-    </php>
+         executionOrder="depends,defects,random"
+         failOnRisky="true"
+         failOnWarning="true">
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+        <testsuite name="unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+        <testsuite name="functional">
+            <directory>tests/Functional</directory>
         </testsuite>
     </testsuites>
 
-    <source ignoreSuppressionOfDeprecations="true"
-            ignoreIndirectDeprecations="true"
-            restrictNotices="true"
-            restrictWarnings="true"
-    >
+    <coverage>
         <include>
-            <directory>src</directory>
+            <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <directory>vendor</directory>
+            <directory>tests</directory>
+            <directory>var</directory>
+        </exclude>
+    </coverage>
 
-        <deprecationTrigger>
-            <method>Doctrine\Deprecations\Deprecation::trigger</method>
-            <method>Doctrine\Deprecations\Deprecation::delegateTriggerToBackend</method>
-            <function>trigger_deprecation</function>
-        </deprecationTrigger>
-    </source>
+    <php>
+        <env name="APP_ENV" value="test"/>
+        <env name="APP_DEBUG" value="1"/>
+        <server name="SYMFONY_DEPRECATIONS_HELPER" value="weak_vendors"/>
+    </php>
 
     <extensions>
-        <bootstrap class="Zenstruck\Foundry\PHPUnit\FoundryExtension" />
+        <bootstrap class="Zenstruck\Foundry\PHPUnit\FoundryExtension"/>
     </extensions>
 </phpunit>
+

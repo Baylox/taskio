@@ -32,9 +32,12 @@ final class AccountFactory extends PersistentProxyObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'email' => self::faker()->safeEmail(), 
+            'email' => self::faker()->safeEmail(),
             'password' => 'password',
-            'role' => RoleFactory::randomOrCreate(['label' => 'ROLE_USER']),
+            'role' => 'ROLE_USER',
+            'isVerified' => true,
+            'name'       => self::faker()->firstName(),
+            'lastname'   => self::faker()->lastName(),
         ];
     }
 

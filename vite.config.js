@@ -1,17 +1,37 @@
+// vite.config.js - ENLEVE le plugin @tailwindcss/vite
 import { defineConfig } from 'vite';
 import symfonyPlugin from 'vite-plugin-symfony';
+import { resolve } from 'path';
 
 export default defineConfig({
-  plugins: [symfonyPlugin()],
-  build: {
-    rollupOptions: {
-      input: {
-        app: './assets/app.js' // Main entry point for the application
-      }
+    plugins: [
+        symfonyPlugin(),
+    ],
+    root: '.',
+    base: '/build/',
+    publicDir: false,
+    build: {
+        manifest: true,
+        emptyOutDir: true,
+        outDir: 'public/build',
+        rollupOptions: {
+            input: {
+                app: './assets/app.js',
+                styles: './assets/styles/app.css'
+            }
+        }
     },
-    outDir: 'public/build',
-    emptyOutDir: true,
-  },
+    resolve: {
+        alias: {
+            '@': resolve(__dirname, './assets'),
+        }
+    },
+    server: {
+        port: 3000,
+        watch: {
+            usePolling: true
+        }
+    }
 });
 
 

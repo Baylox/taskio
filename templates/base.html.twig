@@ -1,35 +1,40 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light">
-  <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Welcome to MiniTrell{% endblock %}</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<html lang="en" data-theme="night">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}
+                Welcome to Taskio
+            {% endblock %}
+        </title>
 
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
-    {% block stylesheets %}
-      {{ vite_entry_link_tags('app') }}
-    {% endblock %}
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 
-    {% block meta %}
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="description" content="A Symfony application using Vite for asset management.">
-      <meta name="author" content="Your Name">
-    {% endblock %}
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
-    {% block javascripts %}
-      {{ vite_entry_script_tags('app') }}
-    {% endblock %}
-  </head>
+        {% block stylesheets %}
+            {{ vite_entry_link_tags('app') }}
+            {{ vite_entry_link_tags('styles') }}
+        {% endblock %}
 
-  <body>
-    {% include 'partials/navbar.html.twig' %}
+        {% block javascripts %}
+            {{ vite_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
 
-    <main>
-      {% block body %}{% endblock %}
-    </main>
+    <body>
+        {% include 'partials/navbar.html.twig' %}
 
-    {% include 'partials/footer.html.twig' %}
-  </body>
+        <main>
+            {% block body %}
+            {% endblock %}
+        </main>
+
+        {% include 'partials/footer.html.twig' %}
+    </body>
 </html>
-

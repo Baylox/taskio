@@ -4,11 +4,13 @@
     "@hotwired/turbo": "^7.1.1 || ^8.0",
     "@symfony/stimulus-bridge": "^3.2.0 || ^4.0.0",
     "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/assets",
-    "@tailwindcss/postcss": "^4.1.11",
-    "autoprefixer": "^10.4.21",
-    "daisyui": "^5.0.47",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.11",
+    "@tailwindcss/forms": "^0.5.10",
+    "autoprefixer": "10.4.20",
+    "daisyui": "4.12.10",
+    "postcss": "8.4.47",
+    "sass-embedded": "^1.91.0",
+    "sass-migrator": "^2.4.2",
+    "tailwindcss": "3.4.10",
     "vite": "^6.3.5",
     "vite-plugin-symfony": "^8.2.0"
   },
@@ -27,7 +29,6 @@
     }
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.11",
     "stimulus-vite-helpers": "^3.1.0"
   }
 }

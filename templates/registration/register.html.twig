@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register
+{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex items-center justify-center bg-base-200">
+        <div class="w-full max-w-md bg-base-100 shadow-xl rounded-xl p-8">
+
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-base-content">Create an account</h1>
+                <p class="text-base-content/70 mt-2">Join Taskio and simplify your organization</p>
+            </div>
+            {{ form_start(registrationForm) }}
+
+            {{ form_row(registrationForm.name, {
+                'attr': {
+                    'class': 'input input-bordered w-full text-base-content bg-base-100',
+                    'placeholder': 'First Name'
+                },
+                'label_attr': {'class': 'label-text text-base-content font-medium'}
+            }) }}
+
+            {{ form_row(registrationForm.lastname, {
+                'attr': {
+                    'class': 'input input-bordered w-full text-base-content bg-base-100',
+                    'placeholder': 'Last Name'
+                },
+                'label_attr': {'class': 'label-text text-base-content font-medium'}
+            }) }}
+
+            {{ form_row(registrationForm.email, {
+                'attr': {
+                    'class': 'input input-bordered w-full text-base-content bg-base-100',
+                    'placeholder': 'Email'
+                },
+                'label_attr': {'class': 'label-text text-base-content font-medium'}
+            }) }}
+
+            {{ form_row(registrationForm.plainPassword.first, {
+                'attr': {
+                    'class': 'input input-bordered w-full text-base-content bg-base-100',
+                    'placeholder': 'Password'
+                },
+                'label_attr': {'class': 'label-text text-base-content font-medium'}
+            }) }}
+
+            {{ form_row(registrationForm.plainPassword.second, {
+                'attr': {
+                    'class': 'input input-bordered w-full text-base-content bg-base-100',
+                    'placeholder': 'Repeat Password'
+                },
+                'label_attr': {'class': 'label-text text-base-content font-medium'}
+            }) }}
+
+            {{ form_row(registrationForm.agreeTerms)}}
+
+            {{ form_rest(registrationForm) }}
+
+            <div class="mt-6">
+                <button class="btn btn-primary w-full">Sign up</button>
+            </div>
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+{% endblock %}

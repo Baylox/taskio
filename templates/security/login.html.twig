@@ -1,38 +1,109 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Log in!
+{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+    <main class="min-h-screen flex items-center justify-center bg-base-200">
+        <div class="card w-full max-w-md shadow-2xl bg-base-100">
+            <div
+                class="card-body">
+                {# Logo or login icon #}
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-primary-content" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </div>
+                </div>
 
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                <h1 class="text-3xl font-bold text-center mb-6">Welcome Back</h1>
+                <p class="text-center text-base-content/70 mb-8">Please sign in to your account</p>
+
+                <form method="post">
+                    {% if error %}
+                        <div class="alert alert-error mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewbox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                        </div>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <div class="alert alert-info mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div>
+                                You are logged in as
+                                <span class="font-semibold">{{ app.user.userIdentifier }}</span>
+                                <a href="{{ path('app_logout') }}" class="link link-primary ml-2">Logout</a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {# Email Field #}
+                    <div class="form-control mb-4">
+                        <label for="username" class="label">
+                            <span class="label-text">Email</span>
+                        </label>
+                        <div class="relative">
+                            <input type="email" value="{{ last_username }}" name="_username" id="username" class="input input-bordered w-full pl-10" placeholder="your@email.com" autocomplete="email" required autofocus>
+                            <span class="absolute left-3 top-3.5 text-base-content/40">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    {# Password Field #}
+                    <div class="form-control mb-6">
+                        <label for="password" class="label">
+                            <span class="label-text">Password</span>
+                        </label>
+                        <div class="relative">
+                            <input type="password" name="_password" id="password" class="input input-bordered w-full pl-10" placeholder="••••••••" required>
+                            <span class="absolute left-3 top-3.5 text-base-content/40">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <label class="label">
+                            <a href="#" class="label-text-alt link link-hover">Forgot password?</a>
+                        </label>
+                    </div>
+
+                    <input
+                    type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+                    {# Remember Me Option (uncommented and styled) #}
+                    <div class="form-control mb-6">
+                        <label class="label cursor-pointer justify-start gap-3">
+                            <input type="checkbox" name="_remember_me" id="_remember_me" class="checkbox checkbox-primary"/>
+                            <span class="label-text">Remember me</span>
+                        </label>
+                    </div>
+
+                    {# Submit Button #}
+                    <div class="form-control mt-6">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                            </svg>
+                            Sign in
+                        </button>
+                    </div>
+
+                    {# Sign up link #}
+                    <p class="text-center mt-6 text-base-content/70">
+                        Don't have an account?
+                        <a href="#" class="link link-primary font-semibold">Sign up</a>
+                    </p>
+                </form>
             </div>
-        {% endif %}
-
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
-            </div>
-        #}
-
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-    </form>
+        </div>
+    </main>
 {% endblock %}

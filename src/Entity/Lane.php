@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LaneRepository::class)]
 #[ORM\Table(
@@ -28,11 +29,12 @@ class Lane
 
     #[ORM\Column(length: 50)]
     private ?string $title = null;
-    
+
     #[ORM\ManyToOne(inversedBy: 'lanes')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Board $board = null;
 
+    #[Assert\PositiveOrZero]
     #[ORM\Column(type: Types::INTEGER)]
     private ?int $position = null;
 

@@ -47,6 +47,9 @@
             "./migrations/.gitignore"
         ]
     },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v6.9.1"
+    },
     "pentatrion/vite-bundle": {
         "version": "8.2",
         "recipe": {
@@ -345,6 +348,9 @@
         "files": [
             "./config/packages/messenger.yaml"
         ]
+    },
+    "symfonycasts/verify-email-bundle": {
+        "version": "v1.17.4"
     },
     "twig/extra-bundle": {
         "version": "v3.21.0"

@@ -6,6 +6,7 @@ use App\Repository\CardRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CardRepository::class)]
 #[ORM\Table(
@@ -23,6 +24,8 @@ class Card
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
     private ?string $title = null;
 
@@ -32,7 +35,8 @@ class Card
     #[ORM\Column(length: 24)]
     private ?string $status = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
+    #[Assert\PositiveOrZero]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $position = null;
 
     #[ORM\ManyToOne(inversedBy: 'cards')]
@@ -94,7 +98,7 @@ class Card
 
     /**
      * Get the value of position
-     */ 
+     */
     public function getPosition()
     {
         return $this->position;
@@ -104,7 +108,7 @@ class Card
      * Set the value of position
      *
      * @return  self
-     */ 
+     */
     public function setPosition($position)
     {
         $this->position = $position;

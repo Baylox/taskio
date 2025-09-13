@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Account
+{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex items-center justify-center bg-base-200">
+        <div class="w-full max-w-md bg-base-100 shadow-xl rounded-xl p-8">
+
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-base-content">Edit this account</h1>
+                <p class="text-base-content/70 mt-2">Update Account profile information</p>
+            </div>
+
+            {{ form_start(form) }}
+
+            {{ form_row(form.name, {
+                'attr': {
+                    'class': 'input input-bordered w-full text-base-content bg-base-100',
+                    'placeholder': 'First Name'
+                },
+                'label_attr': {'class': 'label-text text-base-content font-medium'}
+            }) }}
+
+            {{ form_row(form.lastname, {
+                'attr': {
+                    'class': 'input input-bordered w-full text-base-content bg-base-100',
+                    'placeholder': 'Last Name'
+                },
+                'label_attr': {'class': 'label-text text-base-content font-medium'}
+            }) }}
+
+            {{ form_row(form.email, {
+                'attr': {
+                    'class': 'input input-bordered w-full text-base-content bg-base-100',
+                    'placeholder': 'Email'
+                },
+                'label_attr': {'class': 'label-text text-base-content font-medium'}
+            }) }}
+            {{ form_rest(form) }}
+
+            <div class="mt-6 space-y-3">
+                <button type="submit" class="btn btn-primary w-full">
+                    {{ button_label|default('Save Changes') }}
+                </button>
+
+                <div class="flex space-x-3">
+                    <a href="{{ path('app_account_index') }}" class="btn btn-ghost flex-1">
+                        Back to list
+                    </a>
+
+                    <button type="button" class="btn btn-error flex-1" onclick="document.getElementById('delete_modal').showModal()">
+                        Delete Account
+                    </button>
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    {# Modal de confirmation pour la suppression #}
+    <dialog id="delete_modal" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Confirm Account Deletion</h3>
+            <p class="py-4">Are you sure you want to delete your account? This action cannot be undone.</p>
+            <div class="modal-action">
+                {{ include('account/_delete_form.html.twig') }}
+                <form method="dialog">
+                    <button class="btn btn-ghost">Cancel</button>
+                </form>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+{% endblock %}

@@ -2,16 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\AccountRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+
+use App\Entity\Board;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AccountRepository;
 use Symfony\UX\Turbo\Attribute\Broadcast;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use App\Entity\Role;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'This email is already used.')]
 // #[Broadcast]
 class Account implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -21,20 +27,33 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotBlank(message: "Email is required.")]
+    #[Assert\Email(mode: EmailConstraint::VALIDATION_MODE_STRICT)]
+    #[Assert\Length(max: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 125)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $password = null;
 
-    #[ORM\ManyToOne(inversedBy: 'accounts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Role $role = null;
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $role = 'ROLE_USER';
 
     /**
      * @var Collection<int, Board>
      */
     #[ORM\ManyToMany(targetEntity: Board::class, inversedBy: 'accounts')]
     private Collection $boards;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
+
+    #[Assert\NotBlank(message: 'First name is required')]
+    #[ORM\Column(length: 50)]
+    private ?string $name = null;
+
+    #[Assert\NotBlank(message: 'Last name is required')]
+    #[ORM\Column(length: 50)]
+    private ?string $lastname = null;
 
     public function __construct()
     {
@@ -46,6 +65,8 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
+     // --- Email ---
+
     public function getEmail(): ?string
     {
         return $this->email;
@@ -53,10 +74,13 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setEmail(string $email): static
     {
-        $this->email = $email;
+        // remove extra spaces and convert to lowercase
+        $this->email = mb_strtolower(trim($email));
 
         return $this;
     }
+
+    // --- Password (hash) ---
 
     public function getPassword(): string
     {
@@ -74,59 +98,98 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email ?? '';
     }
 
-    /*
-    * Function for user roles
-    */
+    // -- Account's Role --
+
+
     public function getRoles(): array
     {
-        // Get the role label (ROLE_ADMIN, ROLE_USER, etc.)
-        $roleLabel = $this->role?->getLabel() ?? 'ROLE_USER';
-
-        // Symfony expects an array
-        $roles = [$roleLabel];
-
-        // Always guarantee at least ROLE_USER
-        if (!in_array('ROLE_USER', $roles, true)) {
-            $roles[] = 'ROLE_USER';
-        }
-
-        return array_unique($roles);
+        return [$this->role];
     }
-    
-    public function getRole(): ?Role
+
+    public function getRole(): string
     {
         return $this->role;
     }
 
-    public function setRole(?Role $role): self
+    public function setRole(string $role): self
     {
-        $this->role = $role;
+        $this->role = strtoupper($role);
         return $this;
     }
 
     public function eraseCredentials(): void {}
 
+    // --- Account's Boards ---
+
     /**
-     * @return Collection<int, board>
+     * @return Collection<int, Board>
      */
     public function getBoards(): Collection
     {
         return $this->boards;
     }
 
-    public function addBoard(board $board): static
+    public function addBoard(Board $board): static
     {
         if (!$this->boards->contains($board)) {
             $this->boards->add($board);
+            $board->addAccount($this);
         }
 
         return $this;
     }
 
-    public function removeBoard(board $board): static
+    public function removeBoard(Board $board): static
     {
-        $this->boards->removeElement($board);
+        if ($this->boards->removeElement($board)) {
+        $board->removeAccount($this);
+    }
 
         return $this;
+    }
+
+    // --- Is Verified (For mailing purposes) ---
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    // --- Name and Lastname ---
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): static
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getFullName(): string
+    {
+        return trim(sprintf('%s %s', $this->name ?? '', $this->lastname ?? ''));
     }
 }

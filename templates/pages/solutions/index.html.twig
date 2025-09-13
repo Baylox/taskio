@@ -1,0 +1,205 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Taskio Solutions - Productivity, Your Way{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-base-100">
+
+{{ component('Hero', {
+  title: 'Taskio Solutions',
+  subtitle: "Productivity, Your Way. Real Answers to Your Daily Challenges. Discover how we turn ideas into actions, and projects into success stories.",
+  ctaHref: path('app_register'),
+  ctaLabel: "Start for Free",
+  bg: 'assets/images/hero/task-dark-hero-01.svg'
+}, { class: 'mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-purple-800 to-indigo-900 text-white' }) }}
+
+    <!-- Solutions Section -->
+    <div class="container mx-auto px-4 py-16">
+        <div class="grid md:grid-cols-2 gap-8 mb-16">
+            <!-- For Project Teams -->
+            <div class="card bg-base-200 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <div class="badge badge-primary">Teams</div>
+                        For Project Teams
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-success badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">Clear Planning</h4>
+                                <p class="text-sm opacity-75">Visualize every step on an intuitive board.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-success badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">Real-Time Tracking</h4>
+                                <p class="text-sm opacity-75">Spot bottlenecks before they slow you down.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-success badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">Seamless Collaboration</h4>
+                                <p class="text-sm opacity-75">Comment, assign, and share files directly within your cards.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- For Agencies & Freelancers -->
+            <div class="card bg-base-200 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <div class="badge badge-secondary">Business</div>
+                        For Agencies & Freelancers
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-warning badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">Multi‑Client Management</h4>
+                                <p class="text-sm opacity-75">Keep each client's work organized on separate boards.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-warning badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">On‑Time Deliverables</h4>
+                                <p class="text-sm opacity-75">Prioritize tasks and hit every deadline.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-warning badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">Simplified Communication</h4>
+                                <p class="text-sm opacity-75">Centralize client feedback and updates.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- For Product Teams -->
+            <div class="card bg-base-200 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <div class="badge badge-accent">Product</div>
+                        For Product Teams
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-info badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">Visual Roadmaps</h4>
+                                <p class="text-sm opacity-75">Plan sprints and releases with clarity.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-info badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">Powerful Integrations</h4>
+                                <p class="text-sm opacity-75">Connect Taskio to your development tools.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-info badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">Centralized Feedback</h4>
+                                <p class="text-sm opacity-75">Collect and process user input in one place.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- For Leaders & Managers -->
+            <div class="card bg-base-200 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <div class="badge badge-error">Leadership</div>
+                        For Leaders & Managers
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-error badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">Bird's‑Eye View</h4>
+                                <p class="text-sm opacity-75">Monitor progress across all projects at a glance.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-error badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">Key Metrics</h4>
+                                <p class="text-sm opacity-75">Measure team productivity and efficiency.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-error badge-sm mt-1"></div>
+                            <div>
+                                <h4 class="font-semibold">Faster Decisions</h4>
+                                <p class="text-sm opacity-75">Base your choices on accurate, up‑to‑date data.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why Taskio Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-8">Why Taskio is the Right Solution</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="stat bg-base-200 rounded-box shadow">
+                    <div class="stat-figure text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-title">Ultra‑Fast</div>
+                    <div class="stat-desc">Organize tasks in seconds</div>
+                </div>
+
+                <div class="stat bg-base-200 rounded-box shadow">
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-title">Secure</div>
+                    <div class="stat-desc">Top‑tier security standards</div>
+                </div>
+
+                <div class="stat bg-base-200 rounded-box shadow">
+                    <div class="stat-figure text-accent">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-title">Flexible</div>
+                    <div class="stat-desc">Customize to fit your workflow</div>
+                </div>
+
+                <div class="stat bg-base-200 rounded-box shadow">
+                    <div class="stat-figure text-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-title">Scalable</div>
+                    <div class="stat-desc">Solo work to global enterprises</div>
+                </div>
+            </div>
+        </div>
+
+        {# CTA Section #}
+{% include 'pages/home/_cta.html.twig' %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

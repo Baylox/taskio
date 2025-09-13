@@ -26,9 +26,12 @@
 
 - [Stimulus (Hotwired)](https://stimulus.hotwired.dev/)
 - [Turbo Drive](https://turbo.hotwired.dev/)
+- [Mercure](https://mercure.rocks/docs)
+- [Git/Github](https://github.com/git-guides)
 
 ## Fixtures et Tests
 
 - [Faker](https://faker.readthedocs.io/en/master/)
 - [Zenstruck Foundry](https://symfony.com/doc/current/ZenstruckFoundryBundle/index.html)
+- [PHPUnit](https://phpunit.de/documentation.html)
 ---

@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Account;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Account>
@@ -16,28 +17,47 @@ class AccountRepository extends ServiceEntityRepository
         parent::__construct($registry, Account::class);
     }
 
-    //    /**
-    //     * @return Account[] Returns an array of Account objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function autocompleteUsernames(string $userInput): array
+    {
+        $queryBuilder = $this->createQueryBuilder('user');
 
-    //    public function findOneBySomeField($value): ?Account
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $results = $queryBuilder
+            ->select('user.email')
+            ->andWhere('user.email LIKE :pattern')
+            ->setParameter('pattern', $userInput . '%')
+            ->getQuery()
+            ->getSingleColumnResult();
+
+        return $results;
+    }
+
+    public function qbByRole(?string $role): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('a');
+
+        if ($role !== null && $role !== '') {
+            $qb->andWhere('a.role = :role')
+            ->setParameter('role', $role);
+        }
+
+        // default sorting
+        return $qb->orderBy('a.id', 'DESC');
+    }
+
+    /**
+     * List of distinct roles actually present in the database (to populate the <select>).
+     *
+     * @return string[]
+     */
+    public function distinctRoles(): array
+    {
+        return array_column(
+            $this->createQueryBuilder('a')
+                ->select('DISTINCT a.role AS role')
+                ->orderBy('a.role', 'ASC')
+                ->getQuery()
+                ->getScalarResult(),
+            'role'
+        );
+    }
 }

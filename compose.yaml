@@ -1,50 +1,70 @@
-
 services:
 ###> doctrine/doctrine-bundle ###
   database:
-    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    # Official MariaDB image (latest stable version)
+    image: mariadb:${MARIADB_VERSION:-11.4}
+
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-app}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-!ChangeMe!}
+      MARIADB_USER: ${MARIADB_USER:-app}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-!ChangeMe!}
+
+    # Healthcheck: waits for MariaDB to respond
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-app}", "-U", "${POSTGRES_USER:-app}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${MARIADB_USER:-app}", "-p${MARIADB_PASSWORD:-!ChangeMe!}"]
       timeout: 5s
       retries: 5
-      start_period: 60s
+      start_period: 30s
+
     volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
+      - database_data:/var/lib/mysql:rw
 ###< doctrine/doctrine-bundle ###
 
-###> symfony/mercure-bundle ###
+###> symfony/mercure-bundle ### We don't need it for now (Turbo)
   mercure:
     image: dunglas/mercure
     restart: unless-stopped
+
     environment:
-      # Uncomment the following line to disable HTTPS,
-      #SERVER_NAME: ':80'
+      # Uncomment to disable HTTPS in development
+      SERVER_NAME: ':80'
+      # JWT keys (keep them secret!)
       MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
       MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
-      # Set the URL of your Symfony project (without trailing slash!) as value of the cors_origins directive
+      # Allowed origins (your Symfony app in dev on 8000)
       MERCURE_EXTRA_DIRECTIVES: |
         cors_origins http://127.0.0.1:8000
-    # Comment the following line to disable the development mode
+
+    # Dev mode with specific config
     command: /usr/bin/caddy run --config /etc/caddy/dev.Caddyfile
+
     healthcheck:
       test: ["CMD", "curl", "-f", "https://localhost/healthz"]
       timeout: 5s
       retries: 5
       start_period: 60s
+
     volumes:
       - mercure_data:/data
       - mercure_config:/config
 ###< symfony/mercure-bundle ###
 
+
+###> symfony/mailer ###
+  mailer:
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+###> symfony/mailer ###
+
 volumes:
 ###> doctrine/doctrine-bundle ###
+  # Persistent volume for MariaDB database
   database_data:
 ###< doctrine/doctrine-bundle ###
 
@@ -52,3 +72,4 @@ volumes:
   mercure_data:
   mercure_config:
 ###< symfony/mercure-bundle ###
+

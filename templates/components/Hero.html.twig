@@ -1,10 +1,11 @@
 <section
   {{ attributes.defaults({
-    class: 'relative grid ' ~ this.heightClass() ~ ' place-items-center text-center text-white',
+    class: 'relative grid ' ~ this.heightClass() ~ ' place-items-center text-center text-base-content',
     role:  'banner',
     'aria-labelledby': 'hero-title',
   }) }}
 >
+  <!-- Background image -->
   <picture class="absolute inset-0 -z-10">
     <img
       src="{{ asset(bg) }}"
@@ -15,17 +16,17 @@
     >
   </picture>
 
-  {# Behind the content #}
-  <div class="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-b from-black/20 to-black/60"></div>
+  <!-- Overlay gradient (neutre, basé sur le thème) -->
+  <div class="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-b from-base-100/10 to-base-100/80"></div>
 
-  {# Content above #}
+  <!-- Contenu -->
   <div class="relative z-10 px-4 max-w-xl">
     <h1 id="hero-title" class="text-3xl md:text-4xl font-extrabold mb-3">
       {{ title }}
     </h1>
 
     {% if subtitle %}
-      <p class="text-base md:text-lg opacity-90 mb-5">{{ subtitle }}</p>
+      <p class="text-base md:text-lg opacity-80 mb-5">{{ subtitle }}</p>
     {% endif %}
 
     {% if ctaHref and ctaLabel %}
@@ -35,4 +36,5 @@
     {% endif %}
   </div>
 </section>
+
 
