@@ -79,7 +79,7 @@
                     <input
                     type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
-                    {# Remember Me Option (uncommented and styled) #}
+                    {# Remember Me Option #}
                     <div class="form-control mb-6">
                         <label class="label cursor-pointer justify-start gap-3">
                             <input type="checkbox" name="_remember_me" id="_remember_me" class="checkbox checkbox-primary"/>
@@ -100,7 +100,7 @@
                     {# Sign up link #}
                     <p class="text-center mt-6 text-base-content/70">
                         Don't have an account?
-                        <a href="#" class="link link-primary font-semibold">Sign up</a>
+                        <a href="{{ path('app_register') }}" class="link link-primary font-semibold">Sign up</a>
                     </p>
                 </form>
             </div>
