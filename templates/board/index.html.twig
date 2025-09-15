@@ -16,6 +16,9 @@
         {% for board in boards %}
             <tr>
                 <td>{{ board.title }}</td>
+                <td>
+                    {{ include('board/_delete_form.html.twig') }}
+                </td>
             </tr>
         {% else %}
             <tr>

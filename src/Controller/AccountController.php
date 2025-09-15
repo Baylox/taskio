@@ -38,6 +38,31 @@ final class AccountController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    public function show(Account $account): Response
+    {
+        return $this->render('account/show.html.twig', [
+            'account' => $account,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Account $account, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(AccountType::class, $account);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('app_account_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('account/edit.html.twig', [
+            'account' => $account,
+            'form' => $form,
+        ]);
+    }
+
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Account $account, EntityManagerInterface $entityManager): Response
     {

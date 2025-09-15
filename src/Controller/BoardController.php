@@ -48,32 +48,6 @@ final class BoardController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(Board $board): Response
-    {
-        return $this->render('board/show.html.twig', [
-            'board' => $board,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Board $board, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(BoardType::class, $board);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_board_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('board/edit.html.twig', [
-            'board' => $board,
-            'form' => $form,
-        ]);
-    }
-
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Board $board, EntityManagerInterface $entityManager): Response
     {
