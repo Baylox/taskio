@@ -3,14 +3,22 @@
 {% block title %}Contact Us{% endblock %}
 
 {% block body %}
-<div class="min-h-screen flex items-center justify-center bg-base-200 p-5">
-    <div class="row justify-content-center">
+<div class="min-h-screen flex items-center justify-center bg-base-200">
+    <div class="card w-full max-w-2xl shadow-2xl bg-base-100">
         <div class="col-lg-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
+            <div class="card-body">
+                <div class="card-body items-center justify-center">
+                   <div class="card-header text-white">
                     <h2 class="card-title mb-0">Get in Touch</h2>
-                </div>
-                <div class="card-body items-center justify-center p-15">
+                </div> 
+                   {# Logo or login icon #}
+                   <div class="flex justify-center mb-4">
+                       <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-primary-content" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                           </svg>
+                       </div>
+                   </div>
                     {% for message in app.flashes('success') %}
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ message }}
