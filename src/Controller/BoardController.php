@@ -14,26 +14,19 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/board', name: 'app_board_')]
 final class BoardController extends AbstractController
 {
-    #[Route(name: 'index', methods: ['GET'])]
-    public function index(BoardRepository $boardRepository): Response
-    {
 
-        return $this->render('board/index.html.twig', [
-            'boards' => $boardRepository->findAll(),
-        ]);
-    }
 
-    /* #[Route(name: 'app_board_index', methods: ['GET'])]
+   #[Route(name: 'index', methods: ['GET'])]
     public function index(BoardRepository $boardRepository): Response
     {
         $user = $this->getUser();
         $boards = $boardRepository->findByAccount($user);
 
-       return $this->render('board/index.html.twig', [
-           'boards' => $boards,
-       ]);
+        return $this->render('board/index.html.twig', [
+        'boards' => $boards,
+        ]);
     }
-    */
+
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
