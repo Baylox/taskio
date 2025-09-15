@@ -16,10 +16,6 @@
         {% for board in boards %}
             <tr>
                 <td>{{ board.title }}</td>
-                <td>
-                    <a href="{{ path('app_board_show', {'id': board.id}) }}">show</a>
-                    <a href="{{ path('app_board_edit', {'id': board.id}) }}">edit</a>
-                </td>
             </tr>
         {% else %}
             <tr>
