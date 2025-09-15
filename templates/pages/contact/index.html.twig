@@ -9,16 +9,9 @@
             <div class="card-body">
                 <div class="card-body items-center justify-center">
                    <div class="card-header text-white">
-                    <h2 class="card-title mb-0">Get in Touch</h2>
+                    <h2 class="text-3xl font-bold text-center mb-6">Get in Touch</h2>
                 </div> 
-                   {# Logo or login icon #}
-                   <div class="flex justify-center mb-4">
-                       <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-primary-content" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                           </svg>
-                       </div>
-                   </div>
+                   
                     {% for message in app.flashes('success') %}
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ message }}
@@ -33,34 +26,38 @@
                         </div>
                     {% endfor %}
 
-                    <p class="text-muted mb-4 items-center justify-center">
+                    <p class="text-center text-base-content/70 mb-8">
                         Have a question or want to get in touch? Send us a message and we'll get back to you as soon as possible.
                     </p>
 
                     {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': true}}) }}
-                        <div class="row">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            
                             <div class="col-md-6 mb-3">
-                                {{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_row(form.name, {'attr': {'class': 'input input-bordered w-full'}}) }}
                             </div>
-                            <div class="col-md-6 mb-3">
-                                {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
+                            <div class="form-control">
+                                {{ form_row(form.email, {'attr': {'class': 'input input-bordered w-full'}}) }}
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            {{ form_row(form.subject, {'attr': {'class': 'form-control'}}) }}
+                        <div class="form-control mb-4">
+                            {{ form_row(form.subject, {'attr': {'class': 'input input-bordered w-full'}}) }}
                         </div>
                         
-                        <div class="mb-4">
-                            {{ form_row(form.message, {'attr': {'class': 'form-control'}}) }}
+                        <div class="form-control mb-6">
+                            {{ form_row(form.message, {'attr': {'class': 'textarea textarea-bordered w-full h-32'}}) }}
                         </div>
 
                         <div class="d-none" aria-hidden="true">
                             {{ form_widget(form.website) }}
                         </div>
 
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">
+                        <div class="form-control">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                </svg>
                                 Send Message
                             </button>
                         </div>
