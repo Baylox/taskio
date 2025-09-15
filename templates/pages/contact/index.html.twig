@@ -3,14 +3,15 @@
 {% block title %}Contact Us{% endblock %}
 
 {% block body %}
-<div class="container my-5">
-    <div class="row justify-content-center">
+<div class="min-h-screen flex items-center justify-center bg-base-200">
+    <div class="card w-full max-w-2xl shadow-2xl bg-base-100">
         <div class="col-lg-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="card-title mb-0">Get in Touch</h2>
-                </div>
-                <div class="card-body">
+            <div class="card-body">
+                <div class="card-body items-center justify-center">
+                   <div class="card-header text-white">
+                    <h2 class="text-3xl font-bold text-center mb-6">Get in Touch</h2>
+                </div> 
+                   
                     {% for message in app.flashes('success') %}
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ message }}
@@ -25,34 +26,38 @@
                         </div>
                     {% endfor %}
 
-                    <p class="text-muted mb-4">
+                    <p class="text-center text-base-content/70 mb-3">
                         Have a question or want to get in touch? Send us a message and we'll get back to you as soon as possible.
                     </p>
 
                     {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': true}}) }}
-                        <div class="row">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                            
                             <div class="col-md-6 mb-3">
-                                {{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_row(form.name, {'attr': {'class': 'input input-bordered w-full mt-2'}}) }}
                             </div>
-                            <div class="col-md-6 mb-3">
-                                {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
+                            <div class="form-control">
+                                {{ form_row(form.email, {'attr': {'class': 'input input-bordered w-full mt-2'}}) }}
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            {{ form_row(form.subject, {'attr': {'class': 'form-control'}}) }}
+                        <div class="form-control mb-3">
+                            {{ form_row(form.subject, {'attr': {'class': 'input input-bordered w-full mt-2'}}) }}
                         </div>
                         
-                        <div class="mb-4">
-                            {{ form_row(form.message, {'attr': {'class': 'form-control'}}) }}
+                        <div class="form-control mb-3">
+                            {{ form_row(form.message, {'attr': {'class': 'textarea textarea-bordered w-full h-32 mt-2'}}) }}
                         </div>
 
                         <div class="d-none" aria-hidden="true">
                             {{ form_widget(form.website) }}
                         </div>
 
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">
+                        <div class="form-control">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                </svg>
                                 Send Message
                             </button>
                         </div>

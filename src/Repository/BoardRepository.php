@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Board;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Account;
 
 /**
  * @extends ServiceEntityRepository<Board>
@@ -15,6 +16,19 @@ class BoardRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Board::class);
     }
+
+
+    public function findByAccount(Account $account): array
+    {
+        return $this->createQueryBuilder('b')
+            ->innerJoin('b.accounts', 'a')
+            ->andWhere('a = :account')
+            ->setParameter('account', $account)
+            ->orderBy('b.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 
     //    /**
     //     * @return Board[] Returns an array of Board objects
