@@ -19,15 +19,15 @@ class BoardRepository extends ServiceEntityRepository
 
 
     public function findByAccount(Account $account): array
-{
-    return $this->createQueryBuilder('b')
-        ->innerJoin('b.accounts', 'a')
-        ->andWhere('a = :account')
-        ->setParameter('account', $account)
-        ->orderBy('b.id', 'ASC')
-        ->getQuery()
-        ->getResult();
-}
+    {
+        return $this->createQueryBuilder('b')
+            ->innerJoin('b.accounts', 'a')
+            ->andWhere('a = :account')
+            ->setParameter('account', $account)
+            ->orderBy('b.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
 
     //    /**

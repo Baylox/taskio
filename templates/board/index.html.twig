@@ -22,11 +22,11 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">No boards found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_board_new') }}">Create new</a>
+    <a href="{{ path('app_board_new') }}">Create a board</a>
 {% endblock %}

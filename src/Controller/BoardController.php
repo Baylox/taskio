@@ -48,6 +48,7 @@ final class BoardController extends AbstractController
         ]);
     }
 
+
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Board $board, EntityManagerInterface $entityManager): Response
     {
