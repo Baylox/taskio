@@ -11,12 +11,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/board')]
+#[Route('/board', name: 'app_board_')]
 final class BoardController extends AbstractController
 {
-    #[Route(name: 'app_board_index', methods: ['GET'])]
+    #[Route(name: 'index', methods: ['GET'])]
     public function index(BoardRepository $boardRepository): Response
-    {   
+    {
 
         return $this->render('board/index.html.twig', [
             'boards' => $boardRepository->findAll(),
@@ -28,14 +28,14 @@ final class BoardController extends AbstractController
     {
         $user = $this->getUser();
         $boards = $boardRepository->findByAccount($user);
-    
+
        return $this->render('board/index.html.twig', [
            'boards' => $boards,
        ]);
     }
     */
 
-    #[Route('/new', name: 'app_board_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $board = new Board();
@@ -55,7 +55,7 @@ final class BoardController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_board_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Board $board): Response
     {
         return $this->render('board/show.html.twig', [
@@ -63,7 +63,7 @@ final class BoardController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_board_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Board $board, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(BoardType::class, $board);
@@ -81,7 +81,7 @@ final class BoardController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_board_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Board $board, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$board->getId(), $request->getPayload()->getString('_token'))) {
