@@ -26,27 +26,27 @@
                         </div>
                     {% endfor %}
 
-                    <p class="text-center text-base-content/70 mb-8">
+                    <p class="text-center text-base-content/70 mb-3">
                         Have a question or want to get in touch? Send us a message and we'll get back to you as soon as possible.
                     </p>
 
                     {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': true}}) }}
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                             
                             <div class="col-md-6 mb-3">
-                                {{ form_row(form.name, {'attr': {'class': 'input input-bordered w-full'}}) }}
+                                {{ form_row(form.name, {'attr': {'class': 'input input-bordered w-full mt-2'}}) }}
                             </div>
                             <div class="form-control">
-                                {{ form_row(form.email, {'attr': {'class': 'input input-bordered w-full'}}) }}
+                                {{ form_row(form.email, {'attr': {'class': 'input input-bordered w-full mt-2'}}) }}
                             </div>
                         </div>
                         
-                        <div class="form-control mb-4">
-                            {{ form_row(form.subject, {'attr': {'class': 'input input-bordered w-full'}}) }}
+                        <div class="form-control mb-3">
+                            {{ form_row(form.subject, {'attr': {'class': 'input input-bordered w-full mt-2'}}) }}
                         </div>
                         
-                        <div class="form-control mb-6">
-                            {{ form_row(form.message, {'attr': {'class': 'textarea textarea-bordered w-full h-32'}}) }}
+                        <div class="form-control mb-3">
+                            {{ form_row(form.message, {'attr': {'class': 'textarea textarea-bordered w-full h-32 mt-2'}}) }}
                         </div>
 
                         <div class="d-none" aria-hidden="true">
