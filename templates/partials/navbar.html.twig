@@ -36,7 +36,7 @@
                 {% if app.user %}
                     {# Personal space #}
                     <li>
-                        <a href="#" class="hover:underline">Dashboard</a>
+                        <a href="{{ path('app_board_index') }}" class="hover:underline">Dashboard</a>
                     </li>
 
                     {# Admin visible only for admin #}
