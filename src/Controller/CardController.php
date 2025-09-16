@@ -50,6 +50,18 @@ final class CardController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}', name: 'app_card_delete', methods: ['POST'])]
+    public function delete(Request $request, Card $card, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$card->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($card);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_card_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    // TODO -> AJAX
     #[Route('/{id}/edit', name: 'app_card_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Card $card, EntityManagerInterface $entityManager): Response
     {
@@ -68,14 +80,4 @@ final class CardController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_card_delete', methods: ['POST'])]
-    public function delete(Request $request, Card $card, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$card->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($card);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_card_index', [], Response::HTTP_SEE_OTHER);
-    }
 }
