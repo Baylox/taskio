@@ -32,12 +32,18 @@ class Board
     #[ORM\ManyToMany(targetEntity: Account::class, mappedBy: 'boards')]
     private Collection $accounts;
 
+
+    #[ORM\ManyToOne(inversedBy: 'ownedBoards')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Account $owner = null;
+
     /**
      * @var Collection<int, Lane>
      */
     #[ORM\OneToMany(mappedBy: 'board', targetEntity: Lane::class, orphanRemoval: true, cascade: ['persist'])]
     #[ORM\OrderBy(['position' => 'ASC'])]
     private Collection $lanes;
+
 
     public function __construct()
     {
@@ -115,6 +121,18 @@ class Board
                 $lane->setBoard(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOwner(): ?Account
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?Account $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }
