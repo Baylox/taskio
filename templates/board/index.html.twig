@@ -7,7 +7,7 @@
     {# Title #}
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-2xl font-semibold text-gray-200">Board Management</h1>
-        
+
     </div>
 
     {# Nb Board + Create board #}
@@ -40,7 +40,7 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             {# Board Title with link to dashboard #}
-                                <a href="{{ path('app_board_dashboard', {'id': board.id}) }}" class="text-sm font-medium text-white">{{ board.title }}</a>
+                                <a href="{{ path('app_dashboard', {'id': board.id}) }}" class="text-sm font-medium text-white">{{ board.title }}</a>
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

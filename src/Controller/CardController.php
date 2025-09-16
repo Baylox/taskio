@@ -17,7 +17,7 @@ final class CardController extends AbstractController
     #[Route(name: 'app_card_index', methods: ['GET'])]
     public function index(CardRepository $cardRepository): Response
     {
-        return $this->render('card/index.html.twig', [
+        return $this->render('dashboard/card/index.html.twig', [
             'cards' => $cardRepository->findAll(),
         ]);
     }
@@ -36,7 +36,7 @@ final class CardController extends AbstractController
             return $this->redirectToRoute('app_card_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('card/new.html.twig', [
+        return $this->render('dashboard/card/new.html.twig', [
             'card' => $card,
             'form' => $form,
         ]);
@@ -45,7 +45,7 @@ final class CardController extends AbstractController
     #[Route('/{id}', name: 'app_card_show', methods: ['GET'])]
     public function show(Card $card): Response
     {
-        return $this->render('card/show.html.twig', [
+        return $this->render('dashboard/card/show.html.twig', [
             'card' => $card,
         ]);
     }
@@ -74,7 +74,7 @@ final class CardController extends AbstractController
             return $this->redirectToRoute('app_card_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('card/edit.html.twig', [
+        return $this->render('dashboard/card/edit.html.twig', [
             'card' => $card,
             'form' => $form,
         ]);

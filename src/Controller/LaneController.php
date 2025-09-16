@@ -17,7 +17,7 @@ final class LaneController extends AbstractController
     #[Route(name: 'app_lane_index', methods: ['GET'])]
     public function index(LaneRepository $laneRepository): Response
     {
-        return $this->render('lane/index.html.twig', [
+        return $this->render('dashboard/lane/index.html.twig', [
             'lanes' => $laneRepository->findAll(),
         ]);
     }
@@ -36,7 +36,7 @@ final class LaneController extends AbstractController
             return $this->redirectToRoute('app_lane_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('lane/new.html.twig', [
+        return $this->render('dashboard/lane/new.html.twig', [
             'lane' => $lane,
             'form' => $form,
         ]);
@@ -45,7 +45,7 @@ final class LaneController extends AbstractController
     #[Route('/{id}', name: 'app_lane_show', methods: ['GET'])]
     public function show(Lane $lane): Response
     {
-        return $this->render('lane/show.html.twig', [
+        return $this->render('dashboard/lane/show.html.twig', [
             'lane' => $lane,
         ]);
     }
@@ -74,7 +74,7 @@ final class LaneController extends AbstractController
             return $this->redirectToRoute('app_lane_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('lane/edit.html.twig', [
+        return $this->render('dashboard/lane/edit.html.twig', [
             'lane' => $lane,
             'form' => $form,
         ]);
