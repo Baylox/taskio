@@ -9,16 +9,15 @@ use App\Entity\Board;
 use App\Repository\BoardRepository;
 
 
-#[Route('/dashboard', name: 'app_dashboard', methods: ['GET'])]
 final class DashboardController extends AbstractController
 {
-    public function __invoke(BoardRepository $boards): Response
+    // EDIT of board
+    #[Route('/dashboard', name: 'app_dashboard')]
+    public function index(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        // Ideally: filter by user's membership
-        $userBoards = $boards->findForUser($this->getUser());
         return $this->render('dashboard/index.html.twig', [
-            'boards' => $userBoards,
+            'controller_name' => 'DashboardController',
+
         ]);
     }
 }
