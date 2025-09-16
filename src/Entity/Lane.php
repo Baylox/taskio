@@ -42,6 +42,7 @@ class Lane
      * @var Collection<int, Card>
      */
     #[ORM\OneToMany(targetEntity: Card::class, mappedBy: 'lane')]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     private Collection $cards;
 
     public function __construct()

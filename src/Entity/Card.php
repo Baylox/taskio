@@ -41,6 +41,7 @@ class Card
 
     #[ORM\ManyToOne(inversedBy: 'cards')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     private ?Lane $lane = null;
 
     public function getId(): ?int
