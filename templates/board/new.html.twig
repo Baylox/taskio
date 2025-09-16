@@ -1,11 +1,30 @@
+{# templates/board/new.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}New Board{% endblock %}
-
 {% block body %}
-    <h1>Create new Board</h1>
+<div class="flex justify-center items-center min-h-screen bg-gray-900">
+    <div class="bg-gray-800 p-8 rounded-2xl shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-semibold text-center text-white mb-6">
+            Create New Board
+        </h1>
 
-    {{ include('board/_form.html.twig') }}
+        {{ form_start(form) }}
+            {{ form_row(form.title, {
+                label: 'Title',
+                attr: {class: 'w-full p-3 rounded bg-gray-700 text-white'}
+            }) }}
+            {{ form_row(form.accounts, {
+                label: 'Accounts',
+                attr: {class: 'w-full p-3 rounded bg-gray-700 text-white'}
+            }) }}
 
-    <a href="{{ path('app_board_index') }}">back to list</a>
+            <button class="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded">
+                Save
+            </button>
+            
+        {{ form_end(form) }}
+    </div>
+</div>
+
 {% endblock %}

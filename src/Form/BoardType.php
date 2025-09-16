@@ -14,12 +14,13 @@ class BoardType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('accounts', EntityType::class, [
+            ->add('title') // ajout message erreur si pas de titre
+            // Voir si il faut modifier le "add" de accounts car cela peut créer un nouv account ? (et non le lier a un existant)
+            /*->add('accounts', EntityType::class, [
                 'class' => Account::class,
                 'choice_label' => 'id',
                 'multiple' => true,
-            ])
+            ])*/
         ;
     }
 
