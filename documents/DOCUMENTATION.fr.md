@@ -25,6 +25,7 @@
 ## Autres outils
 
 - [Stimulus (Hotwired)](https://stimulus.hotwired.dev/)
+- [Stimulus components](https://www.stimulus-components.com/docs/stimulus-prefetch)
 - [Turbo Drive](https://turbo.hotwired.dev/)
 - [Mercure](https://mercure.rocks/docs)
 - [Git/Github](https://github.com/git-guides)
