@@ -50,7 +50,6 @@ final class LaneController extends AbstractController
         ]);
     }
 
-
     #[Route('/{id}', name: 'app_lane_delete', methods: ['POST'])]
     public function delete(Request $request, Lane $lane, EntityManagerInterface $entityManager): Response
     {
@@ -62,7 +61,7 @@ final class LaneController extends AbstractController
         return $this->redirectToRoute('app_lane_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    // Todo -> AJAX
+    // Todo -> AJAXs
     #[Route('/{id}/edit', name: 'app_lane_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Lane $lane, EntityManagerInterface $entityManager): Response
     {

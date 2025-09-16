@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class DashboardController extends AbstractController
 {
+    // EDIT of board
     #[Route('/dashboard', name: 'app_dashboard')]
     public function index(): Response
     {
