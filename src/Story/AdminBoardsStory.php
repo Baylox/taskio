@@ -12,8 +12,9 @@ final class AdminBoardsStory extends Story
     {
         $admin = AccountFactory::find(['email' => 'admin@example.com']);
 
-        // Creates 10 different boards, each one associated only with the admin
+        // Creates 10 different boards, each one owned and associated with the admin
         BoardFactory::new()->many(10)->create([
+            'owner' => $admin, // Admin owns each board
             'accounts' => [$admin], // Each board contains only the admin
         ]);
     }

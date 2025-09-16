@@ -32,6 +32,7 @@ final class BoardFactory extends PersistentProxyObjectFactory
     {
         return [
             'title' => self::faker()->words(3, true),
+            'owner' => AccountFactory::new(),
         ];
     }
 

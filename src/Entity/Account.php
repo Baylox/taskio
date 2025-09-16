@@ -44,6 +44,12 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Board::class, inversedBy: 'accounts')]
     private Collection $boards;
 
+    /**
+     * @var Collection<int, Board>
+     */
+    #[ORM\OneToMany(targetEntity: Board::class, mappedBy: 'owner', orphanRemoval: true)]
+    private Collection $ownedBoards;
+
     #[ORM\Column]
     private bool $isVerified = false;
 
@@ -58,6 +64,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->boards = new ArrayCollection();
+        $this->ownedBoards = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,6 +154,36 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    // --- Account's Owned Boards ---
+    /**
+     * @return Collection<int, Board>
+     */
+    public function getOwnedBoards(): Collection
+    {
+        return $this->ownedBoards;
+    }
+
+    public function addOwnedBoard(Board $ownedBoard): static
+    {
+        if (!$this->ownedBoards->contains($ownedBoard)) {
+            $this->ownedBoards->add($ownedBoard);
+            $ownedBoard->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /* public function removeOwnedBoard(Board $ownedBoard): static
+    {
+        if ($this->ownedBoards->removeElement($ownedBoard)) {
+            if ($ownedBoard->getOwner() === $this) {
+                $ownedBoard->setOwner(null);
+            }
+        }
+
+        return $this;
+    } */
 
     // --- Is Verified (For mailing purposes) ---
 
