@@ -39,7 +39,8 @@
                 <tr class="hover:bg-gray-750 transition-colors">
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
-                            <div class="text-sm font-medium text-white">{{ board.title }}</div>
+                            {# Board Title with link to dashboard #}
+                                <a href="{{ path('app_board_dashboard', {'id': board.id}) }}" class="text-sm font-medium text-white">{{ board.title }}</a>
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
