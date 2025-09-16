@@ -27,6 +27,7 @@ class Lane
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 50)]
     private ?string $title = null;
 

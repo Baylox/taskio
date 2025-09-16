@@ -1,0 +1,23 @@
+<li class="card bg-base-100 shadow-sm rounded-xl p-3 hover:shadow transition" data-id="{{ card.id }}" role="listitem" tabindex="0">
+	<div class="flex items-start gap-2">
+		<i class="fa-solid fa-grip-lines text-base-content/40 mt-1 cursor-move" aria-hidden="true"></i>
+
+		<div class="min-w-0 grow">
+			<p class="font-medium truncate" title="{{ title() }}">{{ title() }}</p>
+
+			{% if hasDescription() %}
+				<p class="text-sm text-base-content/70 line-clamp-2">{{ card.description }}</p>
+			{% endif %}
+
+			{% if status() %}
+				<div class="mt-2">
+					<span class="badge badge-outline">{{ status() }}</span>
+				</div>
+			{% endif %}
+		</div>
+
+		<button class="btn btn-ghost btn-xs ml-auto" aria-label="Open card" data-action="card#open">
+			<i class="fa-regular fa-pen-to-square"></i>
+		</button>
+	</div>
+</li>
