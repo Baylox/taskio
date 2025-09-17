@@ -16,14 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/lane')]
 final class LaneController extends AbstractController
 {
-    #[Route(name: 'app_lane_index', methods: ['GET'])]
-    public function index(LaneRepository $laneRepository): Response
-    {
-        return $this->render('dashboard/lane/index.html.twig', [
-            'lanes' => $laneRepository->findAll(),
-        ]);
-    }
-
     // PRG from the dashboard (adding a lane)
     // The Board is received in the URL to know where to attach the lane
     #[Route('/boards/{id}/lanes/new', name: 'lane_new', methods: ['POST', 'GET'])]
@@ -48,15 +40,6 @@ final class LaneController extends AbstractController
             'laneForm'      => $form->createView(),
             'laneEditForms' => $this->buildLaneEditForms($board),
             'openLaneModal' => $form->isSubmitted(),
-        ]);
-    }
-
-
-    #[Route('/{id}', name: 'app_lane_show', methods: ['GET'])]
-    public function show(Lane $lane): Response
-    {
-        return $this->render('dashboard/lane/show.html.twig', [
-            'lane' => $lane,
         ]);
     }
 
