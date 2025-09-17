@@ -1,0 +1,49 @@
+{# --- CARD MODAL (DaisyUI checkbox modal) --- #}
+{# The checkbox controls the opening. "checked" if errors to keep the modal open. #}
+<input type="checkbox" id="card_create_modal_{{ lane.id }}" class="modal-toggle" {% if openCardModalId is defined and openCardModalId == lane.id %} checked {% endif %} />
+<div class="modal" role="dialog">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold mb-4">Add Card to {{ lane.title }}</h3>
+
+        {# Symfony form for card creation #}
+        {{ form_start(cardForm, {
+            action: path('card_new', { laneId: lane.id }),
+            attr: { novalidate: 'novalidate' }
+        }) }}
+
+        {# Display form fields manually for better control #}
+        <div class="space-y-4">
+            <div class="form-control">
+                {{ form_label(cardForm.title) }}
+                {{ form_widget(cardForm.title) }}
+                {{ form_errors(cardForm.title) }}
+            </div>
+
+            <div class="form-control">
+                {{ form_label(cardForm.description) }}
+                {{ form_widget(cardForm.description) }}
+                {{ form_errors(cardForm.description) }}
+            </div>
+
+            <div class="form-control">
+                {{ form_label(cardForm.status) }}
+                {{ form_widget(cardForm.status) }}
+                {{ form_errors(cardForm.status) }}
+            </div>
+
+            {# Hidden fields #}
+            {{ form_widget(cardForm.lane) }}
+        </div>
+
+        <div class="modal-action mt-6">
+            <button type="submit" class="btn btn-primary">Save Card</button>
+            {# Close the modal: click the label linked to the checkbox #}
+            <label for="card_create_modal_{{ lane.id }}" class="btn">Cancel</label>
+        </div>
+
+        {{ form_end(cardForm) }}
+    </div>
+
+    {# Click outside to close (overlay) #}
+    <label class="modal-backdrop" for="card_create_modal_{{ lane.id }}">Close</label>
+</div>

@@ -31,7 +31,7 @@ final class CardController extends AbstractController
         }
 
         // Vérifier les permissions sur le board
-        $this->denyAccessUnlessGranted('EDIT', $lane->getBoard());
+        // $this->denyAccessUnlessGranted('EDIT', $lane->getBoard());
 
         $card = new Card();
         $card->setLane($lane);

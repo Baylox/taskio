@@ -4,9 +4,9 @@
 		<h2 class="font-semibold">{{ lane.title }}</h2>
 		<div class="flex gap-2">
 			<label for="lane_edit_modal_{{ lane.id }}" class="btn btn-sm btn-outline">Edit</label>
-			<button class="btn btn-sm" data-action="click->modal#open" data-modal-target-id="modal-card-create-{{ lane.id }}">
+			<label for="card_create_modal_{{ lane.id }}" class="btn btn-sm">
 				+ Add Card
-			</button>
+			</label>
 		</div>
 	</header>
 
@@ -17,21 +17,9 @@
 	</div>
 </div>
 
-{# Card Modal (one per lane) #}
-<div id="modal-card-create-{{ lane.id }}" class="modal {{ (openCardModalId is defined and openCardModalId == lane.id) ? '' : 'hidden' }}" data-controller="modal">
-	<div class="modal-box">
-		<h3 class="font-bold text-lg">Add Card</h3>
-
-		{{ form_start(cardForms[lane.id], {
-      action: path('card_new', { laneId: lane.id }),
-      attr: { novalidate: 'novalidate' }
-    }) }}
-		{{ form_widget(cardForms[lane.id]) }}
-		<button class="btn btn-primary">Save</button>
-		{{ form_end(cardForms[lane.id]) }}
-
-		<div class="modal-action">
-			<button class="btn" data-action="click->modal#close">Close</button>
-		</div>
-	</div>
-</div>
+{# Include the reusable card creation modal #}
+{% include 'dashboard/new_card.html.twig' with {
+    lane: lane,
+    cardForm: cardForms[lane.id],
+    openCardModalId: openCardModalId|default(null)
+} only %}
