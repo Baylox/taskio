@@ -3,15 +3,15 @@
 		<i class="fa-solid fa-grip-lines text-base-content/40 mt-1 cursor-move" aria-hidden="true"></i>
 
 		<div class="min-w-0 grow">
-			<p class="font-medium truncate" title="{{ title() }}">{{ title() }}</p>
+			<p class="font-medium truncate" title="{{ card.title }}">{{ card.title }}</p>
 
-			{% if hasDescription() %}
+			{% if card.description %}
 				<p class="text-sm text-base-content/70 line-clamp-2">{{ card.description }}</p>
 			{% endif %}
 
-			{% if status() %}
+			{% if card.status %}
 				<div class="mt-2">
-					<span class="badge badge-outline">{{ status() }}</span>
+					<span class="badge badge-outline">{{ card.status }}</span>
 				</div>
 			{% endif %}
 		</div>
