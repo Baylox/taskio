@@ -63,12 +63,14 @@ final class LaneController extends AbstractController
     #[Route('/{id}', name: 'app_lane_delete', methods: ['POST'])]
     public function delete(Request $request, Lane $lane, EntityManagerInterface $entityManager): Response
     {
+        $board = $lane->getBoard();
+
         if ($this->isCsrfTokenValid('delete' . $lane->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($lane);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_lane_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_board_dashboard', ['id' => $board->getId()], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/lanes/{id}/edit', name: 'lane_edit', methods: ['GET', 'POST'])]

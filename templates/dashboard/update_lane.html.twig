@@ -14,6 +14,12 @@
 			<label for="lane_edit_modal_{{ lane.id }}" class="btn" type="button">Cancel</label>
 		</div>
 		{{ form_end(form) }}
+
+		{# Delete form #}
+		<form method="post" action="{{ path('app_lane_delete', {id: lane.id}) }}" onsubmit="return confirm('Are you sure you want to delete this lane?');">
+			<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lane.id) }}">
+			<button class="btn btn-error btn-sm" type="submit">Delete Lane</button>
+		</form>
 	</div>
 	<label class="modal-backdrop" for="lane_edit_modal_{{ lane.id }}">Close</label>
 </div>
