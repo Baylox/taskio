@@ -1,39 +1,34 @@
 {# templates/components/Lane.html.twig #}
 <div id="lane-{{ lane.id }}" class="lane w-80 shrink-0">
-  <header class="flex items-center justify-between mb-2">
-    <h2 class="font-semibold">{{ lane.title }}</h2>
-    <button class="btn btn-sm"
-            data-action="click->modal#open"
-            data-modal-target-id="modal-card-create-{{ lane.id }}">
-      + Add Card
-    </button>
-  </header>
+	<header class="flex items-center justify-between mb-2">
+		<h2 class="font-semibold">{{ lane.title }}</h2>
+		<button class="btn btn-sm" data-action="click->modal#open" data-modal-target-id="modal-card-create-{{ lane.id }}">
+			+ Add Card
+		</button>
+	</header>
 
-  <div class="cards space-y-2">
-    {% for card in lane.cards %}
-      {% include 'components/Card.html.twig' with { card: card } %}
-    {% endfor %}
-  </div>
+	<div class="cards space-y-2">
+		{% for card in lane.cards %}
+			{% include 'components/Card.html.twig' with { card: card } %}
+		{% endfor %}
+	</div>
 </div>
 
 {# Modale Card (une par lane) #}
-<div id="modal-card-create-{{ lane.id }}"
-     class="modal {{ (openCardModalId is defined and openCardModalId == lane.id) ? '' : 'hidden' }}"
-     data-controller="modal">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg">Add Card</h3>
+<div id="modal-card-create-{{ lane.id }}" class="modal {{ (openCardModalId is defined and openCardModalId == lane.id) ? '' : 'hidden' }}" data-controller="modal">
+	<div class="modal-box">
+		<h3 class="font-bold text-lg">Add Card</h3>
 
-    {{ form_start(cardForms[lane.id], {
+		{{ form_start(cardForms[lane.id], {
       action: path('card_new', { laneId: lane.id }),
       attr: { novalidate: 'novalidate' }
     }) }}
-      {{ form_widget(cardForms[lane.id]) }}
-      <button class="btn btn-primary">Save</button>
-    {{ form_end(cardForms[lane.id]) }}
+		{{ form_widget(cardForms[lane.id]) }}
+		<button class="btn btn-primary">Save</button>
+		{{ form_end(cardForms[lane.id]) }}
 
-    <div class="modal-action">
-      <button class="btn" data-action="click->modal#close">Close</button>
-    </div>
-  </div>
+		<div class="modal-action">
+			<button class="btn" data-action="click->modal#close">Close</button>
+		</div>
+	</div>
 </div>
-
