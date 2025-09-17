@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Card;
+use App\Entity\Lane;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,18 @@ class CardRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Card::class);
+    }
+
+    public function findMaxPositionInLane(Lane $lane): int
+    {
+        $result = $this->createQueryBuilder('c')
+            ->select('MAX(c.position) as maxPosition')
+            ->andWhere('c.lane = :lane')
+            ->setParameter('lane', $lane)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result ?? 0;
     }
 
     //    /**

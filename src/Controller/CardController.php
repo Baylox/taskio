@@ -36,6 +36,10 @@ final class CardController extends AbstractController
         $card = new Card();
         $card->setLane($lane);
 
+        // Définir la position en bas de la lane
+        $maxPosition = $em->getRepository(Card::class)->findMaxPositionInLane($lane);
+        $card->setPosition($maxPosition + 1);
+
         $form = $this->createForm(CardType::class, $card);
         $form->handleRequest($request);
 
