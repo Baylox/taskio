@@ -2,9 +2,12 @@
 <div id="lane-{{ lane.id }}" class="lane w-80 shrink-0">
 	<header class="flex items-center justify-between mb-2">
 		<h2 class="font-semibold">{{ lane.title }}</h2>
-		<button class="btn btn-sm" data-action="click->modal#open" data-modal-target-id="modal-card-create-{{ lane.id }}">
-			+ Add Card
-		</button>
+		<div class="flex gap-2">
+			<label for="lane_edit_modal_{{ lane.id }}" class="btn btn-sm btn-outline">Edit</label>
+			<button class="btn btn-sm" data-action="click->modal#open" data-modal-target-id="modal-card-create-{{ lane.id }}">
+				+ Add Card
+			</button>
+		</div>
 	</header>
 
 	<div class="cards space-y-2">

@@ -36,10 +36,17 @@ final class DashboardController extends AbstractController
             $cardForms[$lane->getId()] = $this->createForm(CardType::class, $card);
         }
 
+        // Créer les formulaires pour l'édition des lanes
+        $laneEditForms = [];
+        foreach ($board->getLanes() as $lane) {
+            $laneEditForms[$lane->getId()] = $this->createForm(LaneType::class, $lane)->createView();
+        }
+
         return $this->render('dashboard/index.html.twig', [
             'board' => $board,
             'laneForm' => $laneForm->createView(),
             'cardForms' => array_map(fn($form) => $form->createView(), $cardForms),
+            'laneEditForms' => $laneEditForms,
             'openLaneModal' => false,
         ]);
     }

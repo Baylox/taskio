@@ -46,6 +46,7 @@ final class LaneController extends AbstractController
         return $this->render('dashboard/index.html.twig', [
             'board'         => $board,
             'laneForm'      => $form->createView(),
+            'laneEditForms' => $this->buildLaneEditForms($board),
             'openLaneModal' => $form->isSubmitted(),
         ]);
     }
