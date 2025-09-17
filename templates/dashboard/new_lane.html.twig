@@ -1,0 +1,26 @@
+		{# --- LANE MODAL (DaisyUI checkbox modal) --- #}
+		{# The checkbox controls the opening. "checked" if errors to keep the modal open. #}
+		<input type="checkbox" id="lane_create_modal" class="modal-toggle" {% if openLaneModal|default(false) %} checked {% endif %}/>
+
+		<div class="modal" role="dialog">
+			<div class="modal-box">
+				<h3 class="text-lg font-bold mb-4">Create Lane</h3>
+
+				{# Symfony form directly in the modal #}
+				{{ form_start(laneForm, {
+                action: path('lane_new', { id: board.id }),
+                attr: { novalidate: 'novalidate' }
+            }) }}
+				{{ form_widget(laneForm) }}
+				<div class="modal-action">
+					<button class="btn btn-primary">Save</button>
+					{# Close the modal: click the label linked to the checkbox #}
+					<label for="lane_create_modal" class="btn">Cancel</label>
+				</div>
+				{{ form_end(laneForm) }}
+			</div>
+
+			{# Click outside to close (overlay) #}
+			<label class="modal-backdrop" for="lane_create_modal">Close</label>
+		</div>
+	</div>
