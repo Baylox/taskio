@@ -23,7 +23,7 @@ class CardType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
-                'label'    => 'Board title',
+                'label'    => 'Card title',
                 'attr'     => [
                     'placeholder' => 'Enter a title',
                     'class' => 'input input-bordered w-full text-base-content bg-base-100'
@@ -38,7 +38,6 @@ class CardType extends AbstractType
                 ]
             ])
             ->add('description', TextareaType::class, [
-                'required' => true,
                 'label'    => 'Description',
                 'attr'     => [
                     'placeholder' => 'Enter a description',
@@ -47,14 +46,8 @@ class CardType extends AbstractType
                 'label_attr' => [
                     'class' => 'label-text text-base-content font-medium'
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'The description field cannot be empty.'
-                    ])
-                ]
             ])
             ->add('status', TextType::class, [
-                'required' => true,
                 'label'    => 'Status',
                 'attr'     => [
                     'placeholder' => 'Enter a status (max 24 characters)',
@@ -63,20 +56,7 @@ class CardType extends AbstractType
                 'label_attr' => [
                     'class' => 'label-text text-base-content font-medium'
                 ],
-                'constraints' => [
-                    new NotBlank(['message' => 'The status field cannot be empty.']),
-                    new Length([
-                        'max' => 24,
-                        'maxMessage' => 'The status cannot be longer than {{ limit }} characters.'
-                    ])
-                ]
-            ])
-            ->add('position')
-            ->add('lane', EntityType::class, [
-                'class' => Lane::class,
-                'choice_label' => 'id',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
