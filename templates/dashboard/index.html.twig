@@ -3,6 +3,12 @@
 {% block title %}Dashboard
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ vite_entry_link_tags('styles/dashboard.css') }}
+{% endblock %}
+
+
 {% block body %}
 	<div class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
 		{# Header Section #}
@@ -71,49 +77,4 @@
 		{% endfor %}
 	</div>
 
-	{# Custom Scrollbar Styles #}
-	<style>
-		.dashboard::-webkit-scrollbar {
-			height: 8px;
-		}
-		
-		.dashboard::-webkit-scrollbar-track {
-			background: rgba(148, 163, 184, 0.1);
-			border-radius: 4px;
-		}
-		
-		.dashboard::-webkit-scrollbar-thumb {
-			background: linear-gradient(90deg, #06b6d4, #3b82f6);
-			border-radius: 4px;
-		}
-		
-		.dashboard::-webkit-scrollbar-thumb:hover {
-			background: linear-gradient(90deg, #0891b2, #2563eb);
-		}
-
-		/* Smooth animations */
-		.lane-wrapper {
-			animation: fadeInUp 0.3s ease-out;
-		}
-		
-		@keyframes fadeInUp {
-			from {
-				opacity: 0;
-				transform: translateY(20px);
-			}
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
-		}
-
-		/* Responsive design */
-		@media (max-width: 768px) {
-			.dashboard {
-				gap: 1rem;
-				padding-left: 1rem;
-				padding-right: 1rem;
-			}
-		}
-	</style>
 {% endblock %}
