@@ -25,21 +25,29 @@ final class DashboardController extends AbstractController
             throw $this->createNotFoundException('Board not found');
         }
 
-        // Créer le formulaire pour les lanes
+        // Create the form for lanes
         $laneForm = $this->createForm(LaneType::class, new Lane());
 
-        // Créer les formulaires pour les cards (un par lane)
+        // Create the forms for cards (one per lane)
         $cardForms = [];
         foreach ($board->getLanes() as $lane) {
             $card = new Card();
-            $card->setLane($lane); // Pré-assigner la lane
+            $card->setLane($lane); // Pre-assign the lane
             $cardForms[$lane->getId()] = $this->createForm(CardType::class, $card);
         }
 
-        // Créer les formulaires pour l'édition des lanes
+        // Create the forms for editing lanes
         $laneEditForms = [];
         foreach ($board->getLanes() as $lane) {
             $laneEditForms[$lane->getId()] = $this->createForm(LaneType::class, $lane)->createView();
+        }
+
+        // Create the forms for editing cards
+        $cardEditForms = [];
+        foreach ($board->getLanes() as $lane) {
+            foreach ($lane->getCards() as $card) {
+                $cardEditForms[$card->getId()] = $this->createForm(CardType::class, $card)->createView();
+            }
         }
 
         return $this->render('dashboard/index.html.twig', [
@@ -47,6 +55,7 @@ final class DashboardController extends AbstractController
             'laneForm' => $laneForm->createView(),
             'cardForms' => array_map(fn($form) => $form->createView(), $cardForms),
             'laneEditForms' => $laneEditForms,
+            'cardEditForms' => $cardEditForms,
             'openLaneModal' => false,
         ]);
     }

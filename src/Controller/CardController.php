@@ -14,14 +14,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/card')]
 final class CardController extends AbstractController
 {
-    #[Route(name: 'app_card_index', methods: ['GET'])]
-    public function index(CardRepository $cardRepository): Response
-    {
-        return $this->render('dashboard/card/index.html.twig', [
-            'cards' => $cardRepository->findAll(),
-        ]);
-    }
-
     #[Route('/lanes/{laneId}/cards', name: 'card_new', methods: ['POST'])]
     public function createForLane(int $laneId, Request $request, EntityManagerInterface $em): Response
     {
@@ -30,13 +22,13 @@ final class CardController extends AbstractController
             throw $this->createNotFoundException('Lane not found');
         }
 
-        // Vérifier les permissions sur le board
+        // Check permissions on the board
         // $this->denyAccessUnlessGranted('EDIT', $lane->getBoard());
 
         $card = new Card();
         $card->setLane($lane);
 
-        // Définir la position en bas de la lane
+        // Set the position at the bottom of the lane
         $maxPosition = $em->getRepository(Card::class)->findMaxPositionInLane($lane);
         $card->setPosition($maxPosition + 1);
 
@@ -47,27 +39,27 @@ final class CardController extends AbstractController
             $em->persist($card);
             $em->flush();
 
-            // PRG: retour propre au dashboard
+            // PRG: clean redirect to the dashboard
             return $this->redirectToRoute('app_board_dashboard', ['id' => $lane->getBoard()->getId()], Response::HTTP_SEE_OTHER);
         }
 
-        // Erreurs -> on réaffiche le dashboard avec la modale ouverte et les erreurs
+        // Errors -> redisplay the dashboard with the modal open and errors shown
         $board = $lane->getBoard();
 
-        // Recréer le formulaire lane
+        // Recreate the lane form
         $laneForm = $this->createForm(\App\Form\LaneType::class, new \App\Entity\Lane());
 
-        // Recréer les formulaires cards pour toutes les lanes
+        // Recreate card forms for all lanes
         $cardForms = [];
         foreach ($board->getLanes() as $boardLane) {
             if ($boardLane->getId() === $lane->getId()) {
-                // Pour la lane avec erreur, utiliser le formulaire avec erreurs
-                $cardForms[$boardLane->getId()] = $form;
+            // For the lane with errors, use the form with errors
+            $cardForms[$boardLane->getId()] = $form;
             } else {
-                // Pour les autres lanes, créer un nouveau formulaire
-                $newCard = new Card();
-                $newCard->setLane($boardLane);
-                $cardForms[$boardLane->getId()] = $this->createForm(CardType::class, $newCard);
+            // For other lanes, create a new form
+            $newCard = new Card();
+            $newCard->setLane($boardLane);
+            $cardForms[$boardLane->getId()] = $this->createForm(CardType::class, $newCard);
             }
         }
 
@@ -75,27 +67,7 @@ final class CardController extends AbstractController
             'board' => $board,
             'laneForm' => $laneForm->createView(),
             'cardForms' => array_map(fn($form) => $form->createView(), $cardForms),
-            'openCardModalId' => $lane->getId(), // Ouvrir la modale avec erreurs
-        ]);
-    }
-
-    #[Route('/new', name: 'app_card_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $card = new Card();
-        $form = $this->createForm(CardType::class, $card);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($card);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_card_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('dashboard/card/new.html.twig', [
-            'card' => $card,
-            'form' => $form,
+            'openCardModalId' => $lane->getId(), // Open the modal with errors
         ]);
     }
 
@@ -110,30 +82,57 @@ final class CardController extends AbstractController
     #[Route('/{id}', name: 'app_card_delete', methods: ['POST'])]
     public function delete(Request $request, Card $card, EntityManagerInterface $entityManager): Response
     {
+        $board = $card->getLane()->getBoard();
+
         if ($this->isCsrfTokenValid('delete'.$card->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($card);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_card_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_board_dashboard', ['id' => $board->getId()], Response::HTTP_SEE_OTHER);
     }
 
-    //Todo : AJAX
-    #[Route('/{id}/edit', name: 'app_card_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Card $card, EntityManagerInterface $entityManager): Response
+    #[Route('/cards/{id}/edit', name: 'card_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Card $card, EntityManagerInterface $em): Response
     {
+        $lane = $card->getLane();
+        $board = $lane->getBoard();
+        //$this->denyAccessUnlessGranted('EDIT', $board);
+
         $form = $this->createForm(CardType::class, $card);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_card_index', [], Response::HTTP_SEE_OTHER);
+            $em->flush();
+            return $this->redirectToRoute('app_board_dashboard', ['id' => $board->getId()]);
         }
 
-        return $this->render('dashboard/card/edit.html.twig', [
-            'card' => $card,
-            'form' => $form,
+        // Errors → redisplay dashboard with the UPDATE modal for THIS card open
+        $cardEditForms = [];
+        foreach ($board->getLanes() as $boardLane) {
+            foreach ($boardLane->getCards() as $boardCard) {
+                $cardEditForms[$boardCard->getId()] = $boardCard->getId() === $card->getId()
+                    ? $form->createView() // keep errors
+                    : $this->createForm(CardType::class, $boardCard)->createView();
+            }
+        }
+
+        return $this->render('dashboard/index.html.twig', [
+            'board'           => $board,
+            'laneForm'        => $this->createForm(\App\Form\LaneType::class)->createView(),
+            'laneEditForms'   => $this->buildLaneEditForms($board),
+            'cardEditForms'   => $cardEditForms,
+            'openEditCardId'  => $card->getId(),
         ]);
+    }
+
+    /** @return array<int, \Symfony\Component\Form\FormView> */
+    private function buildLaneEditForms(\App\Entity\Board $board): array
+    {
+        $forms = [];
+        foreach ($board->getLanes() as $lane) {
+            $forms[$lane->getId()] = $this->createForm(\App\Form\LaneType::class, $lane)->createView();
+        }
+        return $forms;
     }
 }
