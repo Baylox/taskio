@@ -1,10 +1,39 @@
-<div class="lane bg-gray-800 rounded-md shadow p-3 w-64 flex-shrink-0">
-    <h2 class="font-semibold text-white mb-2">{{ lane.title }}</h2>
-    <div class="lane-cards space-y-2">
-        {% for card in lane.cards %}
-            {% include 'dashboard/_card.html.twig' with { card: card } %}
-        {% else %}
-            <p class="text-gray-400 text-sm">No cards yet</p>
-        {% endfor %}
-    </div>
+{# templates/components/Lane.html.twig #}
+<div id="lane-{{ lane.id }}" class="lane w-80 shrink-0">
+  <header class="flex items-center justify-between mb-2">
+    <h2 class="font-semibold">{{ lane.title }}</h2>
+    <button class="btn btn-sm"
+            data-action="click->modal#open"
+            data-modal-target-id="modal-card-create-{{ lane.id }}">
+      + Add Card
+    </button>
+  </header>
+
+  <div class="cards space-y-2">
+    {% for card in lane.cards %}
+      {% include 'components/Card.html.twig' with { card: card } %}
+    {% endfor %}
+  </div>
 </div>
+
+{# Modale Card (une par lane) #}
+<div id="modal-card-create-{{ lane.id }}"
+     class="modal {{ (openCardModalId is defined and openCardModalId == lane.id) ? '' : 'hidden' }}"
+     data-controller="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Add Card</h3>
+
+    {{ form_start(cardForms[lane.id], {
+      action: path('card_new', { laneId: lane.id }),
+      attr: { novalidate: 'novalidate' }
+    }) }}
+      {{ form_widget(cardForms[lane.id]) }}
+      <button class="btn btn-primary">Save</button>
+    {{ form_end(cardForms[lane.id]) }}
+
+    <div class="modal-action">
+      <button class="btn" data-action="click->modal#close">Close</button>
+    </div>
+  </div>
+</div>
+

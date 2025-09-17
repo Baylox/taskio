@@ -1,12 +1,38 @@
+{# templates/dashboard/index.html.twig #}
 {% extends 'base.html.twig' %}
-
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
 <div class="dashboard flex gap-4 overflow-x-auto p-4">
-    {# The lanes will be injected here #}
-    {% for lane in board.lanes %}
-        {% include 'components/Lane.html.twig' with { lane: lane } %}
-    {% endfor %}
+
+  <button class="btn btn-primary" data-action="click->modal#open" data-modal-target-id="modal-lane-create">
+    + Add Lane
+  </button>
+
+  {% for lane in board.lanes %}
+    {% include 'components/Lane.html.twig' with { lane: lane } %}
+  {% endfor %}
+</div>
+
+{# Modale Lane #}
+<div id="modal-lane-create"
+     class="modal {{ openLaneModal ? '' : 'hidden' }}"
+     data-controller="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Create Lane</h3>
+
+    {{ form_start(laneForm, {
+      action: path('lane_new', { id: board.id }),
+      attr: { novalidate: 'novalidate' }
+    }) }}
+      {{ form_widget(laneForm) }}
+      <button class="btn btn-primary">Save</button>
+    {{ form_end(laneForm) }}
+
+    <div class="modal-action">
+      <button class="btn" data-action="click->modal#close">Close</button>
+    </div>
+  </div>
 </div>
 {% endblock %}
+

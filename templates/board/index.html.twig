@@ -54,7 +54,7 @@
 										{{ include('board/_delete_form.html.twig') }}
 									</div>
 									{# Dashboard #}
-									<a href="{{ path('app_dash', {'id': board.id}) }}" class="inline-flex items-center px-3 py-1.5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition">
+									<a href="{{ path('app_board_dashboard', {'id': board.id}) }}" class="inline-flex items-center px-3 py-1.5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition">
 										<i class="fas fa-columns mr-1"></i>
 										Dashboard
 									</a>
