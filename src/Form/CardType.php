@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\Length;
 
 class CardType extends AbstractType
 {
@@ -52,7 +53,24 @@ class CardType extends AbstractType
                     ])
                 ]
             ])
-            ->add('status')
+            ->add('status', TextType::class, [
+                'required' => true,
+                'label'    => 'Status',
+                'attr'     => [
+                    'placeholder' => 'Enter a status (max 24 characters)',
+                    'class' => 'input input-bordered w-full text-base-content bg-base-100'
+                ],
+                'label_attr' => [
+                    'class' => 'label-text text-base-content font-medium'
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'The status field cannot be empty.']),
+                    new Length([
+                        'max' => 24,
+                        'maxMessage' => 'The status cannot be longer than {{ limit }} characters.'
+                    ])
+                ]
+            ])
             ->add('position')
             ->add('lane', EntityType::class, [
                 'class' => Lane::class,
