@@ -3,81 +3,58 @@
 namespace App\Controller;
 
 use App\Entity\Card;
+use App\Entity\Lane;
 use App\Form\CardType;
+use App\Form\LaneType;
 use App\Repository\CardRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/card')]
 final class CardController extends AbstractController
 {
     #[Route('/lanes/{laneId}/cards', name: 'card_new', methods: ['POST'])]
-    public function createForLane(int $laneId, Request $request, EntityManagerInterface $em): Response
-    {
-        $lane = $em->getRepository(\App\Entity\Lane::class)->find($laneId);
-        if (!$lane) {
-            throw $this->createNotFoundException('Lane not found');
-        }
+public function createForLane(
+    #[MapEntity(mapping: ['laneId' => 'id'])] Lane $lane,
+    Request $request,
+    EntityManagerInterface $em,
+    CardRepository $cardRepo
+): Response {
 
-        // Check permissions on the board
-        // $this->denyAccessUnlessGranted('EDIT', $lane->getBoard());
+    // $this->denyAccessUnlessGranted('EDIT', $lane->getBoard());
 
-        $card = new Card();
-        $card->setLane($lane);
+    $card = new Card();
+    $card->setLane($lane);
 
-        // Set the position at the bottom of the lane
-        $maxPosition = $em->getRepository(Card::class)->findMaxPositionInLane($lane);
-        $card->setPosition($maxPosition + 1);
+    // Position at the bottom of the lane (robust if lane is empty)
+    $maxPosition = $cardRepo->findMaxPositionInLane($lane);
+    $card->setPosition(($maxPosition ?? 0) + 1);
 
-        $form = $this->createForm(CardType::class, $card);
-        $form->handleRequest($request);
+    $form = $this->createForm(CardType::class, $card);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($card);
-            $em->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em->persist($card);
+        $em->flush();
 
-            // PRG: clean redirect to the dashboard
-            return $this->redirectToRoute('app_board_dashboard', ['id' => $lane->getBoard()->getId()], Response::HTTP_SEE_OTHER);
-        }
-
-        // Errors -> redisplay the dashboard with the modal open and errors shown
-        $board = $lane->getBoard();
-
-        // Recreate the lane form
-        $laneForm = $this->createForm(\App\Form\LaneType::class, new \App\Entity\Lane());
-
-        // Recreate card forms for all lanes
-        $cardForms = [];
-        foreach ($board->getLanes() as $boardLane) {
-            if ($boardLane->getId() === $lane->getId()) {
-            // For the lane with errors, use the form with errors
-            $cardForms[$boardLane->getId()] = $form;
-            } else {
-            // For other lanes, create a new form
-            $newCard = new Card();
-            $newCard->setLane($boardLane);
-            $cardForms[$boardLane->getId()] = $this->createForm(CardType::class, $newCard);
-            }
-        }
-
-        return $this->render('dashboard/index.html.twig', [
-            'board' => $board,
-            'laneForm' => $laneForm->createView(),
-            'cardForms' => array_map(fn($form) => $form->createView(), $cardForms),
-            'openCardModalId' => $lane->getId(), // Open the modal with errors
-        ]);
+        return $this->redirectToRoute(
+            'app_board_dashboard',
+            ['id' => $lane->getBoard()->getId()],
+            Response::HTTP_SEE_OTHER
+        );
     }
-
-    #[Route('/{id}', name: 'app_card_show', methods: ['GET'])]
-    public function show(Card $card): Response
-    {
-        return $this->render('dashboard/card/show.html.twig', [
-            'card' => $card,
-        ]);
-    }
+    // Invalid case: return only the strict minimum
+    return $this->render('dashboard/index.html.twig', [
+        'board' => $lane->getBoard(),
+        'laneForm' => $this->createForm(LaneType::class, new Lane())->createView(),
+        'cardFormForLane' => [$lane->getId() => $form->createView()],
+        'openCardModalLaneId' => $lane->getId(),
+    ]);
+}
 
     #[Route('/{id}', name: 'app_card_delete', methods: ['POST'])]
     public function delete(Request $request, Card $card, EntityManagerInterface $entityManager): Response
@@ -119,7 +96,7 @@ final class CardController extends AbstractController
 
         return $this->render('dashboard/index.html.twig', [
             'board'           => $board,
-            'laneForm'        => $this->createForm(\App\Form\LaneType::class)->createView(),
+            'laneForm'        => $this->createForm(LaneType::class)->createView(),
             'laneEditForms'   => $this->buildLaneEditForms($board),
             'cardEditForms'   => $cardEditForms,
             'openEditCardId'  => $card->getId(),
@@ -131,7 +108,7 @@ final class CardController extends AbstractController
     {
         $forms = [];
         foreach ($board->getLanes() as $lane) {
-            $forms[$lane->getId()] = $this->createForm(\App\Form\LaneType::class, $lane)->createView();
+            $forms[$lane->getId()] = $this->createForm(LaneType::class, $lane)->createView();
         }
         return $forms;
     }
