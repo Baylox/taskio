@@ -25,14 +25,13 @@ final class LaneController extends AbstractController
 
     // PRG from the dashboard (adding a lane)
     // The Board is received in the URL to know where to attach the lane
-    #[Route('/boards/{id}/lanes', name: 'lane_new', methods: ['POST'])]
-    public function create(Board $board, Request $request, EntityManagerInterface $em): Response
+    #[Route('/boards/{id}/lanes/new', name: 'lane_new', methods: ['POST','GET'])]
+    public function new(Board $board, Request $request, EntityManagerInterface $em, LaneRepository $repo): Response
     {
-        // (Optionnel mais recommandé)
-        $this->denyAccessUnlessGranted('EDIT', $board);
 
         $lane = new Lane();
         $lane->setBoard($board);
+        $lane->setPosition($repo->getNextPositionForBoard($board)); // ← clé
 
         $form = $this->createForm(LaneType::class, $lane);
         $form->handleRequest($request);
@@ -40,18 +39,16 @@ final class LaneController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($lane);
             $em->flush();
-
-            // PRG: retour propre au dashboard
-            return $this->redirectToRoute('app_board_dashboard', ['id' => $board->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_board_dashboard', ['id' => $board->getId()]);
         }
 
-        // Erreurs -> on réaffiche le dashboard avec la modale ouverte et les erreurs
         return $this->render('dashboard/index.html.twig', [
             'board'         => $board,
             'laneForm'      => $form->createView(),
-            'openLaneModal' => true,
+            'openLaneModal' => $form->isSubmitted(),
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_lane_show', methods: ['GET'])]
     public function show(Lane $lane): Response

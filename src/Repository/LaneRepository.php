@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Lane;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Board;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Lane>
@@ -16,6 +17,22 @@ class LaneRepository extends ServiceEntityRepository
         parent::__construct($registry, Lane::class);
     }
 
+    /**
+     * Returns the next available position for a lane within the specified board.
+     *
+     * @param Board $board The board entity for which to determine the next lane position.
+     * @return int The next position value for a new lane in the specified board.
+     */
+
+    public function getNextPositionForBoard(Board $board): int
+    {
+        return (int) $this->createQueryBuilder('l')
+            ->select('COALESCE(MAX(l.position), 0)')
+            ->andWhere('l.board = :board')
+            ->setParameter('board', $board)
+            ->getQuery()
+            ->getSingleScalarResult() + 1;
+    }
     //    /**
     //     * @return Lane[] Returns an array of Lane objects
     //     */
