@@ -22,6 +22,59 @@ final class CardController extends AbstractController
         ]);
     }
 
+    #[Route('/lanes/{laneId}/cards', name: 'card_new', methods: ['POST'])]
+    public function createForLane(int $laneId, Request $request, EntityManagerInterface $em): Response
+    {
+        $lane = $em->getRepository(\App\Entity\Lane::class)->find($laneId);
+        if (!$lane) {
+            throw $this->createNotFoundException('Lane not found');
+        }
+
+        // Vérifier les permissions sur le board
+        $this->denyAccessUnlessGranted('EDIT', $lane->getBoard());
+
+        $card = new Card();
+        $card->setLane($lane);
+
+        $form = $this->createForm(CardType::class, $card);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($card);
+            $em->flush();
+
+            // PRG: retour propre au dashboard
+            return $this->redirectToRoute('app_board_dashboard', ['id' => $lane->getBoard()->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        // Erreurs -> on réaffiche le dashboard avec la modale ouverte et les erreurs
+        $board = $lane->getBoard();
+
+        // Recréer le formulaire lane
+        $laneForm = $this->createForm(\App\Form\LaneType::class, new \App\Entity\Lane());
+
+        // Recréer les formulaires cards pour toutes les lanes
+        $cardForms = [];
+        foreach ($board->getLanes() as $boardLane) {
+            if ($boardLane->getId() === $lane->getId()) {
+                // Pour la lane avec erreur, utiliser le formulaire avec erreurs
+                $cardForms[$boardLane->getId()] = $form;
+            } else {
+                // Pour les autres lanes, créer un nouveau formulaire
+                $newCard = new Card();
+                $newCard->setLane($boardLane);
+                $cardForms[$boardLane->getId()] = $this->createForm(CardType::class, $newCard);
+            }
+        }
+
+        return $this->render('dashboard/index.html.twig', [
+            'board' => $board,
+            'laneForm' => $laneForm->createView(),
+            'cardForms' => array_map(fn($form) => $form->createView(), $cardForms),
+            'openCardModalId' => $lane->getId(), // Ouvrir la modale avec erreurs
+        ]);
+    }
+
     #[Route('/new', name: 'app_card_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

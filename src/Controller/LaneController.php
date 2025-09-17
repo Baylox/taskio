@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Lane;
+use App\Entity\Board;
 use App\Form\LaneType;
 use App\Repository\LaneRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/lane')]
 final class LaneController extends AbstractController
@@ -22,25 +23,32 @@ final class LaneController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_lane_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    // PRG from the dashboard (adding a lane)
+    // The Board is received in the URL to know where to attach the lane
+    #[Route('/boards/{id}/lanes/new', name: 'lane_new', methods: ['POST','GET'])]
+    public function new(Board $board, Request $request, EntityManagerInterface $em, LaneRepository $repo): Response
     {
+
         $lane = new Lane();
+        $lane->setBoard($board);
+        $lane->setPosition($repo->getNextPositionForBoard($board)); // ← clé
+
         $form = $this->createForm(LaneType::class, $lane);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($lane);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_lane_index', [], Response::HTTP_SEE_OTHER);
+            $em->persist($lane);
+            $em->flush();
+            return $this->redirectToRoute('app_board_dashboard', ['id' => $board->getId()]);
         }
 
-        return $this->render('dashboard/lane/new.html.twig', [
-            'lane' => $lane,
-            'form' => $form,
+        return $this->render('dashboard/index.html.twig', [
+            'board'         => $board,
+            'laneForm'      => $form->createView(),
+            'openLaneModal' => $form->isSubmitted(),
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_lane_show', methods: ['GET'])]
     public function show(Lane $lane): Response

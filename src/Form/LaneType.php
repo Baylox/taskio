@@ -15,11 +15,6 @@ class LaneType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('position')
-            ->add('board', EntityType::class, [
-                'class' => Board::class,
-                'choice_label' => 'id',
-            ])
         ;
     }
 

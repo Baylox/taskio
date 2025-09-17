@@ -1,20 +1,45 @@
+{# templates/dashboard/index.html.twig #}
 {% extends 'base.html.twig' %}
-
-{% block title %}Hello DashboardController!{% endblock %}
+{% block title %}Dashboard
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<div
+		class="p-4">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+		{# Button that opens the modal via the "toggle" checkbox #}
+		<label for="lane_create_modal" class="btn btn-primary">+ Add Lane</label>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Env/ask-cge/src/Controller/DashboardController.php</code></li>
-        <li>Your template at <code>C:/Env/ask-cge/templates/dashboard/index.html.twig</code></li>
-        </ul>
-</div>
+		<div class="dashboard flex gap-4 overflow-x-auto mt-4" id="board-lanes">
+			{% for lane in board.lanes %}
+				{% include 'components/Lane.html.twig' with { lane: lane } %}
+			{% endfor %}
+		</div>
+
+		{# --- LANE MODAL (DaisyUI checkbox modal) --- #}
+		{# The checkbox controls the opening. "checked" if errors to keep the modal open. #}
+		<input type="checkbox" id="lane_create_modal" class="modal-toggle" {% if openLaneModal|default(false) %} checked {% endif %}/>
+
+		<div class="modal" role="dialog">
+			<div class="modal-box">
+				<h3 class="text-lg font-bold mb-4">Create Lane</h3>
+
+				{# Symfony form directly in the modal #}
+				{{ form_start(laneForm, {
+                action: path('lane_new', { id: board.id }),
+                attr: { novalidate: 'novalidate' }
+            }) }}
+				{{ form_widget(laneForm) }}
+				<div class="modal-action">
+					<button class="btn btn-primary">Save</button>
+					{# Close the modal: click the label linked to the checkbox #}
+					<label for="lane_create_modal" class="btn">Cancel</label>
+				</div>
+				{{ form_end(laneForm) }}
+			</div>
+
+			{# Click outside to close (overlay) #}
+			<label class="modal-backdrop" for="lane_create_modal">Close</label>
+		</div>
+	</div>
 {% endblock %}
