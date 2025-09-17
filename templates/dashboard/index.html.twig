@@ -31,16 +31,5 @@
         checked: (openEditLaneId is defined and lane.id == openEditLaneId)
         } only %}
 		{% endfor %}
-
-		{# Include all Card Edit modals #}
-		{% for lane in board.lanes %}
-			{% for card in lane.cards %}
-				{% include 'dashboard/update_card.html.twig' with {
-					card: card,
-					form: cardEditForms[card.id],
-					checked: (openEditCardId is defined and card.id == openEditCardId)
-				} only %}
-			{% endfor %}
-		{% endfor %}
 	</div>
 {% endblock %}

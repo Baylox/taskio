@@ -1,20 +1,25 @@
 {# templates/components/Lane.html.twig #}
 <div id="lane-{{ lane.id }}" class="lane w-80 shrink-0">
-	<header class="flex items-center justify-between mb-2">
-		<h2 class="font-semibold">{{ lane.title }}</h2>
-		<div class="flex gap-2">
-			<label for="lane_edit_modal_{{ lane.id }}" class="btn btn-sm btn-outline">Edit</label>
-			<label for="card_create_modal_{{ lane.id }}" class="btn btn-sm">
-				+ Add Card
-			</label>
-		</div>
-	</header>
+    <header class="flex items-center justify-between mb-2">
+        <h2 class="font-semibold">{{ lane.title }}</h2>
+        <div class="flex gap-2">
+            <label for="lane_edit_modal_{{ lane.id }}" class="btn btn-sm btn-outline">Edit</label>
+            <label for="card_create_modal_{{ lane.id }}" class="btn btn-sm">
+                + Add Card
+            </label>
+        </div>
+    </header>
 
-	<div class="cards space-y-2">
-		{% for card in lane.cards %}
-			{% include 'components/Card.html.twig' with { card: card } %}
-		{% endfor %}
-	</div>
+    <div class="cards space-y-2">
+        {% for card in lane.cards %}
+            {% include 'components/Card.html.twig' with { card: card } %}
+            {% include 'dashboard/update_card.html.twig' with {
+                card: card,
+                form: cardEditForms[card.id],
+                checked: (openEditCardId is defined and card.id == openEditCardId)
+            } only %}
+        {% endfor %}
+    </div>
 </div>
 
 {# Include the reusable card creation modal #}
