@@ -29,6 +29,17 @@ class BoardRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findWithLanesAndCards(int $id): ?Board
+    {
+        return $this->createQueryBuilder('b')
+            ->leftJoin('b.lanes', 'l')->addSelect('l')
+            ->leftJoin('l.cards', 'c')->addSelect('c')
+            ->andWhere('b.id = :id')->setParameter('id', $id)
+            ->orderBy('l.position', 'ASC')
+            ->addOrderBy('c.position', 'ASC')
+            ->getQuery()->getOneOrNullResult();
+    }
+
 
     //    /**
     //     * @return Board[] Returns an array of Board objects

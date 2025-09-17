@@ -1,60 +1,10 @@
-{# Lane container #}
-<article
-	class="card bg-base-200 w-72 max-w-72 shadow-md rounded-2xl flex flex-col" data-controller="sortable" data-sortable-group-value="cards" data-sortable-end-url-value="{{ path('api_card_reorder', { laneId: lane.id }) }}" data-csrf="{{ csrf_token('dnd_cards_' ~ lane.id) }}" aria-label="Lane {{ lane.title }}">
-	{# Header #}
-	<header class="card-body py-3 px-4 !pb-2">
-		<div class="flex items-center gap-2">
-			<i class="fa-solid fa-grip-vertical text-base-content/50 cursor-move" aria-hidden="true"></i>
-			<h3 class="card-title text-base leading-tight truncate" title="{{ lane.title }}">
-				{{ lane.title }}
-			</h3>
-			<span class="badge badge-neutral ml-auto" aria-label="{{ lane.cards|length }} cards">
-				{{ lane.cards|length }}
-			</span>
-
-			{# Actions menu #}
-			<div class="dropdown dropdown-end">
-				<button type="button" class="btn btn-ghost btn-xs" aria-label="Lane actions">
-					<i class="fa-solid fa-ellipsis"></i>
-				</button>
-				<ul class="dropdown-content menu menu-sm bg-base-200 rounded-box shadow z-[1] w-40">
-					<li>
-						<a data-action="lane#rename">Rename</a>
-					</li>
-					<li>
-						<a data-action="lane#clear">Clear cards</a>
-					</li>
-					<li>
-						<a class="text-error" data-action="lane#delete">Delete lane</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</header>
-
-	<div class="px-4">
-		<div class="divider my-2"></div>
-	</div>
-
-	{# Vertical list of cards, scrollable #}
-	<section class="px-3 pb-2">
-		<ul class="flex flex-col gap-2 max-h-[60vh] overflow-y-auto pr-1" data-sortable-target="container" role="list" aria-label="Cards in {{ lane.title }}">
-			{% for card in lane.cards %}
-				<twig:card :card="card"/>
-			{% else %}
-				<li class="text-sm text-base-content/60 px-2 py-1 italic">No cards yet</li>
-			{% endfor %}
-		</ul>
-	</section>
-
-	{# Footer: Add card inline #}
-	<footer class="card-actions px-3 py-3 mt-auto">
-		<form class="w-full flex items-center gap-2" data-action="submit->lane#createCard">
-			<input name="title" type="text" class="input input-sm input-bordered w-full" placeholder="Add a card…" autocomplete="off" aria-label="New card title"/>
-			<button type="submit" class="btn btn-sm btn-primary">
-				<i class="fa-solid fa-plus mr-1"></i>
-				Add
-			</button>
-		</form>
-	</footer>
-</article>
+<div class="lane bg-gray-800 rounded-md shadow p-3 w-64 flex-shrink-0">
+    <h2 class="font-semibold text-white mb-2">{{ lane.title }}</h2>
+    <div class="lane-cards space-y-2">
+        {% for card in lane.cards %}
+            {% include 'dashboard/_card.html.twig' with { card: card } %}
+        {% else %}
+            <p class="text-gray-400 text-sm">No cards yet</p>
+        {% endfor %}
+    </div>
+</div>
