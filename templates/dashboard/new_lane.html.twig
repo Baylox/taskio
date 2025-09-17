@@ -5,19 +5,19 @@
 		<h3 class="text-lg font-bold mb-4">Create Lane</h3>
 
 		{# Symfony form directly in the modal #}
-		{{ form_start(laneForm, {
+		{{ form_start(form, {
                 action: path('lane_new', { id: board.id }),
                 attr: { novalidate: 'novalidate' }
             }) }}
-		{{ form_widget(laneForm) }}
+		{{ form_widget(form) }}
 		<div class="modal-action">
 			<button class="btn btn-primary">Save</button>
 			{# Close the modal: click the label linked to the checkbox #}
 			<label for="lane_create_modal" class="btn">Cancel</label>
 		</div>
-		{{ form_end(laneForm) }}
+		{{ form_end(form) }}
 	</div>
 
 	{# Click outside to close (overlay) #}
 	<label class="modal-backdrop" for="lane_create_modal">Close</label>
-</div></div>
+</div>

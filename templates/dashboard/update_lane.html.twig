@@ -1,0 +1,19 @@
+{# templates/dashboard/update_lane.html.twig #}
+<input type="checkbox" id="lane_edit_modal_{{ lane.id }}" class="modal-toggle" {{ checked ? 'checked' }}/>
+<div class="modal" role="dialog">
+	<div class="modal-box">
+		<h3 class="text-lg font-bold mb-4">Edit Lane</h3>
+
+		{{ form_start(form, {
+      action: path('lane_edit', { id: lane.id }),
+      attr: { novalidate: 'novalidate' }
+    }) }}
+		{{ form_widget(form) }}
+		<div class="modal-action">
+			<button class="btn btn-primary" type="submit">Update</button>
+			<label for="lane_edit_modal_{{ lane.id }}" class="btn" type="button">Cancel</label>
+		</div>
+		{{ form_end(form) }}
+	</div>
+	<label class="modal-backdrop" for="lane_edit_modal_{{ lane.id }}">Close</label>
+</div>

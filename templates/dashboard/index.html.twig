@@ -16,7 +16,20 @@
 			{% endfor %}
 		</div>
 
-		{# Include the modal for creating a new lane #}
-		{% include 'dashboard/new_lane.html.twig' with { laneForm: laneForm, openLaneModal: openLaneModal } %}
+		{# Include Create modal #}
+		{% include 'dashboard/new_lane.html.twig' with {
+        form: laneForm,
+        board: board,
+        checked: openLaneModal|default(false)
+        } only %}
+
+		{# Include all Edit modals #}
+		{% for lane in board.lanes %}
+		{% include 'dashboard/update_lane.html.twig' with {
+        lane: lane,
+        form: laneEditForms[lane.id],
+        checked: (openEditLaneId is defined and lane.id == openEditLaneId)
+        } only %}
+		{% endfor %}
 	</div>
 {% endblock %}
