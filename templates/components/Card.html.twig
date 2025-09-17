@@ -1,23 +1,218 @@
-<li class="card bg-base-100 shadow-sm rounded-xl p-3 hover:shadow transition" data-id="{{ card.id }}" role="listitem" tabindex="0">
-	<div class="flex items-start gap-2">
-		<i class="fa-solid fa-grip-lines text-base-content/40 mt-1 cursor-move" aria-hidden="true"></i>
+{# templates/components/Card.html.twig #}
+<li class="card group relative bg-slate-700/40 hover:bg-slate-700/60 border border-slate-600/40 hover:border-slate-500/60 shadow-lg hover:shadow-xl rounded-lg p-4 transition-all duration-300 hover:scale-[1.02] cursor-pointer backdrop-blur-sm" 
+    data-id="{{ card.id }}" 
+    role="listitem" 
+    tabindex="0"
+    data-controller="card-drag"
+    data-card-drag-id-value="{{ card.id }}">
 
-		<div class="min-w-0 grow">
-			<p class="font-medium truncate" title="{{ title() }}">{{ title() }}</p>
+	{# Card Priority Indicator #}
+	{% set priorityColor = card.priority|default('normal') == 'high' ? 'bg-red-500' : (card.priority|default('normal') == 'medium' ? 'bg-yellow-500' : 'bg-green-500') %}
+	<div class="absolute top-0 left-0 w-1 h-full {{ priorityColor }} rounded-l-lg opacity-70"></div>
 
+	<div class="flex items-start gap-3">
+		{# Drag Handle #}
+		<div class="drag-handle flex-shrink-0 mt-1 p-1 rounded hover:bg-slate-600/40 transition-colors cursor-move opacity-40 group-hover:opacity-70" 
+			 aria-hidden="true"
+			 data-card-drag-target="handle">
+			<svg class="w-4 h-4 text-slate-300" fill="currentColor" viewBox="0 0 24 24">
+				<path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+			</svg>
+		</div>
+
+		{# Card Content #}
+		<div class="min-w-0 grow space-y-3">
+			{# Card Title #}
+			<div class="flex items-start justify-between gap-2">
+				<h4 class="font-medium text-white text-sm leading-relaxed truncate" 
+					title="{{ title() }}">
+					{{ title() }}
+				</h4>
+				
+				{# Card Actions #}
+				<div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+					<button class="inline-flex items-center justify-center w-7 h-7 text-slate-400 hover:text-white hover:bg-slate-600/50 rounded-md transition-all duration-200" 
+							aria-label="Edit card" 
+							data-action="card#open">
+						<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+						</svg>
+					</button>
+				</div>
+			</div>
+
+			{# Card Description #}
 			{% if hasDescription() %}
-				<p class="text-sm text-base-content/70 line-clamp-2">{{ card.description }}</p>
+				<div class="text-xs text-slate-300 leading-relaxed line-clamp-2 pr-2">
+					{{ card.description }}
+				</div>
 			{% endif %}
 
-			{% if status() %}
-				<div class="mt-2">
-					<span class="badge badge-outline">{{ status() }}</span>
+			{# Card Meta Information #}
+			<div class="flex items-center justify-between gap-2 pt-1">
+				{# Status Badge #}
+				{% if status() %}
+					<div class="flex items-center gap-2">
+						{% set statusConfig = {
+							'todo': { color: 'bg-slate-600/50 text-slate-300 border-slate-500/50', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
+							'in_progress': { color: 'bg-blue-500/20 text-blue-300 border-blue-500/50', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
+							'done': { color: 'bg-green-500/20 text-green-300 border-green-500/50', icon: 'M5 13l4 4L19 7' },
+							'blocked': { color: 'bg-red-500/20 text-red-300 border-red-500/50', icon: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728' }
+						} %}
+						{% set currentStatus = statusConfig[status()]|default(statusConfig['todo']) %}
+						
+						<span class="inline-flex items-center gap-1.5 px-2 py-1 text-xs font-medium rounded-md border {{ currentStatus.color }}">
+							<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ currentStatus.icon }}"/>
+							</svg>
+							{{ status()|replace({'_': ' '})|title }}
+						</span>
+					</div>
+				{% endif %}
+
+				{# Card Meta Icons #}
+				<div class="flex items-center gap-1.5 text-slate-400">
+					{# Due Date #}
+					{% if card.dueDate %}
+						{% set isOverdue = card.dueDate < date() %}
+						{% set isDueToday = card.dueDate|date('Y-m-d') == 'now'|date('Y-m-d') %}
+						<div class="flex items-center gap-1 text-xs {{ isOverdue ? 'text-red-400' : (isDueToday ? 'text-yellow-400' : 'text-slate-400') }}" 
+							 title="Due: {{ card.dueDate|date('M j, Y') }}">
+							<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+							</svg>
+							<span>{{ card.dueDate|date('M j') }}</span>
+						</div>
+					{% endif %}
+
+					{# Comments Count #}
+					{% if card.comments|length > 0 %}
+						<div class="flex items-center gap-1 text-xs" title="{{ card.comments|length }} comment(s)">
+							<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+							</svg>
+							<span>{{ card.comments|length }}</span>
+						</div>
+					{% endif %}
+
+					{# Attachments Count #}
+					{% if card.attachments|length > 0 %}
+						<div class="flex items-center gap-1 text-xs" title="{{ card.attachments|length }} attachment(s)">
+							<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+							</svg>
+							<span>{{ card.attachments|length }}</span>
+						</div>
+					{% endif %}
+
+					{# Assignee Avatar #}
+					{% if card.assignee %}
+						<div class="flex items-center" title="Assigned to {{ card.assignee.name }}">
+							{% if card.assignee.avatar %}
+								<img src="{{ card.assignee.avatar }}" 
+									 alt="{{ card.assignee.name }}" 
+									 class="w-5 h-5 rounded-full border border-slate-500">
+							{% else %}
+								<div class="w-5 h-5 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-xs font-medium text-white">
+									{{ card.assignee.name|first|upper }}
+								</div>
+							{% endif %}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+
+			{# Card Tags/Labels #}
+			{% if card.tags|length > 0 %}
+				<div class="flex items-center gap-1 flex-wrap pt-1">
+					{% for tag in card.tags|slice(0, 3) %}
+						{% set tagColors = ['bg-purple-500/20 text-purple-300', 'bg-pink-500/20 text-pink-300', 'bg-indigo-500/20 text-indigo-300', 'bg-teal-500/20 text-teal-300'] %}
+						<span class="inline-block px-2 py-0.5 text-xs font-medium rounded-full {{ tagColors[loop.index0 % 4] }}">
+							{{ tag.name }}
+						</span>
+					{% endfor %}
+					{% if card.tags|length > 3 %}
+						<span class="text-xs text-slate-400">+{{ card.tags|length - 3 }}</span>
+					{% endif %}
 				</div>
 			{% endif %}
 		</div>
-
-		<button class="btn btn-ghost btn-xs ml-auto" aria-label="Open card" data-action="card#open">
-			<i class="fa-regular fa-pen-to-square"></i>
-		</button>
 	</div>
+
+	{# Hover Overlay Effect #}
+	<div class="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
 </li>
+
+{# Custom Card Styles #}
+<style>
+	/* Card drag state */
+	.card[data-dragging="true"] {
+		@apply opacity-50 scale-95 rotate-2 shadow-2xl z-50;
+		transform: rotate(2deg) scale(0.95);
+	}
+
+	/* Line clamp utility for description */
+	.line-clamp-2 {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	/* Focus states */
+	.card:focus {
+		@apply outline-none ring-2 ring-cyan-500/50 ring-offset-2 ring-offset-slate-800;
+	}
+
+	/* Card hover animations */
+	.card:hover .drag-handle {
+		animation: dragPulse 2s infinite;
+	}
+
+	@keyframes dragPulse {
+		0%, 100% { opacity: 0.4; }
+		50% { opacity: 0.8; }
+	}
+
+	/* Priority indicator glow */
+	.card:hover .absolute.top-0.left-0 {
+		box-shadow: 0 0 10px currentColor;
+	}
+
+	/* Meta icons hover effects */
+	.card .text-slate-400:hover {
+		@apply text-slate-300;
+	}
+
+	/* Smooth transitions for all interactive elements */
+	.card * {
+		transition-property: all;
+		transition-duration: 200ms;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	/* Card entrance animation */
+	.card {
+		animation: cardSlideIn 0.4s ease-out;
+	}
+
+	@keyframes cardSlideIn {
+		from {
+			opacity: 0;
+			transform: translateY(10px) scale(0.95);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	/* Loading skeleton state */
+	.card.loading {
+		@apply animate-pulse;
+	}
+
+	.card.loading * {
+		@apply bg-slate-600/30 text-transparent;
+	}
+</style>
