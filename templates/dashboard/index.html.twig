@@ -1,38 +1,45 @@
 {# templates/dashboard/index.html.twig #}
 {% extends 'base.html.twig' %}
-{% block title %}Dashboard{% endblock %}
-
-{% block body %}
-<div class="dashboard flex gap-4 overflow-x-auto p-4">
-
-  <button class="btn btn-primary" data-action="click->modal#open" data-modal-target-id="modal-lane-create">
-    + Add Lane
-  </button>
-
-  {% for lane in board.lanes %}
-    {% include 'components/Lane.html.twig' with { lane: lane } %}
-  {% endfor %}
-</div>
-
-{# Modale Lane #}
-<div id="modal-lane-create"
-     class="modal {{ openLaneModal ? '' : 'hidden' }}"
-     data-controller="modal">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg">Create Lane</h3>
-
-    {{ form_start(laneForm, {
-      action: path('lane_new', { id: board.id }),
-      attr: { novalidate: 'novalidate' }
-    }) }}
-      {{ form_widget(laneForm) }}
-      <button class="btn btn-primary">Save</button>
-    {{ form_end(laneForm) }}
-
-    <div class="modal-action">
-      <button class="btn" data-action="click->modal#close">Close</button>
-    </div>
-  </div>
-</div>
+{% block title %}Dashboard
 {% endblock %}
 
+{% block body %}
+	<div
+		class="p-4">
+
+		{# Button that opens the modal via the "toggle" checkbox #}
+		<label for="lane_create_modal" class="btn btn-primary">+ Add Lane</label>
+
+		<div class="dashboard flex gap-4 overflow-x-auto mt-4" id="board-lanes">
+			{% for lane in board.lanes %}
+				{% include 'components/Lane.html.twig' with { lane: lane } %}
+			{% endfor %}
+		</div>
+
+		{# --- LANE MODAL (DaisyUI checkbox modal) --- #}
+		{# The checkbox controls the opening. "checked" if errors to keep the modal open. #}
+		<input type="checkbox" id="lane_create_modal" class="modal-toggle" {% if openLaneModal|default(false) %} checked {% endif %}/>
+
+		<div class="modal" role="dialog">
+			<div class="modal-box">
+				<h3 class="text-lg font-bold mb-4">Create Lane</h3>
+
+				{# Symfony form directly in the modal #}
+				{{ form_start(laneForm, {
+                action: path('lane_new', { id: board.id }),
+                attr: { novalidate: 'novalidate' }
+            }) }}
+				{{ form_widget(laneForm) }}
+				<div class="modal-action">
+					<button class="btn btn-primary">Save</button>
+					{# Close the modal: click the label linked to the checkbox #}
+					<label for="lane_create_modal" class="btn">Cancel</label>
+				</div>
+				{{ form_end(laneForm) }}
+			</div>
+
+			{# Click outside to close (overlay) #}
+			<label class="modal-backdrop" for="lane_create_modal">Close</label>
+		</div>
+	</div>
+{% endblock %}

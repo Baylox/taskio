@@ -40,7 +40,7 @@ final class DashboardController extends AbstractController
             'board' => $board,
             'laneForm' => $laneForm->createView(),
             'cardForms' => array_map(fn($form) => $form->createView(), $cardForms),
-            'openLaneModal' => false
+            'openLaneModal' => false,
         ]);
     }
 }
