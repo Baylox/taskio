@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class DashboardController extends AbstractController
 {
     // EDIT of board
-    #[Route('/boards/{id<\d+>}', name: 'app_board_dashboard', methods: ['GET'])]
+    #[Route('/boards/{id<\d+>}', name: 'app_dash', methods: ['GET'])]
     public function index(int $id, BoardRepository $boards): Response
     {
         $board = $boards->findWithLanesAndCards($id);
