@@ -2,21 +2,25 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Board;
 use App\Repository\BoardRepository;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 final class DashboardController extends AbstractController
 {
     // EDIT of board
-    #[Route('/dashboard', name: 'app_dashboard')]
-    public function index(): Response
+    #[Route('/boards/{id<\d+>}', name: 'app_board_dashboard', methods: ['GET'])]
+    public function index(int $id, BoardRepository $boards): Response
     {
-        return $this->render('dashboard/index.html.twig', [
-            'controller_name' => 'DashboardController',
-        ]);
+        $board = $boards->findWithLanesAndCards($id);
+        if (!$board) {
+            throw $this->createNotFoundException('Board not found');
+        }
+
+        return $this->render('dashboard/index.html.twig', ['board' => $board]);
     }
 }
