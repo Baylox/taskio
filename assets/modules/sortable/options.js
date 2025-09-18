@@ -1,48 +1,63 @@
 // assets/modules/sortable/options.js
+import { validateMoveData, validateMoveEvent } from './moveValidator.js';
+import { CardMoveService } from './cardMoveService.js';
+import { MoveLogger } from './logger.js';
+
 export const cardSortableOptions = {
-  group: 'shared',   // allows dragging between lanes
-  animation: 150,
-  onEnd: async (evt) => {
-    const el = evt.item;                    // dragged element
-    const cardId = el?.dataset?.cardId;
+    group: 'shared',   // allows dragging between lanes
+    animation: 150,
+    dropBubble: true,
+    forceFallback: false,
+    fallbackOnBody: true,
+    swapThreshold: 0.65,
+    direction: 'vertical',
+    draggable: '[data-card-id]', // Only elements with data-card-id are draggable
 
-    const toLane = evt.to;                  // destination container
-    const toLaneId = toLane?.dataset?.laneId;
-    const newIndex = evt.newIndex;          // 0-based position
-    const url = toLane?.dataset?.moveUrl;
+    onEnd: async (evt) => {
+        // Prevent duplicate events
+        if (evt.item.dataset.processing === 'true') {
+            console.log('Duplicate onEnd event ignored');
+            return;
+        }
+        evt.item.dataset.processing = 'true';
 
-    console.log('Debug move:', {
-      cardId,
-      toLaneId,
-      newIndex,
-      url,
-      elDataset: el?.dataset,
-      toLaneDataset: toLane?.dataset
-    });
+        console.log('Move triggered:', { cardId: evt.item?.dataset?.cardId, from: evt.oldIndex, to: evt.newIndex });
 
-    if (!cardId || !toLaneId || !url) {
-      console.warn('Incomplete move payload', { cardId, toLaneId, url });
-      return;
-    }
+        // Validate event structure
+        const eventValidation = validateMoveEvent(evt);
+        if (!eventValidation.isValid) {
+            MoveLogger.logValidationError(eventValidation.errors);
+            evt.item.dataset.processing = 'false';
+            return;
+        }
 
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cardId: Number(cardId),
-          toLaneId: Number(toLaneId),
-          newIndex: Number(newIndex)
-        })
-      });
+        // Extract move data from event
+        const moveData = CardMoveService.extractMoveData(evt);
+        MoveLogger.logMoveStart(moveData);
 
-      if (!res.ok) {
-        console.error('Save failed', res.status, await res.text());
-      } else {
-        console.debug('Move saved', await res.json());
-      }
-    } catch (e) {
-      console.error('Network error', e);
-    }
-  }
+        // Validate extracted data
+        const dataValidation = validateMoveData(moveData);
+        if (!dataValidation.isValid) {
+            MoveLogger.logValidationError(dataValidation.errors);
+            evt.item.dataset.processing = 'false';
+            return;
+        }
+
+        // Save move to server
+        try {
+            await CardMoveService.saveMove(moveData);
+            console.log('Move completed successfully');
+        } catch (error) {
+            console.error('Failed to save card move:', error.message);
+            // Revert the visual change on error
+            if (evt.from !== evt.to) {
+                evt.from.insertBefore(evt.item, evt.from.children[evt.oldIndex]);
+            }
+        } finally {
+            // Reset processing flag
+            setTimeout(() => {
+                evt.item.dataset.processing = 'false';
+            }, 100);
+        }
+    },
 };
