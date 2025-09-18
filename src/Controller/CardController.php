@@ -129,6 +129,7 @@ final class CardController extends AbstractController
 
         // $this->denyAccessUnlessGranted('BOARD_EDIT', $lane->getBoard());
         $mover->move($card, $lane, $new);
+        $em->flush();
 
         return $this->json(['ok' => true]);
     }

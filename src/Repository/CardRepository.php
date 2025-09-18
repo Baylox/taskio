@@ -57,7 +57,7 @@ class CardRepository extends ServiceEntityRepository
      */
     public function compactAfterRemoval(Lane $fromLane, int $oldPos): int
     {
-        return $this->_em->createQuery('
+        return $this->getEntityManager()->createQuery('
             UPDATE App\Entity\Card c
             SET c.position = c.position - 1
             WHERE c.lane = :lane AND c.position > :oldPos
@@ -73,13 +73,48 @@ class CardRepository extends ServiceEntityRepository
     */
     public function makeRoomAt(Lane $toLane, int $newIndex): int
     {
-        return $this->_em->createQuery('
+        return $this->getEntityManager()->createQuery('
             UPDATE App\Entity\Card c
             SET c.position = c.position + 1
             WHERE c.lane = :lane AND c.position >= :newIndex
         ')
         ->setParameter('lane', $toLane)
         ->setParameter('newIndex', $newIndex)
+        ->execute();
+    }
+
+    /**
+     * Intra-lane movement: shift cards between oldIndex and newIndex.
+     * - If new > old: move cards down (positions -1 on interval (old..new])
+     * - If new < old: move cards up (positions +1 on interval [new..old))
+     */
+    public function shiftWithinLane(Lane $lane, int $oldIndex, int $newIndex): int
+    {
+        if ($newIndex === $oldIndex) {
+            return 0;
+        }
+
+        if ($newIndex > $oldIndex) {
+            return $this->getEntityManager()->createQuery('
+                UPDATE App\Entity\Card c
+                SET c.position = c.position - 1
+                WHERE c.lane = :lane AND c.position > :old AND c.position <= :new
+            ')
+            ->setParameter('lane', $lane)
+            ->setParameter('old', $oldIndex)
+            ->setParameter('new', $newIndex)
+            ->execute();
+        }
+
+        // $newIndex < $oldIndex
+        return $this->getEntityManager()->createQuery('
+            UPDATE App\Entity\Card c
+            SET c.position = c.position + 1
+            WHERE c.lane = :lane AND c.position >= :new AND c.position < :old
+        ')
+        ->setParameter('lane', $lane)
+        ->setParameter('old', $oldIndex)
+        ->setParameter('new', $newIndex)
         ->execute();
     }
 }

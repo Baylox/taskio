@@ -16,9 +16,13 @@
 	</header>
 
 
-	<div class="lane-cards card-body pt-2 pb-4 px-4 space-y-2 overflow-y-auto max-h-[70vh]">
-		{% for card in lane.cards %}
-			{% include 'components/Card.html.twig' with { card: card } %}
+	<div class="lane-cards card-body pt-2 pb-4 px-4 space-y-2 overflow-y-auto max-h-[70vh]"
+		 data-lane-id="{{ lane.id }}"
+		 data-move-url="{{ path('card_move') }}">
+		{% for card in lane.cards|sort((a,b) => a.position <=> b.position) %}
+			<div data-card-id="{{ card.id }}">
+				{% include 'components/Card.html.twig' with { card: card } %}
+			</div>
 			{% include 'dashboard/update_card.html.twig' with {
                 card: card,
                 form: cardEditForms[card.id],
