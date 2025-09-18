@@ -16,7 +16,7 @@
 	</header>
 
 
-	<div class="card-body pt-2 pb-4 px-4 space-y-2 overflow-y-auto max-h-[70vh]">
+	<div class="lane-cards card-body pt-2 pb-4 px-4 space-y-2 overflow-y-auto max-h-[70vh]">
 		{% for card in lane.cards %}
 			{% include 'components/Card.html.twig' with { card: card } %}
 			{% include 'dashboard/update_card.html.twig' with {
