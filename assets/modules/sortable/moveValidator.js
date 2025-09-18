@@ -1,3 +1,4 @@
+// Validate move data before sending to server
 export function validateMoveData({ cardId, toLaneId, url }) {
     const errors = [
         !cardId && 'cardId is required',
@@ -13,6 +14,7 @@ export function validateMoveData({ cardId, toLaneId, url }) {
     return { isValid: true, errors: [] };
 }
 
+// Validate the structure of the move event
 export function validateMoveEvent(evt) {
     if (!evt?.item || !evt?.to) {
         console.warn('Invalid move event structure');
