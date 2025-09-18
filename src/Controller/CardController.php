@@ -18,50 +18,50 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class CardController extends AbstractController
 {
     #[Route('/lanes/{laneId}/cards', name: 'card_new', methods: ['POST'])]
-public function createForLane(
-    #[MapEntity(mapping: ['laneId' => 'id'])] Lane $lane,
-    Request $request,
-    EntityManagerInterface $em,
-    CardRepository $cardRepo
-): Response {
+    public function createForLane(
+        #[MapEntity(mapping: ['laneId' => 'id'])] Lane $lane,
+        Request $request,
+        EntityManagerInterface $em,
+        CardRepository $cardRepo
+    ): Response {
 
-    // $this->denyAccessUnlessGranted('EDIT', $lane->getBoard());
+        // $this->denyAccessUnlessGranted('EDIT', $lane->getBoard());
 
-    $card = new Card();
-    $card->setLane($lane);
+        $card = new Card();
+        $card->setLane($lane);
 
-    // Position at the bottom of the lane (robust if lane is empty)
-    $maxPosition = $cardRepo->findMaxPositionInLane($lane);
-    $card->setPosition(($maxPosition ?? 0) + 1);
+        // Position at the bottom of the lane (robust if lane is empty)
+        $maxPosition = $cardRepo->findMaxPositionInLane($lane);
+        $card->setPosition(($maxPosition ?? 0) + 1);
 
-    $form = $this->createForm(CardType::class, $card);
-    $form->handleRequest($request);
+        $form = $this->createForm(CardType::class, $card);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $em->persist($card);
-        $em->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($card);
+            $em->flush();
 
-        return $this->redirectToRoute(
-            'app_board_dashboard',
-            ['id' => $lane->getBoard()->getId()],
-            Response::HTTP_SEE_OTHER
-        );
+            return $this->redirectToRoute(
+                'app_board_dashboard',
+                ['id' => $lane->getBoard()->getId()],
+                Response::HTTP_SEE_OTHER
+            );
+        }
+        // Invalid case: return only the strict minimum
+        return $this->render('dashboard/index.html.twig', [
+            'board' => $lane->getBoard(),
+            'laneForm' => $this->createForm(LaneType::class, new Lane())->createView(),
+            'cardFormForLane' => [$lane->getId() => $form->createView()],
+            'openCardModalLaneId' => $lane->getId(),
+        ]);
     }
-    // Invalid case: return only the strict minimum
-    return $this->render('dashboard/index.html.twig', [
-        'board' => $lane->getBoard(),
-        'laneForm' => $this->createForm(LaneType::class, new Lane())->createView(),
-        'cardFormForLane' => [$lane->getId() => $form->createView()],
-        'openCardModalLaneId' => $lane->getId(),
-    ]);
-}
 
     #[Route('/{id}', name: 'app_card_delete', methods: ['POST'])]
     public function delete(Request $request, Card $card, EntityManagerInterface $entityManager): Response
     {
         $board = $card->getLane()->getBoard();
 
-        if ($this->isCsrfTokenValid('delete'.$card->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $card->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($card);
             $entityManager->flush();
         }

@@ -1,23 +1,23 @@
 <li class="card bg-base-100 shadow-sm rounded-xl p-3 hover:shadow transition" data-id="{{ card.id }}" role="listitem" tabindex="0">
-	<div class="flex items-start gap-2">
-		<i class="fa-solid fa-grip-lines text-base-content/40 mt-1 cursor-move" aria-hidden="true"></i>
+    <div class="flex items-start gap-2">
+        <i class="fa-solid fa-grip-lines text-base-content/40 mt-1 cursor-move" aria-hidden="true"></i>
 
-		<div class="min-w-0 grow">
-			<p class="font-medium truncate" title="{{ card.title }}">{{ card.title }}</p>
+        <div class="min-w-0 grow">
+            <p class="font-medium truncate" title="{{ card.title }}">{{ card.title }}</p>
 
-			{% if card.description %}
-				<p class="text-sm text-base-content/70 line-clamp-2">{{ card.description }}</p>
-			{% endif %}
+            {% if card.description %}
+                <p class="text-sm text-base-content/70 line-clamp-2">{{ card.description }}</p>
+            {% endif %}
 
-			{% if card.status %}
-				<div class="mt-2">
-					<span class="badge badge-outline">{{ card.status }}</span>
-				</div>
-			{% endif %}
-		</div>
+            {% if card.status %}
+                <div class="mt-2">
+                    <span class="badge badge-outline">{{ card.status }}</span>
+                </div>
+            {% endif %}
+        </div>
 
-		<label for="card_edit_modal_{{ card.id }}" class="btn btn-ghost btn-xs ml-auto" aria-label="Edit card">
-			<i class="fa-regular fa-pen-to-square"></i>
-		</label>
-	</div>
+        <label for="card_editmodal{{ card.id }}" class="btn btn-ghost btn-xs ml-auto" aria-label="Edit card">
+            <i class="fa-regular fa-pen-to-square"></i>
+        </label>
+    </div>
 </li>
