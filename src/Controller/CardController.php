@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/card')]
@@ -111,5 +112,24 @@ final class CardController extends AbstractController
             $forms[$lane->getId()] = $this->createForm(LaneType::class, $lane)->createView();
         }
         return $forms;
+    }
+
+    #[Route('/cards/move', name: 'card_move', methods: ['POST'])]
+    public function move(
+        Request $req,
+        EntityManagerInterface $em,
+        \App\Service\Board\CardMover $mover
+    ): JsonResponse {
+        $p = json_decode($req->getContent(), true) ?? [];
+        $card = $em->getRepository(Card::class)->find((int)($p['cardId'] ?? 0));
+        $lane = $em->getRepository(Lane::class)->find((int)($p['toLaneId'] ?? 0));
+        $new  = (int)($p['newIndex'] ?? 0);
+
+        if (!$card || !$lane) return $this->json(['error' => 'not found'], 404);
+
+        // $this->denyAccessUnlessGranted('BOARD_EDIT', $lane->getBoard());
+        $mover->move($card, $lane, $new);
+
+        return $this->json(['ok' => true]);
     }
 }
