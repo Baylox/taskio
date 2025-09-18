@@ -1,0 +1,40 @@
+{# templates/components/Lane.html.twig #}
+<div id="lane-{{ lane.id }}" class="lane card w-80 shrink-0 bg-base-200 shadow-md rounded-xl">
+
+	<header class="card-body py-3 px-4 flex flex-col items-center">
+		<h2 class="card-title text-base font-semibold truncate mb-2 text-center">
+			{{ lane.title }}
+		</h2>
+		<div class="flex items-center gap-2">
+			<label for="lane_edit_modal_{{ lane.id }}" class="btn btn-xs btn-outline btn-secondary">
+				Edit
+			</label>
+			<label for="card_create_modal_{{ lane.id }}" class="btn btn-xs btn-primary">
+				+ Add
+			</label>
+		</div>
+	</header>
+
+
+	<div class="lane-cards card-body pt-2 pb-4 px-4 space-y-2 overflow-y-auto max-h-[70vh]"
+		 data-lane-id="{{ lane.id }}"
+		 data-move-url="{{ path('card_move') }}">
+		{% for card in lane.cards|sort((a,b) => a.position <=> b.position) %}
+			<div data-card-id="{{ card.id }}">
+				{% include 'components/Card.html.twig' with { card: card } %}
+			</div>
+			{% include 'dashboard/update_card.html.twig' with {
+                card: card,
+                form: cardEditForms[card.id],
+                checked: (openEditCardId is defined and card.id == openEditCardId)
+            } only %}
+		{% endfor %}
+	</div>
+</div>
+
+{# Reusable card creation modal #}
+{% include 'dashboard/new_card.html.twig' with {
+    lane: lane,
+    cardForm: cardForms[lane.id],
+    openCardModalId: openCardModalId|default(null)
+} only %}

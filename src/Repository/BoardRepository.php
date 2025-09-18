@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Board;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Account;
 
 /**
  * @extends ServiceEntityRepository<Board>
@@ -15,6 +16,30 @@ class BoardRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Board::class);
     }
+
+
+    public function findByAccount(Account $account): array
+    {
+        return $this->createQueryBuilder('b')
+            ->innerJoin('b.accounts', 'a')
+            ->andWhere('a = :account')
+            ->setParameter('account', $account)
+            ->orderBy('b.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findWithLanesAndCards(int $id): ?Board
+    {
+        return $this->createQueryBuilder('b')
+            ->leftJoin('b.lanes', 'l')->addSelect('l')
+            ->leftJoin('l.cards', 'c')->addSelect('c')
+            ->andWhere('b.id = :id')->setParameter('id', $id)
+            ->orderBy('l.position', 'ASC')
+            ->addOrderBy('c.position', 'ASC')
+            ->getQuery()->getOneOrNullResult();
+    }
+
 
     //    /**
     //     * @return Board[] Returns an array of Board objects

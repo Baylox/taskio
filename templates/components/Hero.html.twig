@@ -1,40 +1,41 @@
+{# templates/components/Hero.html.twig #}
 <section
-  {{ attributes.defaults({
-    class: 'relative grid ' ~ this.heightClass() ~ ' place-items-center text-center text-base-content',
-    role:  'banner',
-    'aria-labelledby': 'hero-title',
-  }) }}
+    {{ attributes.defaults({
+        class: 'relative grid ' ~ this.heightClass() ~ ' place-items-center text-center text-base-content',
+        role:  'banner',
+        'aria-labelledby': 'hero-title',
+    }) }}
 >
-  <!-- Background image -->
-  <picture class="absolute inset-0 -z-10">
-    <img
-      src="{{ asset(bg) }}"
-      sizes="100vw"
-      alt=""
-      fetchpriority="high" loading="eager" decoding="async"
-      class="w-full h-full object-cover object-center"
-    >
-  </picture>
+    <!-- Background image -->
+    <picture class="absolute inset-0 -z-10">
+        <img
+            src="{{ asset(bg) }}"
+            sizes="100vw"
+            alt=""
+            fetchpriority="high" loading="eager" decoding="async"
+            class="w-full h-full object-cover object-center"
+        >
+    </picture>
 
-  <!-- Overlay gradient (neutre, basé sur le thème) -->
-  <div class="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-b from-base-100/10 to-base-100/80"></div>
+    <!-- Overlay gradient (neutral, based on theme) -->
+    <div class="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-b from-base-100/10 to-base-100/80"></div>
 
-  <!-- Contenu -->
-  <div class="relative z-10 px-4 max-w-xl">
-    <h1 id="hero-title" class="text-3xl md:text-4xl font-extrabold mb-3">
-      {{ title }}
-    </h1>
+    <!-- Content -->
+    <div class="relative z-10 px-4 max-w-xl">
+        <h1 id="hero-title" class="text-3xl md:text-4xl font-extrabold mb-3">
+            {{ title }}
+        </h1>
 
-    {% if subtitle %}
-      <p class="text-base md:text-lg opacity-80 mb-5">{{ subtitle }}</p>
-    {% endif %}
+        {% if subtitle %}
+            <p class="text-base md:text-lg opacity-80 mb-5">{{ subtitle }}</p>
+        {% endif %}
 
-    {% if ctaHref and ctaLabel %}
-      <a href="{{ ctaHref }}" class="btn btn-primary btn-wide shadow-lg">
-        {{ ctaLabel }}
-      </a>
-    {% endif %}
-  </div>
+        {% if ctaHref and ctaLabel %}
+            <a href="{{ ctaHref }}" class="btn btn-primary btn-wide shadow-lg">
+                {{ ctaLabel }}
+            </a>
+        {% endif %}
+    </div>
 </section>
 
 

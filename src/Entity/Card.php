@@ -32,7 +32,7 @@ class Card
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 24)]
+    #[ORM\Column(length: 24, nullable: true)]
     private ?string $status = null;
 
     #[Assert\PositiveOrZero]
@@ -41,6 +41,7 @@ class Card
 
     #[ORM\ManyToOne(inversedBy: 'cards')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     private ?Lane $lane = null;
 
     public function getId(): ?int

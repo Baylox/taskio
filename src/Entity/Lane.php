@@ -27,6 +27,7 @@ class Lane
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 50)]
     private ?string $title = null;
 
@@ -42,6 +43,7 @@ class Lane
      * @var Collection<int, Card>
      */
     #[ORM\OneToMany(targetEntity: Card::class, mappedBy: 'lane')]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     private Collection $cards;
 
     public function __construct()
