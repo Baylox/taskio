@@ -1,4 +1,39 @@
 services:
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www
+      - ./docker/apache.conf:/etc/apache2/sites-available/000-default.conf
+    environment:
+      - APP_ENV=dev
+      - APP_DEBUG=1
+      - DATABASE_URL=mysql://app:!ChangeMe!@database:3306/app
+    depends_on:
+      - database
+
+  # Service for Vite and hot reload
+  vite:
+    image: node:22-alpine
+    working_dir: /app
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    environment:
+      - VITE_HMR_HOST=localhost
+  # Service for Vite and hot reload
+  mercure:
+    image: dunglas/mercure
+    environment:
+      SERVER_NAME: ':80'
+      MERCURE_PUBLISHER_JWT_KEY: '!ChangeMe!'
+      MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeMe!'
+    ports:
+      - "3001:80"
+
 ###> doctrine/doctrine-bundle ###
   database:
     # Official MariaDB image (latest stable version)
@@ -20,35 +55,6 @@ services:
     volumes:
       - database_data:/var/lib/mysql:rw
 ###< doctrine/doctrine-bundle ###
-
-###> symfony/mercure-bundle ### We don't need it for now (Turbo)
-  mercure:
-    image: dunglas/mercure
-    restart: unless-stopped
-
-    environment:
-      # Uncomment to disable HTTPS in development
-      SERVER_NAME: ':80'
-      # JWT keys (keep them secret!)
-      MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
-      MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
-      # Allowed origins (your Symfony app in dev on 8000)
-      MERCURE_EXTRA_DIRECTIVES: |
-        cors_origins http://127.0.0.1:8000
-
-    # Dev mode with specific config
-    command: /usr/bin/caddy run --config /etc/caddy/dev.Caddyfile
-
-    healthcheck:
-      test: ["CMD", "curl", "-f", "https://localhost/healthz"]
-      timeout: 5s
-      retries: 5
-      start_period: 60s
-
-    volumes:
-      - mercure_data:/data
-      - mercure_config:/config
-###< symfony/mercure-bundle ###
 
 
 ###> symfony/mailer ###
