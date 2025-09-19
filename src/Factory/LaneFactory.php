@@ -13,7 +13,7 @@ final class LaneFactory extends PersistentProxyObjectFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
-     * @todo inject services if required
+     * @inject services if required
      */
     public function __construct() {}
 
@@ -25,12 +25,24 @@ final class LaneFactory extends PersistentProxyObjectFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
      *
-     * @todo add your default values here
+     * @return array<string, mixed>|callable<string, mixed> Default values for the Lane entity.
      */
     protected function defaults(): array|callable
     {
         return [
-            'title' => self::faker()->text(50),
+            'title' => static function () {
+                $labels = [
+                    'Backlog',
+                    'To Do',
+                    'In Progress',
+                    'Blocked',
+                    'In Review',
+                    'Testing',
+                    'Done',
+                    'Archived',
+                ];
+                return self::faker()->randomElement($labels);
+            },
             'position' => null,
         ];
     }

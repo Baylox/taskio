@@ -25,7 +25,7 @@ final class CardFactory extends PersistentProxyObjectFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
      *
-     * @todo add your default values here
+     * @return array<string, mixed>|callable<string, mixed> Default values for the Card entity.
      */
     protected function defaults(): array|callable
     {

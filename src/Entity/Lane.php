@@ -35,7 +35,8 @@ class Lane
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Board $board = null;
 
-    #[Assert\PositiveOrZero]
+    #[Assert\NotNull]
+    #[Assert\GreaterThanOrEqual(1)]
     #[ORM\Column(type: Types::INTEGER)]
     private ?int $position = null;
 

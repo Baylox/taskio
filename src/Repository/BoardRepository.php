@@ -49,6 +49,7 @@ class BoardRepository extends ServiceEntityRepository
             ->addOrderBy('c.position', 'ASC')
             ->getQuery()->getOneOrNullResult();
     }
+
     /**
      * Find boards visible to the given user (either owner or member).
      * Replaces findAll() for listing boards.

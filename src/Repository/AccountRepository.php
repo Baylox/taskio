@@ -58,7 +58,6 @@ class AccountRepository extends ServiceEntityRepository
 
     /**
      * List of distinct roles actually present in the database (to populate the <select>).
-     *
      * @return string[] List of unique roles, sorted alphabetically
      */
     public function distinctRoles(): array
