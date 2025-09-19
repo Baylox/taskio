@@ -15,14 +15,16 @@ services:
 
   # Service for Vite and hot reload
   vite:
-    image: node:22-alpine
-    working_dir: /app
-    command: npm run dev
+    build:
+      context: .
+      dockerfile: ./docker/vite/Dockerfile
     ports:
       - "3000:3000"
     volumes:
       - .:/app
+      - /app/node_modules
     environment:
+      - VITE_HOST=0.0.0.0
       - VITE_HMR_HOST=localhost
   # Service for Vite and hot reload
   mercure:
