@@ -2,45 +2,45 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Board;
+use App\Entity\Account;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 final class BoardVoter extends Voter
 {
-    public const EDIT = 'POST_EDIT';
-    public const VIEW = 'POST_VIEW';
+    public const VIEW   = 'BOARD_VIEW';
+    public const EDIT   = 'BOARD_EDIT';
+    public const DELETE = 'BOARD_DELETE';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        // replace with your own logic
-        // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW])
-            && $subject instanceof \App\Entity\Board;
+        return in_array($attribute, [self::VIEW, self::EDIT, self::DELETE], true)
+            && $subject instanceof Board;
     }
 
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $board, TokenInterface $token): bool
     {
         $user = $token->getUser();
-
-        // if the user is anonymous, do not grant access
-        if (!$user instanceof UserInterface) {
+        if (!$user instanceof Account) {
             return false;
         }
 
-        // ... (check conditions and return true to grant permission) ...
-        switch ($attribute) {
-            case self::EDIT:
-                // logic to determine if the user can EDIT
-                // return true or false
-                break;
-
-            case self::VIEW:
-                // logic to determine if the user can VIEW
-                // return true or false
-                break;
+        // Admin can do anything
+        if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+            return true;
         }
 
-        return false;
+        if (($owner = $board->getOwner()) && $owner->getId() === $user->getId()) {
+            return true;
+        }
+        $isOwner  = $board->getOwner() && $board->getOwner()->getId() === $user->getId();
+        $isMember = $board->getAccounts()->exists(fn($k, $m) => $m->getId() === $user->getId());
+
+        return match ($attribute) {
+            self::VIEW   => $isOwner || $isMember,
+            self::EDIT   => $isOwner || $isMember,
+            self::DELETE => $isOwner,
+        };
     }
 }

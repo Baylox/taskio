@@ -17,7 +17,11 @@ class BoardRepository extends ServiceEntityRepository
         parent::__construct($registry, Board::class);
     }
 
-
+    /**
+     * Find boards where the user is a member (via accounts).
+     * Does not include boards where the user is only the owner.
+     * @return Board[]
+     */
     public function findByAccount(Account $account): array
     {
         return $this->createQueryBuilder('b')
@@ -29,6 +33,10 @@ class BoardRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Find one board with its lanes and cards, ordered by position.
+     * @return Board|null
+     */
     public function findWithLanesAndCards(int $id): ?Board
     {
         return $this->createQueryBuilder('b')
@@ -39,30 +47,40 @@ class BoardRepository extends ServiceEntityRepository
             ->addOrderBy('c.position', 'ASC')
             ->getQuery()->getOneOrNullResult();
     }
+    /**
+     * Find boards visible to the given user (either owner or member).
+     * Replaces findAll() for listing boards.
+     * @return Board[]
+     */
+    public function findVisibleForUser(Account $user): array
+    {
+        $qb = $this->createQueryBuilder('b');
 
+        return $qb
+            ->andWhere($qb->expr()->orX(
+                'b.owner = :u',
+                'EXISTS (SELECT 1 FROM b.accounts a WHERE a = :u)'
+            ))
+            ->setParameter('u', $user)
+            ->orderBy('b.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    /**
-    //     * @return Board[] Returns an array of Board objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('b.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Board
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Check if a user is a member of a given board without hydrating the collection.
+     * @return bool
+     */
+    public function isBoardMember(Board $board, Account $user): bool
+    {
+        return (bool) $this->createQueryBuilder('b')
+            ->select('1')
+            ->innerJoin('b.accounts', 'a')
+            ->andWhere('b = :b')
+            ->andWhere('a = :u')
+            ->setParameter('b', $board)
+            ->setParameter('u', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
