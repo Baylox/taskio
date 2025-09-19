@@ -17,6 +17,12 @@ class AccountRepository extends ServiceEntityRepository
         parent::__construct($registry, Account::class);
     }
 
+    /**
+     * Autocomplete usernames emails starting
+     *
+     * @param string $userInput Partial username to match.
+     * @return string[] Array of matching usernames (emails).
+     */
     public function autocompleteUsernames(string $userInput): array
     {
         $queryBuilder = $this->createQueryBuilder('user');
@@ -31,6 +37,12 @@ class AccountRepository extends ServiceEntityRepository
         return $results;
     }
 
+    /**
+     * QueryBuilder to list accounts, possibly filtered by role.
+     *
+     * @param string|null $role Role to filter by, or null/empty for no filtering.
+     * @return QueryBuilder
+     */
     public function qbByRole(?string $role): QueryBuilder
     {
         $qb = $this->createQueryBuilder('a');
@@ -47,7 +59,7 @@ class AccountRepository extends ServiceEntityRepository
     /**
      * List of distinct roles actually present in the database (to populate the <select>).
      *
-     * @return string[]
+     * @return string[] List of unique roles, sorted alphabetically
      */
     public function distinctRoles(): array
     {
