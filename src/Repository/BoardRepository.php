@@ -20,6 +20,7 @@ class BoardRepository extends ServiceEntityRepository
     /**
      * Find boards where the user is a member (via accounts).
      * Does not include boards where the user is only the owner.
+     * @param Account $account
      * @return Board[]
      */
     public function findByAccount(Account $account): array
@@ -35,6 +36,7 @@ class BoardRepository extends ServiceEntityRepository
 
     /**
      * Find one board with its lanes and cards, ordered by position.
+     * @param int $id
      * @return Board|null
      */
     public function findWithLanesAndCards(int $id): ?Board
@@ -50,6 +52,7 @@ class BoardRepository extends ServiceEntityRepository
     /**
      * Find boards visible to the given user (either owner or member).
      * Replaces findAll() for listing boards.
+     * @param Account $user
      * @return Board[]
      */
     public function findVisibleForUser(Account $user): array
@@ -69,6 +72,8 @@ class BoardRepository extends ServiceEntityRepository
 
     /**
      * Check if a user is a member of a given board without hydrating the collection.
+     * @param Board $board
+     * @param Account $user
      * @return bool
      */
     public function isBoardMember(Board $board, Account $user): bool
