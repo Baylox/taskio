@@ -6,6 +6,7 @@
 
 {% block body %}
 	<div class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
+
 		{# Header #}
 		<div class="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700/50 px-6 py-4">
 			<div class="flex items-center justify-between">
@@ -13,7 +14,6 @@
 					<h1 class="text-2xl font-bold text-white mb-1">{{ board.name ?? 'Dashboard' }}</h1>
 					<p class="text-slate-400 text-sm">Manage your project tasks and workflows</p>
 				</div>
-
 				{# Add Lane Button #}
 				<label for="lane_create_modal" 
 					   class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-xl hover:shadow-cyan-500/30 cursor-pointer transform hover:scale-105 hover:-translate-y-0.5">
@@ -26,41 +26,33 @@
 		</div>
 
 		{# Main Dashboard Content #}
-		<div class="p-8">
-			<div class="dashboard flex gap-8 overflow-x-auto pb-8" id="board-lanes">
+		<div class="p-6">
+			<div class="dashboard flex gap-6 overflow-x-auto pb-6" id="board-lanes">
 				{% for lane in board.lanes %}
-					<div class="lane-wrapper flex-shrink-0 animate-fadeInUp">
+					<div class="lane-wrapper flex-shrink-0">
 						{% include 'components/Lane.html.twig' with { lane: lane } %}
 					</div>
 				{% endfor %}
 
 				{# Empty State or Add Lane Placeholder #}
 				{% if board.lanes|length == 0 %}
-					<div class="flex-shrink-0 w-96 h-96 border-2 border-dashed border-slate-600/50 rounded-2xl flex flex-col items-center justify-center text-slate-400 bg-slate-800/20 backdrop-blur-sm hover:bg-slate-800/30 hover:border-slate-500/50 transition-all duration-300 group">
-						<div class="w-24 h-24 rounded-full bg-gradient-to-r from-slate-700 to-slate-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-							<svg class="w-12 h-12 text-slate-400 group-hover:text-slate-300 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-							</svg>
-						</div>
-						<h3 class="text-xl font-semibold mb-3 text-slate-300 group-hover:text-white transition-colors duration-300">No lanes yet</h3>
-						<p class="text-sm text-center text-slate-400 max-w-xs leading-relaxed group-hover:text-slate-300 transition-colors duration-300 mb-6">Create your first lane to start organizing your project tasks and improve your workflow</p>
-						<label for="lane_create_modal" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500/80 to-blue-500/80 text-white text-sm font-medium rounded-lg hover:from-cyan-500 hover:to-blue-500 cursor-pointer transition-all duration-200 opacity-0 group-hover:opacity-100">
-							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-							</svg>
-							Get Started
-						</label>
+					<div class="flex-shrink-0 w-80 h-96 border-2 border-dashed border-slate-600 rounded-xl flex flex-col items-center justify-center text-slate-400 bg-slate-800/30 backdrop-blur-sm">
+						<svg class="w-16 h-16 mb-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+						</svg>
+						<h3 class="text-lg font-medium mb-2">No lanes yet</h3>
+						<p class="text-sm text-center">Create your first lane to start organizing tasks</p>
 					</div>
 				{% endif %}
 			</div>
 		</div>
 
-		{# Floating Action Button pour mobile #}
-		<div class="fixed bottom-8 right-8 lg:hidden z-20">
-			<label for="lane_create_modal" 
-				   class="flex items-center justify-center w-16 h-16 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full shadow-2xl hover:shadow-cyan-500/40 cursor-pointer transition-all duration-300 hover:scale-110 hover:-translate-y-1">
-				<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+		{# Floating Action Button for Mobile #}
+		<div class="fixed bottom-6 right-6 lg:hidden">
+			<label for="lane_create_modal"
+				   class="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full shadow-lg hover:shadow-cyan-500/25 cursor-pointer transition-all duration-200 hover:scale-110">
+				<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
 				</svg>
 			</label>
 		</div>
