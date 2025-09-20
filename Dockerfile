@@ -59,8 +59,8 @@ RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www
 
 # Environment variables
-ENV APP_ENV=prod
-ENV APP_DEBUG=0
+ENV APP_ENV=dev
+ENV APP_DEBUG=1
 
 EXPOSE 80
 

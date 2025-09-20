@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import symfonyPlugin from 'vite-plugin-symfony';
 import { resolve } from 'path';
+const PUBLIC_HOST = process.env.APP_PUBLIC_HOST || 'localhost'
 
 export default defineConfig({
     plugins: [
@@ -30,7 +31,11 @@ export default defineConfig({
         port: 3000,
         watch: {
             usePolling: true
-        }
+        },
+        strictPort: true,
+        host: true,
+        hmr: { host: PUBLIC_HOST, protocol: 'ws', port: 8080 },
+        origin: `http://${PUBLIC_HOST}:8080`
     }
 });
 

@@ -12,6 +12,9 @@ services:
       - DATABASE_URL=mysql://app:!ChangeMe!@database:3306/app
     depends_on:
       - database
+    command: >
+      bash -lc "a2enmod proxy proxy_http proxy_wstunnel headers rewrite &&
+                apache2-foreground"
 
   # Service for Vite and hot reload
   vite:
