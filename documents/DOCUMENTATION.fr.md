@@ -22,17 +22,27 @@
 - [Utiliser Tailwind avec PostCSS](https://tailwindcss.com/docs/using-with-preprocessors#using-postcss-as-your-preprocessor)
 - [DaisyUI](https://daisyui.com/docs/intro)
 
-## Autres outils
-
-- [Stimulus (Hotwired)](https://stimulus.hotwired.dev/)
-- [Stimulus components](https://www.stimulus-components.com/docs/stimulus-prefetch)
-- [Turbo Drive](https://turbo.hotwired.dev/)
-- [Mercure](https://mercure.rocks/docs)
-- [Git/Github](https://github.com/git-guides)
 
 ## Fixtures et Tests
 
 - [Faker](https://faker.readthedocs.io/en/master/)
 - [Zenstruck Foundry](https://symfony.com/doc/current/ZenstruckFoundryBundle/index.html)
 - [PHPUnit](https://phpunit.de/documentation.html)
+
+## Déploiement
+
+- [Docker](https://docs.docker.com/)
+
+## Autres outils
+
+- [Stimulus (Hotwired)](https://stimulus.hotwired.dev/)
+- [Stimulus components](https://www.stimulus-components.com/docs/stimulus-prefetch)
+
+- [Turbo Drive](https://turbo.hotwired.dev/)
+
+- [Mercure](https://mercure.rocks/docs)
+
+- [Git/Github](https://github.com/git-guides)
+
+
 ---
