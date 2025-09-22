@@ -9,8 +9,8 @@
 			<label for="card_create_modal_{{ lane.id }}" class="btn btn-xs btn-primary">
 				+ New
 			</label>
-            <label for="lane_edit_modal_{{ lane.id }}" class="btn btn-xs btn-ghost text-slate-400 hover:text-white hover:bg-slate-700/50 ml-2 p-1 min-h-0 h-6 w-6 rounded-md transition-all duration-200">
-				<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<label for="lane_edit_modal_{{ lane.id }}" class="btn btn-xs btn-ghost text-slate-400 hover:text-white hover:bg-slate-700/50 ml-2 p-1 min-h-0 h-6 w-6 rounded-md transition-all duration-200">
+				<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
 				</svg>
 			</label>
@@ -18,9 +18,7 @@
 	</header>
 
 
-	<div class="card-body pt-2 pb-4 px-4 space-y-2 overflow-y-auto max-h-[70vh]"
-		 data-lane-id="{{ lane.id }}"
-		 data-move-url="{{ path('card_move') }}">
+	<div class="card-body lane-cards pt-2 pb-4 px-4 space-y-2 overflow-y-auto max-h-[70vh]" data-lane-id="{{ lane.id }}" data-move-url="{{ path('card_move') }}">
 		{% for card in lane.cards|sort((a,b) => a.position <=> b.position) %}
 			<div data-card-id="{{ card.id }}">
 				{% include 'components/Card.html.twig' with { card: card } %}
