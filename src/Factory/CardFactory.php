@@ -52,7 +52,7 @@ final class CardFactory extends PersistentProxyObjectFactory
         return [
             'status' => self::faker()->randomElement(['todo', 'in-progress', 'review', 'done', 'blocked']),
             'title' => $title,
-            'description' => self::faker()->optional(0.7)->sentence() . ' ' . $titles[$title],
+            'description' => self::faker()->optional(0.7)->sentence(). '' .$titles[$title],
             'position' => null,
         ];
     }
