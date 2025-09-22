@@ -27,14 +27,31 @@ final class CardFactory extends PersistentProxyObjectFactory
      *
      * @return array<string, mixed>|callable<string, mixed> Default values for the Card entity.
      */
-    protected function defaults(): array|callable
+    protected function defaults(): array
     {
         return [
-            'status' => self::faker()->text(24),
-            'title' => self::faker()->text(50),
+            'status' => self::faker()->randomElement(['todo', 'in-progress', 'review', 'done', 'blocked']),
+            'title' => self::faker()->randomElement([
+                'Fix login bug',
+                'Add user authentication',
+                'Implement search feature',
+                'Update documentation',
+                'Code review',
+                'Database migration',
+                'Performance optimization',
+                'Security audit',
+                'UI/UX improvements',
+                'Test automation setup',
+                'API endpoint creation',
+                'Bug investigation',
+                'Feature specification',
+                'Deploy to production',
+                'Refactor legacy code',
+            ]),
             'position' => null,
         ];
     }
+
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
