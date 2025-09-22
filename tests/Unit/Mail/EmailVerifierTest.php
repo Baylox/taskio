@@ -3,8 +3,11 @@
 namespace App\Tests\Unit\Mail;
 
 use App\Security\EmailVerifier;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\Mailer\MailerInterface;
+use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 #[CoversClass(EmailVerifier::class)]
 class EmailVerifierTest extends TestCase
@@ -16,9 +19,9 @@ class EmailVerifierTest extends TestCase
 
     public function testCanCreateEmailVerifier(): void
     {
-        $verifyHelper = $this->createMock(\SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface::class);
-        $mailer = $this->createMock(\Symfony\Component\Mailer\MailerInterface::class);
-        $entityManager = $this->createMock(\Doctrine\ORM\EntityManagerInterface::class);
+        $verifyHelper = $this->createMock(VerifyEmailHelperInterface::class);
+        $mailer = $this->createMock(MailerInterface::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
 
         $emailVerifier = new EmailVerifier($verifyHelper, $mailer, $entityManager);
 
