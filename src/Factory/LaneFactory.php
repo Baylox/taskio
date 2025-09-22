@@ -27,25 +27,23 @@ final class LaneFactory extends PersistentProxyObjectFactory
      *
      * @return array<string, mixed>|callable<string, mixed> Default values for the Lane entity.
      */
-    protected function defaults(): array|callable
+    protected function defaults(): array
     {
         return [
-            'title' => static function () {
-                $labels = [
-                    'Backlog',
-                    'To Do',
-                    'In Progress',
-                    'Blocked',
-                    'In Review',
-                    'Testing',
-                    'Done',
-                    'Archived',
-                ];
-                return self::faker()->randomElement($labels);
-            },
+            'title' => self::faker()->randomElement([
+                'Backlog',
+                'To Do',
+                'In Progress',
+                'Blocked',
+                'In Review',
+                'Testing',
+                'Done',
+                'Archived',
+            ]),
             'position' => null,
         ];
     }
+
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
