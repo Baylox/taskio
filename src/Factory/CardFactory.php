@@ -27,14 +27,37 @@ final class CardFactory extends PersistentProxyObjectFactory
      *
      * @return array<string, mixed>|callable<string, mixed> Default values for the Card entity.
      */
-    protected function defaults(): array|callable
+    protected function defaults(): array
     {
+        $titles = [
+            'Fix login bug' => 'Investigate and resolve the issue preventing some users from logging in successfully.',
+            'Add user authentication' => 'Implement secure login and registration with hashed passwords and session handling.',
+            'Implement search feature' => 'Allow users to search content using keywords and filters for better navigation.',
+            'Update documentation' => 'Review and update project documentation to reflect the latest changes.',
+            'Code review' => 'Perform a peer review to ensure code quality, maintainability, and adherence to standards.',
+            'Database migration' => 'Create and execute migration scripts to update the schema without data loss.',
+            'Performance optimization' => 'Identify bottlenecks and optimize queries or code to improve response time.',
+            'Security audit' => 'Run a security check for vulnerabilities such as SQL injection or XSS.',
+            'UI/UX improvements' => 'Enhance the interface for better usability and user satisfaction.',
+            'Test automation setup' => 'Introduce automated tests to reduce regressions and ensure reliability.',
+            'API endpoint creation' => 'Develop and document a new API endpoint for client integration.',
+            'Bug investigation' => 'Reproduce, analyze, and document a reported bug before fixing it.',
+            'Feature specification' => 'Write detailed specs to define requirements and acceptance criteria.',
+            'Deploy to production' => 'Prepare release notes, run final checks, and deploy to the live environment.',
+            'Refactor legacy code' => 'Clean up outdated code to improve readability and maintainability.',
+        ];
+
+        $title = self::faker()->randomElement(array_keys($titles));
+
         return [
-            'status' => self::faker()->text(24),
-            'title' => self::faker()->text(50),
+            'status' => self::faker()->randomElement(['todo', 'in-progress', 'review', 'done', 'blocked']),
+            'title' => $title,
+            'description' => self::faker()->optional(0.7)->sentence(). '' .$titles[$title],
             'position' => null,
         ];
     }
+
+
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization

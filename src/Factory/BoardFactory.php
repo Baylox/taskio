@@ -28,10 +28,26 @@ final class BoardFactory extends PersistentProxyObjectFactory
      *
      * @todo add your default values here
      */
-    protected function defaults(): array|callable
+    protected function defaults(): array
     {
         return [
-            'title' => self::faker()->words(3, true),
+            'title' => self::faker()->randomElement([
+                'Website Redesign Project',
+                'Mobile App Development',
+                'Marketing Campaign Q4',
+                'Bug Fixes Sprint',
+                'Feature Backlog',
+                'User Research Board',
+                'Team Onboarding',
+                'Product Launch',
+                'Code Review Tasks',
+                'Documentation Updates',
+                'Testing & QA',
+                'Client Projects',
+                'Personal Tasks',
+                'Team Meeting Notes',
+                'Infrastructure Migration',
+            ]),
             'owner' => AccountFactory::new(),
         ];
     }
