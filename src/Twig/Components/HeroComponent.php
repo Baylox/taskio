@@ -4,8 +4,8 @@ namespace App\Twig\Components;
 
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
-#[AsTwigComponent]
-final class Hero
+#[AsTwigComponent('Hero')]
+final class HeroComponent
 {
     public string $title = 'The ultra-fast visual manager';
     public ?string $subtitle = 'Organize your tasks, manage your projects, collaborate as a team.';
