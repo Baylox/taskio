@@ -3,15 +3,14 @@
 {% block title %}Prices{% endblock %}
 
 {% block body %}
+{{ component('Hero', {
+  title: 'Pricing Plans',
+  subtitle: "Choose the perfect plan for your team and start boosting your productivity today.",
+  size: 'xs'
+}) }}
+
 <div class="py-16 bg-gradient-to-br from-base-100 to-base-200">
     <div class="max-w-7xl mx-auto px-4">
-        <!-- Section Header -->
-        <div class="text-center mb-16">
-            <h2 class="text-5xl font-bold mb-6">Pricing Plans</h2>
-            <p class="text-xl text-base-content/70 max-w-3xl mx-auto">
-                Choose the perfect plan for your team and start boosting your productivity today.
-            </p>
-        </div>
 
         <!-- Desktop View - Cards -->
         <div class="hidden lg:flex justify-center items-stretch gap-8 mb-16">
