@@ -3,116 +3,394 @@
 {% block title %}Prices{% endblock %}
 
 {% block body %}
-<div class="flex justify-center items-center min-h-screen gap-8 px-4 bg-base-100">
-    <div class="cardFree w-96 bg-base-100 shadow-sm">
-  <div class="card-body">
-    <div class="flex justify-between">
-      <h2 class="text-3xl font-bold">Free</h2>
-      <span class="text-xl">$0/mo</span>
-    </div>
-    <ul class="mt-6 flex flex-col gap-2 text-xs">
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Create and organize tasks</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Assign tasks and update status</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Add labels and descriptions to tasks</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Simple due dates</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Archive tasks</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Basic filtering and sorting</span>
-      </li>
-    </ul>
-    <div class="mt-6">
-      <button class="btn btn-primary btn-block">Subscribe</button>
-    </div>
-  </div>
-    </div>
+<div class="py-16 bg-gradient-to-br from-base-100 to-base-200">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-bold mb-6">Pricing Plans</h2>
+            <p class="text-xl text-base-content/70 max-w-3xl mx-auto">
+                Choose the perfect plan for your team and start boosting your productivity today.
+            </p>
+        </div>
 
-    <div class="cardStarter bg-base-100 w-96 shadow-sm">
-  <div class="card-body">
-    <span class="badge badge-xs badge-warning">Most Popular</span>
-    <div class="flex justify-between">
-      <h2 class="text-3xl font-bold">Starter</h2>
-      <span class="text-xl">$9.99/mo</span>
-    </div>
-    <ul class="mt-6 flex flex-col gap-2 text-xs">
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>All Free features</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Task comments</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Email notifications</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Calendar view</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Timeline view</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Advanced filtering and sorting</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Customizable labels and colors</span>
-      </li>
-    </ul>
-    <div class="mt-6">
-      <button class="btn btn-primary btn-block">Subscribe</button>
-    </div>
-  </div>
-    </div>
+        <!-- Desktop View - Cards -->
+        <div class="hidden lg:flex justify-center items-stretch gap-8 mb-16">
+            <!-- Free Plan -->
+            <div class="card bg-base-100 shadow-xl border border-base-300 w-80 transform hover:scale-105 transition-transform">
+                <div class="card-body">
+                    <div class="text-center mb-6">
+                        <div class="avatar placeholder mb-4">
+                            <div class="bg-neutral text-neutral-content rounded-full w-16">
+                                <span class="text-2xl">🆓</span>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold">Free</h3>
+                        <div class="flex items-baseline justify-center mt-2">
+                            <span class="text-4xl font-extrabold">$0</span>
+                            <span class="text-base-content/60 ml-1">/month</span>
+                        </div>
+                    </div>
 
-    <div class="cardPremium w-96 bg-base-100 shadow-sm">
-  <div class="card-body">
-    <div class="flex justify-between">
-      <h2 class="text-3xl font-bold">Premium</h2>
-      <span class="text-xl">$19.99/mo</span>
-    </div>
-    <ul class="mt-6 flex flex-col gap-2 text-xs">
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>All Free + Starter features</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Internal and external newsletter system</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Advanced integrations (e.g., Mailchimp)</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Priority support and personalized onboarding</span>
-      </li>
-    </ul>
-    <div class="mt-6">
-      <button class="btn btn-primary btn-block">Subscribe</button>
-    </div>
-  </div>
+                    <div class="divider"></div>
+
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-success badge-sm">✓</div>
+                            <span class="text-sm">Create and organize tasks</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-success badge-sm">✓</div>
+                            <span class="text-sm">Assign tasks and update status</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-success badge-sm">✓</div>
+                            <span class="text-sm">Add labels and descriptions</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-success badge-sm">✓</div>
+                            <span class="text-sm">Simple due dates</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-success badge-sm">✓</div>
+                            <span class="text-sm">Basic filtering and sorting</span>
+                        </li>
+                    </ul>
+
+                    <div class="card-actions justify-center">
+                        <button class="btn btn-outline btn-primary btn-block">Get Started</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Starter Plan -->
+            <div class="card bg-primary text-primary-content shadow-xl border-2 border-primary w-80 transform scale-110 hover:scale-115 transition-transform relative">
+                <div class="badge badge-secondary absolute -top-3 left-1/2 -translate-x-1/2">Most Popular</div>
+                <div class="card-body">
+                    <div class="text-center mb-6">
+                        <div class="avatar placeholder mb-4">
+                            <div class="bg-primary-content text-primary rounded-full w-16">
+                                <span class="text-2xl">🚀</span>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold">Starter</h3>
+                        <div class="flex items-baseline justify-center mt-2">
+                            <span class="text-4xl font-extrabold">$9.99</span>
+                            <span class="opacity-70 ml-1">/month</span>
+                        </div>
+                    </div>
+
+                    <div class="divider divider-neutral"></div>
+
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-accent badge-sm">✓</div>
+                            <span class="text-sm">All Free features</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-accent badge-sm">✓</div>
+                            <span class="text-sm">Task comments</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-accent badge-sm">✓</div>
+                            <span class="text-sm">Email notifications</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-accent badge-sm">✓</div>
+                            <span class="text-sm">Calendar & timeline views</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-accent badge-sm">✓</div>
+                            <span class="text-sm">Advanced filtering</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-accent badge-sm">✓</div>
+                            <span class="text-sm">Custom labels & colors</span>
+                        </li>
+                    </ul>
+
+                    <div class="card-actions justify-center">
+                        <button class="btn btn-accent btn-block">Start Free Trial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="card bg-base-100 shadow-xl border border-base-300 w-80 transform hover:scale-105 transition-transform">
+                <div class="card-body">
+                    <div class="text-center mb-6">
+                        <div class="avatar placeholder mb-4">
+                            <div class="bg-gradient-to-br from-primary to-secondary text-white rounded-full w-16">
+                                <span class="text-2xl">👑</span>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold">Premium</h3>
+                        <div class="flex items-baseline justify-center mt-2">
+                            <span class="text-4xl font-extrabold">$19.99</span>
+                            <span class="text-base-content/60 ml-1">/month</span>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-success badge-sm">✓</div>
+                            <span class="text-sm">All Starter features</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-success badge-sm">✓</div>
+                            <span class="text-sm">Newsletter system</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-success badge-sm">✓</div>
+                            <span class="text-sm">Advanced integrations</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-success badge-sm">✓</div>
+                            <span class="text-sm">Priority support</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="badge badge-success badge-sm">✓</div>
+                            <span class="text-sm">Personalized onboarding</span>
+                        </li>
+                    </ul>
+
+                    <div class="card-actions justify-center">
+                        <button class="btn btn-primary btn-block">Upgrade Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile View - Carousel -->
+        <div class="lg:hidden mt-8">
+            <div class="carousel w-full rounded-box">
+                <!-- Free Plan Slide -->
+                <div id="slide1" class="carousel-item relative w-full flex justify-center">
+                    <div class="card bg-base-100 shadow-xl border border-base-300 w-80 mx-4">
+                        <div class="card-body">
+                            <div class="text-center mb-6">
+                                <div class="avatar placeholder mb-4">
+                                    <div class="bg-neutral text-neutral-content rounded-full w-16">
+                                        <span class="text-2xl">🆓</span>
+                                    </div>
+                                </div>
+                                <h3 class="text-2xl font-bold">Free</h3>
+                                <div class="flex items-baseline justify-center mt-2">
+                                    <span class="text-4xl font-extrabold">$0</span>
+                                    <span class="text-base-content/60 ml-1">/month</span>
+                                </div>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-success badge-sm">✓</div>
+                                    <span class="text-sm">Create and organize tasks</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-success badge-sm">✓</div>
+                                    <span class="text-sm">Assign tasks and update status</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-success badge-sm">✓</div>
+                                    <span class="text-sm">Add labels and descriptions</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-success badge-sm">✓</div>
+                                    <span class="text-sm">Simple due dates</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-success badge-sm">✓</div>
+                                    <span class="text-sm">Basic filtering and sorting</span>
+                                </li>
+                            </ul>
+
+                            <div class="card-actions justify-center">
+                                <button class="btn btn-outline btn-primary btn-block">Get Started</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                        <a href="#slide3" class="btn btn-circle btn-sm">❮</a>
+                        <a href="#slide2" class="btn btn-circle btn-sm">❯</a>
+                    </div>
+                </div>
+
+                <!-- Starter Plan Slide -->
+                <div id="slide2" class="carousel-item relative w-full flex justify-center">
+                    <div class="card bg-primary text-primary-content shadow-xl border-2 border-primary w-80 mx-4">
+                        <div class="badge badge-secondary absolute -top-3 left-1/2 -translate-x-1/2">Most Popular</div>
+                        <div class="card-body">
+                            <div class="text-center mb-6">
+                                <div class="avatar placeholder mb-4">
+                                    <div class="bg-primary-content text-primary rounded-full w-16">
+                                        <span class="text-2xl">🚀</span>
+                                    </div>
+                                </div>
+                                <h3 class="text-2xl font-bold">Starter</h3>
+                                <div class="flex items-baseline justify-center mt-2">
+                                    <span class="text-4xl font-extrabold">$9.99</span>
+                                    <span class="opacity-70 ml-1">/month</span>
+                                </div>
+                            </div>
+
+                            <div class="divider divider-neutral"></div>
+
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-accent badge-sm">✓</div>
+                                    <span class="text-sm">All Free features</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-accent badge-sm">✓</div>
+                                    <span class="text-sm">Task comments</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-accent badge-sm">✓</div>
+                                    <span class="text-sm">Email notifications</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-accent badge-sm">✓</div>
+                                    <span class="text-sm">Calendar & timeline views</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-accent badge-sm">✓</div>
+                                    <span class="text-sm">Advanced filtering</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-accent badge-sm">✓</div>
+                                    <span class="text-sm">Custom labels & colors</span>
+                                </li>
+                            </ul>
+
+                            <div class="card-actions justify-center">
+                                <button class="btn btn-accent btn-block">Start Free Trial</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                        <a href="#slide1" class="btn btn-circle btn-sm">❮</a>
+                        <a href="#slide3" class="btn btn-circle btn-sm">❯</a>
+                    </div>
+                </div>
+
+                <!-- Premium Plan Slide -->
+                <div id="slide3" class="carousel-item relative w-full flex justify-center">
+                    <div class="card bg-base-100 shadow-xl border border-base-300 w-80 mx-4">
+                        <div class="card-body">
+                            <div class="text-center mb-6">
+                                <div class="avatar placeholder mb-4">
+                                    <div class="bg-gradient-to-br from-primary to-secondary text-white rounded-full w-16">
+                                        <span class="text-2xl">👑</span>
+                                    </div>
+                                </div>
+                                <h3 class="text-2xl font-bold">Premium</h3>
+                                <div class="flex items-baseline justify-center mt-2">
+                                    <span class="text-4xl font-extrabold">$19.99</span>
+                                    <span class="text-base-content/60 ml-1">/month</span>
+                                </div>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-success badge-sm">✓</div>
+                                    <span class="text-sm">All Starter features</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-success badge-sm">✓</div>
+                                    <span class="text-sm">Newsletter system</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-success badge-sm">✓</div>
+                                    <span class="text-sm">Advanced integrations</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-success badge-sm">✓</div>
+                                    <span class="text-sm">Priority support</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="badge badge-success badge-sm">✓</div>
+                                    <span class="text-sm">Personalized onboarding</span>
+                                </li>
+                            </ul>
+
+                            <div class="card-actions justify-center">
+                                <button class="btn btn-primary btn-block">Upgrade Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                        <a href="#slide2" class="btn btn-circle btn-sm">❮</a>
+                        <a href="#slide1" class="btn btn-circle btn-sm">❯</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel indicators -->
+            <div class="flex justify-center w-full py-2 gap-2 mt-4">
+                <a href="#slide1" class="btn btn-xs">1</a>
+                <a href="#slide2" class="btn btn-xs">2</a>
+                <a href="#slide3" class="btn btn-xs">3</a>
+            </div>
+        </div>
+
+        <!-- Features Comparison Table -->
+        <div class="mt-16">
+            <div class="text-center mb-8">
+                <h3 class="text-3xl font-bold mb-4">Compare all features</h3>
+                <p class="text-base-content/70">See what's included in each plan</p>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="table table-zebra bg-base-100 rounded-lg shadow-lg">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Features</th>
+                            <th class="text-center">Free</th>
+                            <th class="text-center">Starter</th>
+                            <th class="text-center">Premium</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-medium">Task Management</td>
+                            <td class="text-center"><div class="badge badge-success badge-sm">✓</div></td>
+                            <td class="text-center"><div class="badge badge-success badge-sm">✓</div></td>
+                            <td class="text-center"><div class="badge badge-success badge-sm">✓</div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">Email Notifications</td>
+                            <td class="text-center"><div class="badge badge-error badge-sm">✗</div></td>
+                            <td class="text-center"><div class="badge badge-success badge-sm">✓</div></td>
+                            <td class="text-center"><div class="badge badge-success badge-sm">✓</div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">Advanced Views</td>
+                            <td class="text-center"><div class="badge badge-error badge-sm">✗</div></td>
+                            <td class="text-center"><div class="badge badge-success badge-sm">✓</div></td>
+                            <td class="text-center"><div class="badge badge-success badge-sm">✓</div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">Newsletter System</td>
+                            <td class="text-center"><div class="badge badge-error badge-sm">✗</div></td>
+                            <td class="text-center"><div class="badge badge-error badge-sm">✗</div></td>
+                            <td class="text-center"><div class="badge badge-success badge-sm">✓</div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">Priority Support</td>
+                            <td class="text-center"><div class="badge badge-error badge-sm">✗</div></td>
+                            <td class="text-center"><div class="badge badge-error badge-sm">✗</div></td>
+                            <td class="text-center"><div class="badge badge-success badge-sm">✓</div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}
