@@ -20,7 +20,7 @@ final class BoardController extends AbstractController
     public function index(BoardRepository $boardRepository): Response
     {
         return $this->render('board/index.html.twig', [
-            'boards' => $boardRepository->findAll(),
+            'boards' => $boardRepository->findVisibleForUser($this->getUser()),
         ]);
     }
 
@@ -45,6 +45,7 @@ final class BoardController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_board_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('BOARD_EDIT', subject: 'board')]
     public function edit(Request $request, Board $board, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(BoardType::class, $board);
@@ -63,6 +64,7 @@ final class BoardController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_board_delete', methods: ['POST'])]
+    #[IsGranted('BOARD_DELETE', subject: 'board')]
     public function delete(Request $request, Board $board, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$board->getId(), $request->getPayload()->getString('_token'))) {
