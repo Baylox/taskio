@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/board')]
 final class BoardController extends AbstractController
 {
+    #[IsGranted('BOARD_VIEW', subject: 'board')]
     #[Route(name: 'app_board_index', methods: ['GET'])]
     public function index(BoardRepository $boardRepository): Response
     {
@@ -44,8 +45,8 @@ final class BoardController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_board_edit', methods: ['GET', 'POST'])]
     #[IsGranted('BOARD_EDIT', subject: 'board')]
+    #[Route('/{id}/edit', name: 'app_board_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Board $board, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(BoardType::class, $board);
@@ -63,11 +64,11 @@ final class BoardController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_board_delete', methods: ['POST'])]
     #[IsGranted('BOARD_DELETE', subject: 'board')]
+    #[Route('/{id}', name: 'app_board_delete', methods: ['POST'])]
     public function delete(Request $request, Board $board, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$board->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $board->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($board);
             $entityManager->flush();
         }
