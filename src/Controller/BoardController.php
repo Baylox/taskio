@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/board')]
 final class BoardController extends AbstractController
 {
-    #[IsGranted('BOARD_VIEW', subject: 'board')]
+
     #[Route(name: 'app_board_index', methods: ['GET'])]
     public function index(BoardRepository $boardRepository): Response
     {
@@ -33,6 +33,7 @@ final class BoardController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $board->setOwner($this->getUser());
             $entityManager->persist($board);
             $entityManager->flush();
 
