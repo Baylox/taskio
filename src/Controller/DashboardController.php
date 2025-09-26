@@ -10,13 +10,12 @@ use App\Form\LaneType;
 use App\Repository\BoardRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 final class DashboardController extends AbstractController
 {
-    // EDIT of board
     #[Route('/boards/{id<\d+>}', name: 'app_board_dashboard', methods: ['GET'])]
     public function index(int $id, BoardRepository $boards): Response
     {
@@ -24,6 +23,8 @@ final class DashboardController extends AbstractController
         if (!$board) {
             throw $this->createNotFoundException('Board not found');
         }
+
+        $this->denyAccessUnlessGranted('BOARD_VIEW', $board);
 
         // Create the form for lanes
         $laneForm = $this->createForm(LaneType::class, new Lane());

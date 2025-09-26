@@ -58,14 +58,11 @@ class BoardRepository extends ServiceEntityRepository
      */
     public function findVisibleForUser(Account $user): array
     {
-        $qb = $this->createQueryBuilder('b');
-
-        return $qb
-            ->andWhere($qb->expr()->orX(
-                'b.owner = :u',
-                'EXISTS (SELECT 1 FROM b.accounts a WHERE a = :u)'
-            ))
-            ->setParameter('u', $user)
+        return $this->createQueryBuilder('b')
+            ->leftJoin('b.accounts', 'a')
+            ->andWhere('b.owner = :user OR a = :user')
+            ->setParameter('user', $user)
+            ->distinct()
             ->orderBy('b.id', 'ASC')
             ->getQuery()
             ->getResult();

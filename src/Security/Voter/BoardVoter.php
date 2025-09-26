@@ -6,6 +6,7 @@ use App\Entity\Board;
 use App\Entity\Account;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use App\Repository\BoardRepository;
 
 final class BoardVoter extends Voter
 {
@@ -13,12 +14,16 @@ final class BoardVoter extends Voter
     public const EDIT   = 'BOARD_EDIT';
     public const DELETE = 'BOARD_DELETE';
 
+    public function __construct(private readonly BoardRepository $boardRepository) {}
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::VIEW, self::EDIT, self::DELETE], true)
             && $subject instanceof Board;
     }
 
+    /**
+     * @param Board $board
+     */
     protected function voteOnAttribute(string $attribute, mixed $board, TokenInterface $token): bool
     {
         $user = $token->getUser();
@@ -31,16 +36,17 @@ final class BoardVoter extends Voter
             return true;
         }
 
-        if (($owner = $board->getOwner()) && $owner->getId() === $user->getId()) {
-            return true;
-        }
-        $isOwner  = $board->getOwner() && $board->getOwner()->getId() === $user->getId();
-        $isMember = $board->getAccounts()->exists(fn($k, $m) => $m->getId() === $user->getId());
+        // Owner can do anything on his board
+        if ($board->getOwner()?->getId() === $user->getId()) {
+                return true;
+            }
+        // Check if the user is a member of the board
+        $isMember = $this->boardRepository->isBoardMember($board, $user);
 
         return match ($attribute) {
-            self::VIEW   => $isOwner || $isMember,
-            self::EDIT   => $isOwner || $isMember,
-            self::DELETE => $isOwner,
+            self::VIEW   => $isMember,
+            self::EDIT   => $isMember,
+            self::DELETE => false,
         };
     }
 }
