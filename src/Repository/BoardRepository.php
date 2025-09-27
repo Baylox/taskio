@@ -69,6 +69,18 @@ class BoardRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find all boards with their owners, for admin listing.
+     * @return Board[]
+     */
+    public function findAllForAdmin(): array
+    {
+    return $this->createQueryBuilder('b')
+        ->leftJoin('b.owner','o')->addSelect('o')
+        ->orderBy('b.title', 'ASC')
+        ->getQuery()->getResult();
+    }
+
+    /**
      * Check if a user is a member of a given board without hydrating the collection.
      * @param Board $board
      * @param Account $user
