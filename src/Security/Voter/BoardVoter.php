@@ -32,7 +32,7 @@ final class BoardVoter extends Voter
         }
 
         // Admin can do anything
-        if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+        if (in_array('ROLE_ADMIN', $token->getRoleNames(), true)) {
             return true;
         }
 
