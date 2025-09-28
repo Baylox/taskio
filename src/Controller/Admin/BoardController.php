@@ -17,6 +17,7 @@ final class BoardController extends AbstractController
     {
         return $this->render('board/index.html.twig', [
             'boards'    => $boards->findAllForAdmin(),
+            'adminMode' => true,
         ]);
     }
 }
