@@ -68,8 +68,10 @@
 										{{ include('board/_delete_form.html.twig') }}
 									</div>
 									{# Dashboard #}
-									<a href="{{ path('app_board_dashboard', {'id': board.id}) }}" class="inline-flex items-center px-3 py-1.5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition" aria-label="View dashboard for {{ board.title }}">
-										<i class="fas fa-columns mr-1" aria-hidden="true"></i>
+									<a href="{{ path('app_board_dashboard', {'id': board.id}) }}" class="btn" title="View dashboard for {{ board.title }}">
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 002 2m0 0v10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2H9z"/>
+										</svg>
 										Dashboard
 									</a>
 								</div>
