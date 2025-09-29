@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Account;
 use App\Form\AccountType;
@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[IsGranted('ROLE_ADMIN')]
-#[Route('/account', name: 'app_account_')]
+#[Route('admin/account', name: 'admin_account_')]
 final class AccountController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
@@ -31,7 +31,7 @@ final class AccountController extends AbstractController
         $qb = $accountRepository->qbByRole($role);
         $accounts = $paginator->paginate($qb, $request->query->getInt('page', 1), 10);
 
-        return $this->render('account/index.html.twig', [
+        return $this->render('admin/account/index.html.twig', [
             'accounts'        => $accounts,
             'current_role'    => $role,
             'available_roles' => $availableRoles,
@@ -41,7 +41,7 @@ final class AccountController extends AbstractController
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Account $account): Response
     {
-        return $this->render('account/show.html.twig', [
+        return $this->render('admin/account/show.html.twig', [
             'account' => $account,
         ]);
     }
@@ -54,10 +54,10 @@ final class AccountController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            return $this->redirectToRoute('app_account_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_account_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('account/edit.html.twig', [
+        return $this->render('admin/account/edit.html.twig', [
             'account' => $account,
             'form' => $form,
         ]);
@@ -71,6 +71,6 @@ final class AccountController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_account_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_account_index', [], Response::HTTP_SEE_OTHER);
     }
 }
