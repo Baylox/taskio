@@ -45,7 +45,7 @@
                 </button>
 
                 <div class="flex space-x-3">
-                    <a href="{{ path('app_account_index') }}" class="btn btn-ghost flex-1">
+                    <a href="{{ path('admin_account_index') }}" class="btn btn-ghost flex-1">
                         Back to list
                     </a>
 
@@ -65,7 +65,7 @@
             <h3 class="font-bold text-lg">Confirm Account Deletion</h3>
             <p class="py-4">Are you sure you want to delete your account? This action cannot be undone.</p>
             <div class="modal-action">
-                {{ include('account/_delete_form.html.twig') }}
+                {{ include('admin/account/_delete_form.html.twig') }}
                 <form method="dialog">
                     <button class="btn btn-ghost">Cancel</button>
                 </form>
