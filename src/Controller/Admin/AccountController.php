@@ -64,11 +64,16 @@ final class AccountController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request, Account $account, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Account $account, EntityManagerInterface $em): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $account->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($account);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$account->getId(), $request->request->get('_token'))) {
+            $em->remove($account);
+            $em->flush();
+            // Account deleted.
+            $this->addFlash('success', 'Account deleted.');
+        } else {
+            // Invalid CSRF token.
+            $this->addFlash('error', 'Invalid CSRF token.');
         }
 
         return $this->redirectToRoute('admin_account_index', [], Response::HTTP_SEE_OTHER);
