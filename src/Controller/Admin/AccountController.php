@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Account;
-use App\Form\AccountType;
+use App\Form\AdminAccountType;
 use App\Repository\AccountRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -49,7 +49,7 @@ final class AccountController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Account $account, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(AccountType::class, $account);
+        $form = $this->createForm(AdminAccountType::class, $account);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
