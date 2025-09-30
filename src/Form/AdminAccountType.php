@@ -10,10 +10,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
-class AccountType extends AbstractType
+class AdminAccountType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -22,7 +21,6 @@ class AccountType extends AbstractType
                 'attr' => [
                     'autocomplete' => 'email',
                     'inputmode' => 'email', // Mobile-friendly keyboard
-                    'placeholder' => 'votre@email.com'
                 ]
             ])
             ->add('name', TextType::class, [
@@ -38,7 +36,6 @@ class AccountType extends AbstractType
         ->add('role', ChoiceType::class, [
             'choices' => [
                 'User' => 'ROLE_USER',
-                'Admin' => 'ROLE_ADMIN'
             ],
             'label' => 'Role',
             'placeholder' => 'Select a role...',
@@ -48,12 +45,7 @@ class AccountType extends AbstractType
             'label_attr' => [
                 'class' => 'label-text text-base-content font-medium'
             ]
-        ])
-            ->add('isVerified', CheckboxType::class, [
-                'disabled' => true,   // greyed out, cannot be changed
-                'label'    => 'Email verified',
-            ])
-        ;
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

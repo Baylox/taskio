@@ -42,7 +42,10 @@
                     {# Admin visible only for admin #}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li>
-                            <a href="{{ path('app_account_index') }}" class="hover:underline">Accounts</a>
+                            <a href="{{ path('admin_board_index') }}" class="hover:underline text-red-400 hover:text-red-300">All Boards</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_account_index') }}" class="hover:underline text-red-400 hover:text-red-300">Accounts</a>
                         </li>
                     {% endif %}
 
@@ -59,9 +62,15 @@
 
 		<!-- Right: profile -->
 		<div class="navbar-end flex-1 justify-end">
-			<a href="#account" class="btn btn-ghost btn-circle transition-transform duration-200 hover:scale-105 active:scale-95" aria-label="Account">
-				<i class="fa-solid fa-user text-lg text-base-content/90 hover:text-primary transition-colors duration-200"></i>
-			</a>
+			{% if app.user %}
+				<a href="{{ path('app_account_edit') }}" class="btn btn-ghost btn-circle transition-transform duration-200 hover:scale-105 active:scale-95" aria-label="Account">
+					<i class="fa-solid fa-user text-lg text-base-content/90 hover:text-primary transition-colors duration-200"></i>
+				</a>
+			{% else %}
+				<a href="{{ path('app_login') }}" class="btn btn-ghost btn-circle transition-transform duration-200 hover:scale-105 active:scale-95" aria-label="Login">
+					<i class="fa-solid fa-user text-lg text-base-content/90 hover:text-primary transition-colors duration-200"></i>
+				</a>
+			{% endif %}
 		</div>
 	</div>
 </header>
@@ -91,9 +100,30 @@
 				<li class="transition-all duration-700">
 					<a href="{{ path('app_contact') }}" class="hover:bg-base-300/30">Contact</a>
 				</li>
-				<li class="transition-all duration-700">
-					<a href="{{ path('app_login') }}" class="hover:bg-base-300/30">Connexion</a>
-				</li>
+                {% if app.user %}
+                    {# Personal space #}
+                    <li class="transition-all duration-200">
+                        <a href="{{ path('app_board_index') }}" class="hover:bg-base-300/30">Dashboard</a>
+                    </li>
+
+                    {# Admin visible only for admin #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li class="transition-all duration-200">
+                            <a href="{{ path('admin_board_index') }}" class="hover:bg-base-300/30 text-red-400 hover:text-red-300">All Boards</a>
+                        </li>
+                        <li class="transition-all duration-200">
+                            <a href="{{ path('admin_account_index') }}" class="hover:bg-base-300/30 text-red-400 hover:text-red-300">Accounts</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="transition-all duration-700">
+                        <a href="{{ path('app_logout') }}" class="hover:bg-base-300/30">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="transition-all duration-700">
+                        <a href="{{ path('app_login') }}" class="hover:bg-base-300/30">Connexion</a>
+                    </li>
+                {% endif %}
 			</ul>
 		</div>
 	</div>
