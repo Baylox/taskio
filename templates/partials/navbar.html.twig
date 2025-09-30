@@ -62,9 +62,15 @@
 
 		<!-- Right: profile -->
 		<div class="navbar-end flex-1 justify-end">
-			<a href="#account" class="btn btn-ghost btn-circle transition-transform duration-200 hover:scale-105 active:scale-95" aria-label="Account">
-				<i class="fa-solid fa-user text-lg text-base-content/90 hover:text-primary transition-colors duration-200"></i>
-			</a>
+			{% if app.user %}
+				<a href="{{ path('app_account_edit') }}" class="btn btn-ghost btn-circle transition-transform duration-200 hover:scale-105 active:scale-95" aria-label="Account">
+					<i class="fa-solid fa-user text-lg text-base-content/90 hover:text-primary transition-colors duration-200"></i>
+				</a>
+			{% else %}
+				<a href="{{ path('app_login') }}" class="btn btn-ghost btn-circle transition-transform duration-200 hover:scale-105 active:scale-95" aria-label="Login">
+					<i class="fa-solid fa-user text-lg text-base-content/90 hover:text-primary transition-colors duration-200"></i>
+				</a>
+			{% endif %}
 		</div>
 	</div>
 </header>

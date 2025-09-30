@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Profile
+{% endblock %}
+
+{% block body %}
+	<div class="min-h-screen flex items-center justify-center bg-base-200">
+		<div class="w-full max-w-md bg-base-100 shadow-xl rounded-xl p-8">
+
+			<div class="text-center mb-8">
+				<h1 class="text-2xl font-bold text-base-content">My Profile</h1>
+				<p class="text-base-content/70 mt-2">Update your profile information</p>
+			</div>
+
+			{{ form_start(form) }}
+
+			{{ form_row(form.name) }}
+			{{ form_row(form.plainPassword) }}
+
+			{{ form_rest(form) }}
+
+			<div class="mt-6 space-y-3">
+				<button type="submit" class="btn btn-primary w-full">
+					Save Changes
+				</button>
+			</div>
+
+			{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}
