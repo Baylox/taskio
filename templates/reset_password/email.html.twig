@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirm your email - Taskio</title>
+    <title>Reset your password - Taskio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <style>
         body {
@@ -132,23 +132,23 @@
         <div class="card">
             <div class="icon-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                 </svg>
             </div>
 
             <div class="header">
-                <h1>Welcome to Taskio!</h1>
-                <p>We're excited to have you on board</p>
+                <h1>Reset Your Password</h1>
+                <p>We received a request to reset your password</p>
             </div>
 
             <div class="content">
                 <div class="alert">
-                    <p>To complete your registration and start organizing your tasks, please confirm your email address. This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.</p>
+                    <p>Click the button below to choose a new password. This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
                 </div>
 
-                <a href="{{ signedUrl|raw }}" class="btn">Confirm Email Address</a>
+                <a href="{{ url('app_reset_password', {token: resetToken.token}) }}" class="btn">Reset Password</a>
 
-                <p class="expiry-text">Didn't create an account? You can safely ignore this email.</p>
+                <p class="expiry-text">If you didn't request a password reset, you can safely ignore this email.</p>
             </div>
         </div>
 
