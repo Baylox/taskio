@@ -1,11 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Password Reset Email Sent{% endblock %}
+{% block title %}Password Reset Link Sent
+{% endblock %}
 
 {% block body %}
-    <p>
-        If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password.
-        This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
-    </p>
-    <p>If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request') }}">try again</a>.</p>
+	<main class="min-h-screen flex items-center justify-center bg-base-200">
+		<div class="card w-full max-w-md shadow-2xl bg-base-100">
+			<div
+				class="card-body">
+				{# Mail icon #}
+				<div class="flex justify-center mb-4">
+					<div class="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center shadow-lg">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-primary-content" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l9 4 9-4M21 8v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8m18 0l-9 4-9-4"/>
+						</svg>
+					</div>
+				</div>
+
+				<h1 class="text-3xl font-bold text-center mb-3">Check your inbox</h1>
+				<p class="text-center text-base-content/70 mb-6">
+					If an account matches the email address you entered, we’ve just sent you an email with a link to reset your password.
+				</p>
+
+				<div class="alert alert-info mb-6">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 1010 10A10.011 10.011 0 0012 2z"/>
+					</svg>
+					<span>
+						This link will be valid for
+						{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+					</span>
+				</div>
+
+				<p class="text-center text-base-content/70">
+					Didn’t get the email? Please check your spam folder or
+					<a href="{{ path('app_forgot_password_request') }}" class="link link-primary font-semibold">request a new link</a>.
+				</p>
+
+				<div class="form-control mt-8">
+					<a href="{{ path('app_login') }}" class="btn btn-primary btn-block">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v8a2 2 0 002 2h4m5-4l3-3m0 0l-3-3m3 3H9"/>
+						</svg>
+						Back to login
+					</a>
+				</div>
+			</div>
+		</div>
+	</main>
 {% endblock %}
