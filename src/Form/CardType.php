@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Card;
 use App\Entity\Lane;
+use App\Enum\CardStatus;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\Length;
@@ -47,11 +49,14 @@ class CardType extends AbstractType
                     'class' => 'label-text text-base-content font-medium'
                 ],
             ])
-            ->add('status', TextType::class, [
-                'label'    => 'Status',
-                'attr'     => [
-                    'placeholder' => 'Enter a status (max 24 characters)',
-                    'class' => 'input input-bordered w-full text-base-content bg-base-100'
+            ->add('status', EnumType::class, [
+                'class' => CardStatus::class,
+                'choice_label' => fn(CardStatus $status) => $status->getLabel(),
+                'label' => 'Status',
+                'required' => false,
+                'placeholder' => 'Select a status',
+                'attr' => [
+                    'class' => 'select select-bordered w-full text-base-content bg-base-100'
                 ],
                 'label_attr' => [
                     'class' => 'label-text text-base-content font-medium'
