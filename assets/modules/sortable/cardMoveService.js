@@ -11,7 +11,7 @@ export class CardMoveService {
             toLaneDataset: evt.to?.dataset
         };
     }
-
+    // Save the card move to the server
     static async saveMove({ cardId, toLaneId, newIndex, url }) {
         try {
             const payload = this._createPayload(cardId, toLaneId, newIndex);
@@ -27,7 +27,7 @@ export class CardMoveService {
             throw error;
         }
     }
-
+    // Prepare payload for the move request
     static _createPayload(cardId, toLaneId, newIndex) {
         return {
             cardId: Number(cardId),
@@ -35,11 +35,11 @@ export class CardMoveService {
             newIndex: Number(newIndex)
         };
     }
-
+    // Count cards in the target lane for logging purposes
     static _getLaneCardCount(toLaneId) {
         return document.querySelectorAll(`[data-lane-id="${toLaneId}"] [data-card-id]`).length;
     }
-
+    // Send POST request to server with move details
     static async _sendMoveRequest(url, payload) {
         return fetch(url, {
             method: 'POST',
@@ -47,7 +47,7 @@ export class CardMoveService {
             body: JSON.stringify(payload)
         });
     }
-
+    // Handle server response and log results
     static async _handleResponse(response, payload) {
         if (!response.ok) {
             const errorText = await response.text();
@@ -64,7 +64,7 @@ export class CardMoveService {
         MoveLogger.logMoveSuccess(result);
         return result;
     }
-
+    // Visual feedback for successful move
     static _showMoveSuccess(cardId) {
         const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
         if (cardElement) {
@@ -72,7 +72,7 @@ export class CardMoveService {
             setTimeout(() => cardElement.classList.remove('move-success'), 300);
         }
     }
-
+    // Centralized error handling
     static _handleError(error) {
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
             MoveLogger.logNetworkError(error);

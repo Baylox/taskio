@@ -5,7 +5,8 @@ import { cardSortableOptions } from './options.js';
 /**
  * Initialize SortableJS on a lane (container of cards)
  * @param {HTMLElement} element - the .lane-cards container
+ * @returns {Sortable} The Sortable instance
  */
 export function initCardSortable(element) {
-    new Sortable(element, cardSortableOptions);
+    return new Sortable(element, cardSortableOptions);
 }

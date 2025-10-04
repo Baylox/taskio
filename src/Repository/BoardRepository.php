@@ -17,7 +17,12 @@ class BoardRepository extends ServiceEntityRepository
         parent::__construct($registry, Board::class);
     }
 
-
+    /**
+     * Find boards where the user is a member (via accounts).
+     * Does not include boards where the user is only the owner.
+     * @param Account $account
+     * @return Board[]
+     */
     public function findByAccount(Account $account): array
     {
         return $this->createQueryBuilder('b')
@@ -29,6 +34,11 @@ class BoardRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Find one board with its lanes and cards, ordered by position.
+     * @param int $id
+     * @return Board|null
+     */
     public function findWithLanesAndCards(int $id): ?Board
     {
         return $this->createQueryBuilder('b')
@@ -40,29 +50,52 @@ class BoardRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * Find boards visible to the given user (either owner or member).
+     * Replaces findAll() for listing boards.
+     * @param Account $user
+     * @return Board[]
+     */
+    public function findVisibleForUser(Account $user): array
+    {
+        return $this->createQueryBuilder('b')
+            ->leftJoin('b.accounts', 'a')
+            ->andWhere('b.owner = :user OR a = :user')
+            ->setParameter('user', $user)
+            ->distinct()
+            ->orderBy('b.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    /**
-    //     * @return Board[] Returns an array of Board objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('b.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Find all boards with their owners, for admin listing.
+     * @return Board[]
+     */
+    public function findAllForAdmin(): array
+    {
+    return $this->createQueryBuilder('b')
+        ->leftJoin('b.owner','o')->addSelect('o')
+        ->orderBy('b.title', 'ASC')
+        ->getQuery()->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Board
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Check if a user is a member of a given board without hydrating the collection.
+     * @param Board $board
+     * @param Account $user
+     * @return bool
+     */
+    public function isBoardMember(Board $board, Account $user): bool
+    {
+        return (bool) $this->createQueryBuilder('b')
+            ->select('1')
+            ->innerJoin('b.accounts', 'a')
+            ->andWhere('b = :b')
+            ->andWhere('a = :u')
+            ->setParameter('b', $board)
+            ->setParameter('u', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

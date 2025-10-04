@@ -20,6 +20,8 @@ class CardRepository extends ServiceEntityRepository
     /**
      * Finds the maximum position value of cards in the given lane.
      * Returns 0 if there are no cards in the lane.
+     * @param Lane $lane
+     * @return int Maximum position, or 0 if none.
      */
     public function findMaxPositionInLane(Lane $lane): int
     {
@@ -35,7 +37,7 @@ class CardRepository extends ServiceEntityRepository
 
     /**
      * Retrieves the IDs of the cards in a lane, ordered by ascending position.
-     *
+     * @param Lane $lane
      * @return int[] Array of card IDs in ascending order by position.
      */
     public function findIdsByLaneOrdered(Lane $lane): array
@@ -54,6 +56,9 @@ class CardRepository extends ServiceEntityRepository
     /**
      * After removing a card at $oldPos in $fromLane,
      * close the gap by decrementing positions > oldPos.
+     * @param Lane $fromLane
+     * @param int $oldPos
+     * @return int
      */
     public function compactAfterRemoval(Lane $fromLane, int $oldPos): int
     {
@@ -70,6 +75,9 @@ class CardRepository extends ServiceEntityRepository
     /**
     * Before inserting at $newIndex in $toLane,
     * "make room" by incrementing positions >= newIndex.
+    * @param Lane $toLane
+    * @param int $newIndex
+    * @return int
     */
     public function makeRoomAt(Lane $toLane, int $newIndex): int
     {

@@ -16,6 +16,14 @@ final class UserStory extends Story
             'role' => 'ROLE_USER',
         ]);
 
+        AccountFactory::createOne([
+            'email' => 'user@example.com',
+            'role'  => 'ROLE_USER',
+            'password' => 'userpassword',
+            'isVerified' => true,
+            'name'      => 'Regular',
+            'lastname'  => 'User',
+        ]);
         // 1 admin account
         AccountFactory::createOne([
             'email' => 'admin@example.com',

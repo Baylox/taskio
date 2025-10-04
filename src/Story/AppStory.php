@@ -17,14 +17,11 @@ final class AppStory extends Story
 
         // Load the board story
         BoardStory::load();
-        
+
         // Load the board lanes story
         BoardLanesStory::load();
 
         // Load the boards, lanes, and cards story
         BoardsLanesCardsStory::load();
-
-        // Load the admin boards story
-        AdminBoardsStory::load();
     }
 }

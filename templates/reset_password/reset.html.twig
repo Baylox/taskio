@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block body %}
+    <main class="min-h-screen flex items-center justify-center bg-base-200">
+        <div class="card w-full max-w-md shadow-2xl bg-base-100">
+            <div class="card-body">
+                {# Lock icon #}
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-primary-content" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <h1 class="text-3xl font-bold text-center mb-6">Reset Your Password</h1>
+                <p class="text-center text-base-content/70 mb-8">Please enter your new password</p>
+
+                {{ form_start(resetForm) }}
+                    {# Password Field #}
+                    <div class="form-control mb-4">
+                        {{ form_label(resetForm.plainPassword.first, null, {
+                            'label_attr': {'class': 'label'}
+                        }) }}
+                        <div class="relative">
+                            {{ form_widget(resetForm.plainPassword.first, {
+                                'attr': {'class': 'input input-bordered w-full pl-10', 'placeholder': '••••••••'}
+                            }) }}
+                            <span class="absolute left-3 top-3.5 text-base-content/40">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                            </span>
+                        </div>
+                        {{ form_errors(resetForm.plainPassword.first) }}
+                    </div>
+
+                    {# Confirm Password Field #}
+                    <div class="form-control mb-6">
+                        {{ form_label(resetForm.plainPassword.second, null, {
+                            'label_attr': {'class': 'label'}
+                        }) }}
+                        <div class="relative">
+                            {{ form_widget(resetForm.plainPassword.second, {
+                                'attr': {'class': 'input input-bordered w-full pl-10', 'placeholder': '••••••••'}
+                            }) }}
+                            <span class="absolute left-3 top-3.5 text-base-content/40">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </span>
+                        </div>
+                        {{ form_errors(resetForm.plainPassword.second) }}
+                    </div>
+
+                    {# Submit Button #}
+                    <div class="form-control mt-6">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Reset password
+                        </button>
+                    </div>
+
+                    {# Back to login link #}
+                    <p class="text-center mt-6 text-base-content/70">
+                        Remember your password?
+                        <a href="{{ path('app_login') }}" class="link link-primary font-semibold">Sign in</a>
+                    </p>
+                {{ form_end(resetForm) }}
+            </div>
+        </div>
+    </main>
+{% endblock %}

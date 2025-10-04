@@ -15,15 +15,11 @@ registerControllers(app, import.meta.glob('./controllers/**/*_controller.js'));
 
 
 // Additional JavaScript files
-
-import { initCardSortable } from './modules/index.js';
+import { sortableManager } from './modules/sortableManager.js';
 import.meta.glob(['./images/**']);
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.lane-cards').forEach(lane => {
-    initCardSortable(lane);
-  });
-});
+// Initialize sortable management
+sortableManager.setupEventListeners();
 
 
 console.log('App loaded with Vite + Tailwind + DaisyUI');

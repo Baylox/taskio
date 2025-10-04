@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block body %}
+    <main class="min-h-screen flex items-center justify-center bg-base-200">
+        <div class="card w-full max-w-md shadow-2xl bg-base-100">
+            <div class="card-body">
+                {# Email icon #}
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-primary-content" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <h1 class="text-3xl font-bold text-center mb-6">Reset Your Password</h1>
+                <p class="text-center text-base-content/70 mb-8">Enter your email address, and we will send you a link to reset your password.</p>
+
+                {% for flash_error in app.flashes('reset_password_error') %}
+                    <div class="alert alert-error mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>{{ flash_error }}</span>
+                    </div>
+                {% endfor %}
+
+                {{ form_start(requestForm) }}
+                    {# Email Field #}
+                    <div class="form-control mb-6">
+                        {{ form_label(requestForm.email, null, {
+                            'label_attr': {'class': 'label'}
+                        }) }}
+                        <div class="relative">
+                            {{ form_widget(requestForm.email, {
+                                'attr': {'class': 'input input-bordered w-full pl-10', 'placeholder': 'your@email.com'}
+                            }) }}
+                            <span class="absolute left-3 top-3.5 text-base-content/40">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </span>
+                        </div>
+                        {{ form_errors(requestForm.email) }}
+                    </div>
+
+                    {# Submit Button #}
+                    <div class="form-control mt-6">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            Send password reset email
+                        </button>
+                    </div>
+
+                    {# Back to login link #}
+                    <p class="text-center mt-6 text-base-content/70">
+                        Remember your password?
+                        <a href="{{ path('app_login') }}" class="link link-primary font-semibold">Sign in</a>
+                    </p>
+                {{ form_end(requestForm) }}
+            </div>
+        </div>
+    </main>
+{% endblock %}

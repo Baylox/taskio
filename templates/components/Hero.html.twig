@@ -7,7 +7,7 @@
     }) }}
 >
     <!-- Background image -->
-    <picture class="absolute inset-0 -z-10">
+    <picture class="absolute inset-0 z-0" aria-hidden="true">
         <img
             src="{{ asset(bg) }}"
             sizes="100vw"
@@ -18,10 +18,10 @@
     </picture>
 
     <!-- Overlay gradient (neutral, based on theme) -->
-    <div class="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-b from-base-100/10 to-base-100/80"></div>
+    <div class="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-base-100/10 to-base-100/80"></div>
 
     <!-- Content -->
-    <div class="relative z-10 px-4 max-w-xl">
+    <div class="relative z-20 px-4 max-w-xl">
         <h1 id="hero-title" class="text-3xl md:text-4xl font-extrabold mb-3">
             {{ title }}
         </h1>
