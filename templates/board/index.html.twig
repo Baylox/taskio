@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ adminMode|default(false) ? 'Admin - All Boards' : 'My Boards' }}{% endblock %}
+{% block title %}
+	{{ adminMode|default(false) ? 'Admin - All Boards' : 'My Boards' }}
+{% endblock %}
 
 {% block body %}
 	<div
@@ -48,7 +50,8 @@
 					{% for board in boards %}
 						<tr class="hover:bg-gray-750 transition-colors">
 							<td class="px-6 py-4 whitespace-nowrap">
-								<div class="flex items-center">
+								<div
+									class="flex items-center">
 									{# Board Title with link to dashboard #}
 									<a href="{{ path('app_board_edit', {'id': board.id}) }}" class="text-sm font-medium text-white">{{ board.title }}</a>
 								</div>
@@ -62,18 +65,13 @@
 							{% endif %}
 							<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 								<div
-									class="flex items-center justify-end gap-2">
-									{# Delete #}
-									<div>
-										{{ include('board/_delete_form.html.twig') }}
-									</div>
+									class="flex items-center justify-end gap-1">
 									{# Dashboard #}
-									<a href="{{ path('app_board_dashboard', {'id': board.id}) }}" class="btn" title="View dashboard for {{ board.title }}">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 002 2m0 0v10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2H9z"/>
-										</svg>
-										Dashboard
+									<a href="{{ path('app_board_dashboard', {'id': board.id}) }}" class="btn btn-ghost btn-sm hover:btn-primary" title="View dashboard for {{ board.title }}" aria-label="View dashboard for {{ board.title }}">
+										<i class="fa-solid fa-table-columns"></i>
 									</a>
+									{# Delete #}
+									{{ include('board/_delete_form.html.twig') }}
 								</div>
 							</td>
 

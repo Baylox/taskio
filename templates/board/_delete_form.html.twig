@@ -1,4 +1,10 @@
-<form method="post" action="{{ path('app_board_delete', {'id': board.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form method="post" action="{{ path('app_board_delete', {'id': board.id}) }}" onsubmit="return confirm('Are you sure you want to delete this board?');" class="inline-block">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ board.id) }}">
-    <button type="submit" class="btn btn-error" aria-label="Delete {{ board.title }}">Delete</button>
+    <button type="submit"
+            class="btn btn-ghost btn-sm text-error hover:bg-error/10 focus-visible:ring-2 focus-visible:ring-error"
+            aria-label="Delete {{ board.title }}"
+            title="Delete board">
+        <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+        <span class="sr-only">Delete</span>
+    </button>
 </form>
