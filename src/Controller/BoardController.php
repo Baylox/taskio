@@ -25,6 +25,27 @@ final class BoardController extends AbstractController
         ]);
     }
 
+    #[Route('/new', name: 'app_board_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $board = new Board();
+        $form = $this->createForm(BoardType::class, $board);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $board->setOwner($this->getUser());
+            $entityManager->persist($board);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_board_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('board/new.html.twig', [
+            'board' => $board,
+            'form' => $form,
+        ]);
+    }
+
     #[IsGranted('BOARD_EDIT', subject: 'board')]
     #[Route('/{id}/edit', name: 'app_board_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Board $board, EntityManagerInterface $entityManager): Response
@@ -42,5 +63,17 @@ final class BoardController extends AbstractController
             'board' => $board,
             'form' => $form,
         ]);
+    }
+
+    #[IsGranted('BOARD_DELETE', subject: 'board')]
+    #[Route('/{id}', name: 'app_board_delete', methods: ['POST'])]
+    public function delete(Request $request, Board $board, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $board->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($board);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_board_index', [], Response::HTTP_SEE_OTHER);
     }
 }
