@@ -28,12 +28,7 @@ final class AccountController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $plainPassword = $form->get('plainPassword')->getData();
-
-            if ($plainPassword) {
-                $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
-            }
-
+            $this->updateUserPassword($user, $form, $passwordHasher);
             $em->flush();
             $this->addFlash('success', 'Profile updated successfully.');
 
@@ -41,8 +36,19 @@ final class AccountController extends AbstractController
         }
 
         return $this->render('account/edit.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
+    }
+
+    private function updateUserPassword(Account $user, $form, UserPasswordHasherInterface $passwordHasher): void
+    {
+        $plainPassword = $form->get('plainPassword')->getData();
+
+        if (!$plainPassword) {
+            return;
+        }
+
+        $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
     }
 }
 
