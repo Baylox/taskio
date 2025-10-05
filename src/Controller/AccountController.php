@@ -10,13 +10,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/account', name: 'app_account_')]
 final class AccountController extends AbstractController
 {
     #[Route('/edit', name: 'edit', methods: ['GET','POST'])]
-    public function edit(Request $request, EntityManagerInterface $em): Response
+    public function edit(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Account) {
@@ -27,8 +28,14 @@ final class AccountController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = $form->get('plainPassword')->getData();
+
+            if ($plainPassword) {
+                $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
+            }
+
             $em->flush();
-            $this->addFlash('success', 'Profil mis à jour.');
+            $this->addFlash('success', 'Profile updated successfully.');
 
             return $this->redirectToRoute('app_account_edit', [], Response::HTTP_SEE_OTHER);
         }
