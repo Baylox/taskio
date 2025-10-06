@@ -1,191 +1,177 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ adminMode|default(false) ? 'Admin - All Boards' : 'My Boards' }}
+    {{ adminMode|default(false) ? 'Admin - All Boards' : 'My Boards' }}
 {% endblock %}
 
 {% block body %}
-	<div
-		class="container mx-auto px-6 py-8">
-		{# Title #}
-		<div class="flex justify-between items-center mb-8">
-			<h1 class="text-2xl font-semibold text-gray-200">
-				{{ adminMode|default(false) ? 'Admin - Board Management' : 'My Boards' }}
-			</h1>
-			{% if adminMode|default(false) %}
-				<div class="text-sm text-gray-400">
-					<span class="bg-red-600 text-white px-2 py-1 rounded text-xs font-medium">ADMIN MODE</span>
-				</div>
-			{% endif %}
-		</div>
+    <div class="container mx-auto px-6 py-8">
+        {# Title and Stats #}
+        <div class="flex justify-between items-start mb-8">
+            <div class="flex items-center gap-3">
+                <h1 class="text-2xl font-semibold text-gray-200">
+                    {{ adminMode|default(false) ? 'Admin - Board Management' : 'My Boards' }}
+                </h1>
+                {% if adminMode|default(false) %}
+                    <span class="bg-red-600 text-white px-3 py-1 rounded text-xs font-medium uppercase">ADMIN MODE</span>
+                {% endif %}
+            </div>
+            <div class="text-right">
+                <div class="text-sm text-gray-400">{{ adminMode|default(false) ? 'All Boards' : 'My Boards' }}</div>
+                <div class="text-2xl font-bold text-white">{{ boards|length }}</div>
+            </div>
+        </div>
 
-		{# Search bar (admin mode only) #}
-		{% if adminMode|default(false) %}
-			<form method="get" class="mb-6">
-				<div class="flex gap-3">
-					<!-- Search input -->
-					<div class="flex-1">
-						<div class="join w-full">
-							<input
-								type="text"
-								id="search"
-								name="search"
-								value="{{ current_search }}"
-								placeholder="Search by board title or owner email..."
-								class="input input-sm input-bordered join-item flex-1"
-							/>
-							<button type="submit" class="btn btn-sm btn-primary join-item">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-								</svg>
-							</button>
-						</div>
-					</div>
+        {# Create Board Button #}
+        <div class="mb-6 flex justify-end">
+            <a href="{{ path('app_board_new') }}" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors inline-flex items-center gap-2" aria-label="Create a new board">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Create Board
+            </a>
+        </div>
 
-					<!-- Clear filters button -->
-					{% if current_search %}
-						<a href="{{ path('admin_board_index') }}" class="btn btn-sm btn-ghost">
-							Clear
-						</a>
-					{% endif %}
-				</div>
-			</form>
-		{% endif %}
+        {# Search bar (admin mode only) #}
+        {% if adminMode|default(false) %}
+            <form method="get" class="mb-6">
+                <div class="flex gap-3">
+                    <!-- Search input -->
+                    <div class="flex-1">
+                        <div class="join w-full">
+                            <input
+                                type="text"
+                                id="search"
+                                name="search"
+                                value="{{ current_search }}"
+                                placeholder="Search by board title or owner email..."
+                                class="input input-sm input-bordered join-item flex-1"
+                            />
+                            <button type="submit" class="btn btn-sm btn-primary join-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
 
-		{# Nb Board + Create board #}
-		<div class="mb-6">
-			<div class="flex items-center gap-4">
-				<div class="text-right">
-					<p class="text-sm text-gray-400">{{ adminMode|default(false) ? 'All Boards' : 'My Boards' }}</p>
-					<p class="text-2xl font-bold text-white text-left">{{ adminMode|default(false) ? boards.totalItemCount : boards|length }}</p>
-				</div>
-				<div class="ml-auto">
-					<a href="{{ path('app_board_new') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors" aria-label="Create a new board">
-						+ Create Board
-					</a>
-				</div>
-			</div>
-		</div>
+                    <!-- Clear filters button -->
+                    {% if current_search %}
+                        <a href="{{ path('admin_board_index') }}" class="btn btn-sm btn-ghost">
+                            Clear
+                        </a>
+                    {% endif %}
+                </div>
+            </form>
+        {% endif %}
 
-		{# Create Board Button #}
-		<div class="mb-6 flex justify-end">
-			<a href="{{ path('app_board_new') }}" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors inline-flex items-center gap-2" aria-label="Create a new board">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-				</svg>
-				Create Board
-			</a>
-		</div>
+        {# Board Table #}
+        <div class="overflow-hidden">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-700">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Title</th>
+                        {% if adminMode|default(false) %}
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Owner</th>
+                        {% endif %}
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for board in boards %}
+                        <tr class="hover:bg-gray-750 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    {# Board Title with link to dashboard #}
+                                    <a href="{{ path('app_board_edit', {'id': board.id}) }}" class="text-sm font-medium text-white">{{ board.title }}</a>
+                                </div>
+                            </td>
+                            {% if adminMode|default(false) %}
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-400">
+                                        {{ board.owner ? board.owner.email : 'Unknown' }}
+                                    </div>
+                                </td>
+                            {% endif %}
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div class="flex items-center justify-end gap-1">
+                                    {# Dashboard #}
+                                    <a href="{{ path('app_board_dashboard', {'id': board.id}) }}" class="btn btn-ghost btn-sm hover:btn-primary" title="View dashboard for {{ board.title }}" aria-label="View dashboard for {{ board.title }}">
+                                        <i class="fa-solid fa-table-columns"></i>
+                                    </a>
+                                    {# Delete #}
+                                    {{ include('board/_delete_form.html.twig') }}
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        {# Empty state #}
+                        <tr>
+                            <td colspan="{{ adminMode|default(false) ? '3' : '2' }}" class="px-6 py-12 text-center">
+                                <div class="flex flex-col items-center space-y-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                    </svg>
+                                    <p class="text-lg font-medium text-gray-500">
+                                        {{ adminMode|default(false) ? 'No boards in the system' : 'No boards found' }}
+                                    </p>
+                                    <p class="text-sm text-gray-400 mb-2">
+                                        {{ adminMode|default(false) ? 'No boards have been created yet' : 'Get started by creating your first board' }}
+                                    </p>
+                                    <a href="{{ path('app_board_new') }}" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors inline-flex items-center gap-2" aria-label="Create your first board">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                        </svg>
+                                        Create Board
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-		{# Board Table #}
-		<div class="overflow-hidden">
-			<table class="w-full">
-				<thead>
-					<tr class="border-b border-gray-700">
-						<th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Title</th>
-						{% if adminMode|default(false) %}
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Owner</th>
-						{% endif %}
-						<th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for board in boards %}
-						<tr class="hover:bg-gray-750 transition-colors">
-							<td class="px-6 py-4 whitespace-nowrap">
-								<div
-									class="flex items-center">
-									{# Board Title with link to dashboard #}
-									<a href="{{ path('app_board_edit', {'id': board.id}) }}" class="text-sm font-medium text-white">{{ board.title }}</a>
-								</div>
-							</td>
-							{% if adminMode|default(false) %}
-								<td class="px-6 py-4">
-									<div class="text-sm text-gray-400">
-										{{ board.owner ? board.owner.email : 'Unknown' }}
-									</div>
-								</td>
-							{% endif %}
-							<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-								<div
-									class="flex items-center justify-end gap-1">
-									{# Dashboard #}
-									<a href="{{ path('app_board_dashboard', {'id': board.id}) }}" class="btn btn-ghost btn-sm hover:btn-primary" title="View dashboard for {{ board.title }}" aria-label="View dashboard for {{ board.title }}">
-										<i class="fa-solid fa-table-columns"></i>
-									</a>
-									{# Delete #}
-									{{ include('board/_delete_form.html.twig') }}
-								</div>
-							</td>
-						</tr>
-					{% else %}
-						{# Empty state #}
-						<tr>
-							<td colspan="{{ adminMode|default(false) ? '3' : '2' }}" class="px-6 py-12 text-center">
-								<div class="flex flex-col items-center space-y-3">
-									<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-									</svg>
-									<p class="text-lg font-medium text-gray-500">
-										{{ adminMode|default(false) ? 'No boards in the system' : 'No boards found' }}
-									</p>
-									<p class="text-sm text-gray-400 mb-2">
-										{{ adminMode|default(false) ? 'No boards have been created yet' : 'Get started by creating your first board' }}
-									</p>
-									<a href="{{ path('app_board_new') }}" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors inline-flex items-center gap-2" aria-label="Create your first board">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-										</svg>
-										Create Board
-									</a>
-								</div>
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
+        {# Pagination (admin mode only) #}
+        {% if adminMode|default(false) and boards.pageCount > 1 %}
+            {% set route = app.request.attributes.get('_route') %}
+            {% set q = app.request.query.all %}
 
-		{# Pagination (admin mode only) #}
-		{% if adminMode|default(false) and boards.pageCount > 1 %}
-			{% set route = app.request.attributes.get('_route') %}
-			{% set q = app.request.query.all %}
+            <div class="flex justify-center mt-6">
+                <div class="join">
+                    {% if boards.currentPageNumber > 1 %}
+                        <a href="{{ path(route, q|merge({'page': boards.currentPageNumber - 1})) }}" class="join-item btn btn-sm">«</a>
+                    {% endif %}
 
-			<div class="flex justify-center mt-6">
-				<div class="join">
-					{% if boards.currentPageNumber > 1 %}
-						<a href="{{ path(route, q|merge({'page': boards.currentPageNumber - 1})) }}" class="join-item btn btn-sm">«</a>
-					{% endif %}
+                    {% for page in 1..boards.pageCount %}
+                        {% if page == boards.currentPageNumber %}
+                            <span class="join-item btn btn-sm btn-active">{{ page }}</span>
+                        {% elseif page <= 2 or page >= boards.pageCount - 1 or (page >= boards.currentPageNumber - 1 and page <= boards.currentPageNumber + 1) %}
+                            <a href="{{ path(route, q|merge({'page': page})) }}" class="join-item btn btn-sm">{{ page }}</a>
+                        {% elseif page == 3 and boards.currentPageNumber > 4 %}
+                            <span class="join-item btn btn-sm btn-disabled">...</span>
+                        {% elseif page == boards.pageCount - 2 and boards.currentPageNumber < boards.pageCount - 3 %}
+                            <span class="join-item btn btn-sm btn-disabled">...</span>
+                        {% endif %}
+                    {% endfor %}
 
-					{% for page in 1..boards.pageCount %}
-						{% if page == boards.currentPageNumber %}
-							<span class="join-item btn btn-sm btn-active">{{ page }}</span>
-						{% elseif page <= 2 or page >= boards.pageCount - 1 or (page >= boards.currentPageNumber - 1 and page <= boards.currentPageNumber + 1) %}
-							<a href="{{ path(route, q|merge({'page': page})) }}" class="join-item btn btn-sm">{{ page }}</a>
-						{% elseif page == 3 and boards.currentPageNumber > 4 %}
-							<span class="join-item btn btn-sm btn-disabled">...</span>
-						{% elseif page == boards.pageCount - 2 and boards.currentPageNumber < boards.pageCount - 3 %}
-							<span class="join-item btn btn-sm btn-disabled">...</span>
-						{% endif %}
-					{% endfor %}
+                    {% if boards.currentPageNumber < boards.pageCount %}
+                        <a href="{{ path(route, q|merge({'page': boards.currentPageNumber + 1})) }}" class="join-item btn btn-sm">»</a>
+                    {% endif %}
+                </div>
+            </div>
 
-					{% if boards.currentPageNumber < boards.pageCount %}
-						<a href="{{ path(route, q|merge({'page': boards.currentPageNumber + 1})) }}" class="join-item btn btn-sm">»</a>
-					{% endif %}
-				</div>
-			</div>
-
-			<div class="text-center mt-4 text-sm opacity-70">
-				{% set startItem = (boards.currentPageNumber - 1) * boards.itemNumberPerPage + 1 %}
-				{% set endItem = startItem + boards.count - 1 %}
-				Showing
-				{{ startItem }}
-				to
-				{{ endItem }}
-				of
-				{{ boards.totalItemCount }}
-				boards
-			</div>
-		{% endif %}
-	</div>
+            <div class="text-center mt-4 text-sm opacity-70">
+                {% set startItem = (boards.currentPageNumber - 1) * boards.itemNumberPerPage + 1 %}
+                {% set endItem = startItem + boards.count - 1 %}
+                Showing
+                {{ startItem }}
+                to
+                {{ endItem }}
+                of
+                {{ boards.totalItemCount }}
+                boards
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
