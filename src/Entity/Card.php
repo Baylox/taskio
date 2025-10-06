@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\CardStatus;
 use App\Repository\CardRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,8 +33,8 @@ class Card
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 24, nullable: true)]
-    private ?string $status = null;
+    #[ORM\Column(type: 'string', enumType: CardStatus::class, nullable: true)]
+    private ?CardStatus $status = null;
 
     #[Assert\PositiveOrZero]
     #[ORM\Column(type: Types::INTEGER)]
@@ -73,12 +74,12 @@ class Card
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?CardStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(?CardStatus $status): static
     {
         $this->status = $status;
 

@@ -20,18 +20,46 @@
 					</div>
 				</div>
 
-				<!-- Role filter -->
-				<form method="get" class="mb-4 flex items-center gap-2">
-					<label for="role" class="text-sm opacity-70">Role</label>
+				<!-- Search and filters -->
+				<form method="get" class="mb-4 flex flex-col md:flex-row gap-3">
+					<!-- Search input -->
+					<div class="flex-1">
+						<div class="join w-full">
+							<input
+								type="text"
+								id="search"
+								name="search"
+								value="{{ current_search }}"
+								placeholder="Search by name, email..."
+								class="input input-sm input-bordered join-item flex-1"
+							/>
+							<button type="submit" class="btn btn-sm btn-primary join-item">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+								</svg>
+							</button>
+						</div>
+					</div>
 
-					<select id="role" name="role" class="select select-sm select-bordered pr-8 min-w-36 w-40 leading-tight" onchange="this.form.submit()">
-						<option value="">All</option>
-						{% for r in available_roles %}
-							<option value="{{ r }}" {{ current_role == r ? 'selected' }}>
-								{{ r|replace({'ROLE_': ''})|replace({'_':' '})|capitalize }}
-							</option>
-						{% endfor %}
-					</select>
+					<!-- Role filter -->
+					<div class="flex items-center gap-2">
+						<label for="role" class="text-sm opacity-70">Role</label>
+						<select id="role" name="role" class="select select-sm select-bordered pr-8 min-w-36 w-40 leading-tight" onchange="this.form.submit()">
+							<option value="">All</option>
+							{% for r in available_roles %}
+								<option value="{{ r }}" {{ current_role == r ? 'selected' }}>
+									{{ r|replace({'ROLE_': ''})|replace({'_':' '})|capitalize }}
+								</option>
+							{% endfor %}
+						</select>
+					</div>
+
+					<!-- Clear filters button (shown only if filters are active) -->
+					{% if current_search or current_role %}
+						<a href="{{ path('admin_account_index') }}" class="btn btn-sm btn-ghost">
+							Clear
+						</a>
+					{% endif %}
 				</form>
 
 

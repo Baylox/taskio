@@ -3,68 +3,97 @@
 {% block title %}Contact Us{% endblock %}
 
 {% block body %}
-<div class="min-h-screen flex items-center justify-center bg-base-200">
-    <div class="card w-full max-w-2xl shadow-2xl bg-base-100">
-        <div class="col-lg-8">
-            <div class="card-body border border-white/10 rounded-2xl shadow-lg shadow-blue-500/10">
-                <div class="card-body items-center justify-center">
-                   <div class="card-header text-white">
-                    <h2 class="text-3xl font-bold text-center mb-6">Get in Touch</h2>
-                    </div> 
-                   
-                    {% for message in app.flashes('success') %}
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    {% endfor %}
-                    
-                    {% for message in app.flashes('error') %}
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    {% endfor %}
+<div class="min-h-screen flex items-center justify-center bg-base-200 py-12">
+    <div class="w-full max-w-2xl bg-base-100 shadow-xl rounded-xl p-8 mx-4">
 
-                    <p class="text-center text-base-content/70 mb-3">
-                        Have a question or want to get in touch? Send us a message and we'll get back to you as soon as possible.
-                    </p>
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-base-content">Get in Touch</h1>
+            <p class="text-base-content/70 mt-2">
+                Have a question or want to get in touch? Send us a message and we'll get back to you as soon as possible.
+            </p>
+        </div>
 
-                    {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': true}}) }}
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                            
-                            <div class="col-md-6 mb-3">
-                                {{ form_row(form.name, {'attr': {'class': 'input input-bordered w-full mt-2'}}) }}
-                            </div>
-                            <div class="form-control">
-                                {{ form_row(form.email, {'attr': {'class': 'input input-bordered w-full mt-2'}}) }}
-                            </div>
-                        </div>
-                        
-                        <div class="form-control mb-3">
-                            {{ form_row(form.subject, {'attr': {'class': 'input input-bordered w-full mt-2'}}) }}
-                        </div>
-                        
-                        <div class="form-control mb-3">
-                            {{ form_row(form.message, {'attr': {'class': 'textarea textarea-bordered w-full h-32 mt-2'}}) }}
-                        </div>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
 
-                        <div class="d-none" aria-hidden="true">
-                            {{ form_widget(form.website) }}
-                        </div>
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-error mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
 
-                        <div class="form-control">
-                            <button type="submit" class="btn btn-primary btn-block">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                </svg>
-                                Send Message
-                            </button>
-                        </div>
-                    {{ form_end(form) }}
+        {{ form_start(form, {attr: {class: 'space-y-4'}}) }}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-control">
+                    {{ form_label(form.name, 'Name', {label_attr: {class: 'label'}}) }}
+                    {{ form_widget(form.name, {
+                        attr: {
+                            class: 'input input-bordered w-full bg-base-100 focus:input-primary transition-colors',
+                            placeholder: 'Your name'
+                        }
+                    }) }}
+                    {{ form_errors(form.name) }}
+                </div>
+
+                <div class="form-control">
+                    {{ form_label(form.email, 'Email', {label_attr: {class: 'label'}}) }}
+                    {{ form_widget(form.email, {
+                        attr: {
+                            class: 'input input-bordered w-full bg-base-100 focus:input-primary transition-colors',
+                            placeholder: 'your@email.com'
+                        }
+                    }) }}
+                    {{ form_errors(form.email) }}
                 </div>
             </div>
-        </div>
+
+            <div class="form-control">
+                {{ form_label(form.subject, 'Subject', {label_attr: {class: 'label'}}) }}
+                {{ form_widget(form.subject, {
+                    attr: {
+                        class: 'input input-bordered w-full bg-base-100 focus:input-primary transition-colors',
+                        placeholder: 'How can we help?'
+                    }
+                }) }}
+                {{ form_errors(form.subject) }}
+            </div>
+
+            <div class="form-control">
+                {{ form_label(form.message, 'Message', {label_attr: {class: 'label'}}) }}
+                {{ form_widget(form.message, {
+                    attr: {
+                        class: 'textarea textarea-bordered w-full h-32 bg-base-100 focus:textarea-primary transition-colors',
+                        placeholder: 'Your message...'
+                    }
+                }) }}
+                {{ form_errors(form.message) }}
+            </div>
+
+            <div class="hidden">
+                {{ form_widget(form.website) }}
+            </div>
+
+            <div class="mt-6">
+                <button type="submit" class="btn btn-primary w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                    Send Message
+                </button>
+            </div>
+
+            {{ form_rest(form) }}
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}

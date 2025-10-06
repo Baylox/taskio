@@ -1,24 +1,49 @@
 {# templates/components/Card.html.twig #}
-<li class="card bg-base-100 shadow-sm rounded-xl p-3 hover:shadow transition" data-id="{{ card.id }}" role="listitem" tabindex="0">
-    <div class="flex items-start gap-2">
-        <i class="fa-solid fa-grip-lines text-base-content/40 mt-1 cursor-move" aria-hidden="true"></i>
+{% set statusBadgeClass = card.status ? card.status.badgeClass : 'badge-outline' %}
+{% set statusBorderClass = card.status ? card.status.borderClass : 'bg-base-300' %}
+{% set statusIcon = card.status ? card.status.icon : '' %}
+{% set statusLabel = card.status ? card.status.label : '' %}
 
-        <div class="min-w-0 grow">
-            <p class="font-medium truncate" title="{{ card.title }}">{{ card.title }}</p>
+	<li
+	class="relative group card bg-base-100/95 ring-1 ring-base-200/60 hover:ring-primary/30 shadow-sm hover:shadow-md rounded-xl p-3 sm:p-4 transition-all duration-200 ease-out
+			hover:-translate-y-0.5 focus-within:ring-2 focus-within:ring-primary/50" data-id="{{ card.id }}" role="listitem" tabindex="0" aria-labelledby="card-title-{{ card.id }}"> {# Status color stripe #}
+	<span class="absolute inset-y-0 left-0 w-1 rounded-l-xl {{ statusBorderClass }}" aria-hidden="true"></span>
 
-            {% if card.description %}
-                <p class="text-sm text-base-content/70 line-clamp-2">{{ card.description }}</p>
-            {% endif %}
+	<div
+		class="flex items-start gap-3 sm:gap-4">
+		{# Drag handle #}
+		<i class="fa-solid fa-grip-lines text-base-content/30 hover:text-base-content/70 mt-1.5 sm:mt-1.5
+					cursor-grab active:cursor-grabbing select-none" aria-hidden="true" title="Drag to move"></i>
 
-            {% if card.status %}
-                <div class="mt-2">
-                    <span class="badge badge-outline">{{ card.status }}</span>
-                </div>
-            {% endif %}
-        </div>
+		{# Card content #}
+		<div class="min-w-0 grow">
+			<p id="card-title-{{ card.id }}" class="text-sm sm:text-base font-semibold truncate text-base-content" title="{{ card.title }}">
+				{{ card.title }}
+			</p>
 
-		<label for="card_edit_modal_{{ card.id }}" class="btn btn-ghost btn-xs ml-auto" aria-label="Edit card">
-			<i class="fa-regular fa-pen-to-square"></i>
+			{% if card.description %}
+				<p class="mt-0.5 text-sm text-base-content/70 line-clamp-2">
+					{{ card.description }}
+				</p>
+			{% endif %}
+
+			{% if card.status %}
+				<div class="mt-2">
+					<span class="badge {{ statusBadgeClass }} gap-1">
+						<i class="fa-solid {{ statusIcon }}" aria-hidden="true"></i>
+						{{ statusLabel }}
+					</span>
+				</div>
+			{% endif %}
+		</div>
+
+		{# Edit button #}
+		<label for="card_edit_modal_{{ card.id }}" class="btn btn-ghost btn-xs ml-auto hover:bg-base-200/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition" aria-label="Edit card {{ card.title }}">
+			<i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+			<span class="sr-only">Edit</span>
 		</label>
-    </div>
+	</div>
+
+	{# Focus ring for keyboard navigation #}
+	<span class="pointer-events-none absolute inset-0 rounded-xl ring-0 group-focus-within:ring-2 group-focus-within:ring-primary/40" aria-hidden="true"></span>
 </li>

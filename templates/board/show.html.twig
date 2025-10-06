@@ -1,21 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Board{% endblock %}
+{% block title %}
+	{{ board.title }}
+{% endblock %}
 
 {% block body %}
-    <h1>Board</h1>
+	<div
+		class="container mx-auto px-6 py-8">
+		{# Header with title and actions #}
+		<div class="flex justify-between items-center mb-8">
+			<h1 class="text-2xl font-semibold text-gray-200">{{ board.title }}</h1>
+			<div
+				class="flex items-center gap-2">
+				{# Back to list #}
+				<a href="{{ path('app_board_index') }}" class="btn btn-ghost btn-sm" title="Back to list" aria-label="Back to boards list">
+					<i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+					<span class="sr-only">Back</span>
+				</a>
+				{# Dashboard #}
+				<a href="{{ path('app_board_dashboard', {'id': board.id}) }}" class="btn btn-ghost btn-sm hover:btn-primary focus-visible:ring-2 focus-visible:ring-primary" title="View dashboard for {{ board.title }}" aria-label="View dashboard for {{ board.title }}">
+					<i class="fa-solid fa-table-columns" aria-hidden="true"></i>
+					<span class="sr-only">Dashboard</span>
+				</a>
+				{# Edit #}
+				<a href="{{ path('app_board_edit', {'id': board.id}) }}" class="btn btn-ghost btn-sm hover:btn-info focus-visible:ring-2 focus-visible:ring-info" title="Edit board" aria-label="Edit {{ board.title }}">
+					<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+					<span class="sr-only">Edit</span>
+				</a>
+				{# Delete #}
+				{{ include('board/_delete_form.html.twig') }}
+			</div>
+		</div>
 
-    <table class="table">
-            <tr>
-                <th>Title</th>
-                <td>{{ board.title }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_board_index') }}">back to list</a>
-
-    <a href="{{ path('app_board_edit', {'id': board.id}) }}">edit</a>
-
-    {{ include('board/_delete_form.html.twig') }}
+		{# Board info card #}
+		<div class="bg-gray-800 rounded-lg p-6">
+			<div class="space-y-4">
+				<div>
+					<p class="text-sm text-gray-400 mb-1">Title</p>
+					<p class="text-lg font-medium text-white">{{ board.title }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
