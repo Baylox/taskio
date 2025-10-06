@@ -9,23 +9,27 @@
   size: 'xs'
 }) }}
 
-<div class="py-16 bg-gradient-to-br from-base-100 to-base-200">
+<div class="relative py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-black overflow-hidden">
+    <!-- Décorations -->
+    <div class="absolute top-20 left-10 w-40 h-40 bg-cyan-500/20 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-20 right-20 w-56 h-56 bg-purple-500/20 rounded-full blur-3xl"></div>
+
     <div class="max-w-7xl mx-auto px-4">
 
         <!-- Desktop View - Cards -->
         <div class="hidden lg:flex justify-center items-stretch gap-8 mb-16">
             <!-- Free Plan -->
-            <div class="card bg-base-100 shadow-xl border border-base-300 w-80 transform hover:scale-105 transition-transform">
+            <div class="card bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg shadow-blue-500/10 w-80 transform hover:scale-105 hover:shadow-cyan-500/20 transition-all duration-300">
                 <div class="card-body">
                     <div class="text-center mb-6">
                         <div class="avatar placeholder mb-4">
                             <div class="bg-neutral text-neutral-content rounded-full w-16">
-                                <span class="text-2xl">🆓</span>
+                                <i class="fa-solid fa-rocket"></i>
                             </div>
                         </div>
-                        <h3 class="text-2xl font-bold">Free</h3>
+                        <h3 class="text-2xl font-bold text-white">Free</h3>
                         <div class="flex items-baseline justify-center mt-2">
-                            <span class="text-4xl font-extrabold">$0</span>
+                            <span class="text-4xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">$0</span>
                             <span class="text-base-content/60 ml-1">/month</span>
                         </div>
                     </div>
@@ -54,26 +58,34 @@
                             <span class="text-sm">Basic filtering and sorting</span>
                         </li>
                     </ul>
-
                     <div class="card-actions justify-center">
-                        <button class="btn btn-outline btn-primary btn-block">Get Started</button>
+                        <a href="#" class="px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 
+                           hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 
+                           text-white font-semibold rounded-xl transition-all duration-300 
+                           shadow-xl hover:shadow-cyan-500/30 transform hover:scale-105 hover:-translate-y-0.5 w-full text-center">
+                           Get Started
+                        </a>
                     </div>
                 </div>
             </div>
 
             <!-- Starter Plan -->
-            <div class="card bg-primary text-primary-content shadow-xl border-2 border-primary w-80 transform scale-110 hover:scale-115 transition-transform relative">
-                <div class="badge badge-secondary absolute -top-3 left-1/2 -translate-x-1/2">Most Popular</div>
+            <div class="card bg-white/10 backdrop-blur-xl border-2 border-cyan-500 rounded-2xl shadow-xl shadow-cyan-500/30 w-80 transform scale-105 hover:scale-110 transition-all duration-300 relative">
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-purple-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+                    Most Popular
+                </div>
                 <div class="card-body">
                     <div class="text-center mb-6">
                         <div class="avatar placeholder mb-4">
                             <div class="bg-primary-content text-primary rounded-full w-16">
-                                <span class="text-2xl">🚀</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7M12 3v1m0 16v1m8-9h1M3 12H2" />
+                                </svg>
                             </div>
                         </div>
-                        <h3 class="text-2xl font-bold">Starter</h3>
+                        <h3 class="text-2xl font-bold text-white">Starter</h3>
                         <div class="flex items-baseline justify-center mt-2">
-                            <span class="text-4xl font-extrabold">$9.99</span>
+                            <span class="text-4xl font-extrabold text-white">$9.99</span>
                             <span class="opacity-70 ml-1">/month</span>
                         </div>
                     </div>
@@ -106,25 +118,31 @@
                             <span class="text-sm">Custom labels & colors</span>
                         </li>
                     </ul>
-
                     <div class="card-actions justify-center">
-                        <button class="btn btn-accent btn-block">Start Free Trial</button>
+                        <a href="#" class="px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 
+                           hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 
+                           text-white font-semibold rounded-xl transition-all duration-300 
+                           shadow-xl hover:shadow-cyan-500/30 transform hover:scale-105 hover:-translate-y-0.5 w-full text-center">
+                           Start Free Trial
+                        </a>
                     </div>
                 </div>
             </div>
 
             <!-- Premium Plan -->
-            <div class="card bg-base-100 shadow-xl border border-base-300 w-80 transform hover:scale-105 transition-transform">
+            <div class="card bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg shadow-blue-500/10 w-80 transform hover:scale-105 hover:shadow-cyan-500/20 transition-all duration-300">
                 <div class="card-body">
                     <div class="text-center mb-6">
                         <div class="avatar placeholder mb-4">
                             <div class="bg-gradient-to-br from-primary to-secondary text-white rounded-full w-16">
-                                <span class="text-2xl">👑</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10l4 2 3-6 4 8 3-4 4 2-2 6H5l-2-8z" />
+                                </svg>
                             </div>
                         </div>
-                        <h3 class="text-2xl font-bold">Premium</h3>
+                        <h3 class="text-2xl font-bold text-white">Premium</h3>
                         <div class="flex items-baseline justify-center mt-2">
-                            <span class="text-4xl font-extrabold">$19.99</span>
+                            <span class="text-4xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">$19.99</span>
                             <span class="text-base-content/60 ml-1">/month</span>
                         </div>
                     </div>
@@ -153,9 +171,13 @@
                             <span class="text-sm">Personalized onboarding</span>
                         </li>
                     </ul>
-
                     <div class="card-actions justify-center">
-                        <button class="btn btn-primary btn-block">Upgrade Now</button>
+                        <a href="#" class="px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 
+                           hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 
+                           text-white font-semibold rounded-xl transition-all duration-300 
+                           shadow-xl hover:shadow-cyan-500/30 transform hover:scale-105 hover:-translate-y-0.5 w-full text-center">
+                           Upgrade Now
+                        </a>
                     </div>
                 </div>
             </div>
@@ -166,17 +188,17 @@
             <div class="carousel w-full rounded-box">
                 <!-- Free Plan Slide -->
                 <div id="slide1" class="carousel-item relative w-full flex justify-center">
-                    <div class="card bg-base-100 shadow-xl border border-base-300 w-80 mx-4">
+                    <div class="card bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg shadow-blue-500/10 w-80 mx-4 transform hover:scale-105 hover:shadow-cyan-500/20 transition-all duration-300">
                         <div class="card-body">
                             <div class="text-center mb-6">
                                 <div class="avatar placeholder mb-4">
                                     <div class="bg-neutral text-neutral-content rounded-full w-16">
-                                        <span class="text-2xl">🆓</span>
+                                        <i class="list-checks"></i>
                                     </div>
                                 </div>
-                                <h3 class="text-2xl font-bold">Free</h3>
+                                <h3 class="text-2xl font-bold text-white">Free</h3>
                                 <div class="flex items-baseline justify-center mt-2">
-                                    <span class="text-4xl font-extrabold">$0</span>
+                                    <span class="text-4xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">$0</span>
                                     <span class="text-base-content/60 ml-1">/month</span>
                                 </div>
                             </div>
@@ -205,9 +227,13 @@
                                     <span class="text-sm">Basic filtering and sorting</span>
                                 </li>
                             </ul>
-
                             <div class="card-actions justify-center">
-                                <button class="btn btn-outline btn-primary btn-block">Get Started</button>
+                                <a href="#" class="px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 
+                                   hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 
+                                   text-white font-semibold rounded-xl transition-all duration-300 
+                                   shadow-xl hover:shadow-cyan-500/30 transform hover:scale-105 hover:-translate-y-0.5 w-full text-center">
+                                   Get Started
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -219,18 +245,22 @@
 
                 <!-- Starter Plan Slide -->
                 <div id="slide2" class="carousel-item relative w-full flex justify-center">
-                    <div class="card bg-primary text-primary-content shadow-xl border-2 border-primary w-80 mx-4">
-                        <div class="badge badge-secondary absolute -top-3 left-1/2 -translate-x-1/2">Most Popular</div>
+                    <div class="card bg-white/10 backdrop-blur-xl border-2 border-cyan-500 rounded-2xl shadow-xl shadow-cyan-500/30 w-80 mx-4 transform hover:scale-105 hover:shadow-cyan-500/20 transition-all duration-300 relative">
+                        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-purple-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+                            Most Popular
+                        </div>
                         <div class="card-body">
                             <div class="text-center mb-6">
                                 <div class="avatar placeholder mb-4">
                                     <div class="bg-primary-content text-primary rounded-full w-16">
-                                        <span class="text-2xl">🚀</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7M12 3v1m0 16v1m8-9h1M3 12H2" />
+                                        </svg>
                                     </div>
                                 </div>
-                                <h3 class="text-2xl font-bold">Starter</h3>
+                                <h3 class="text-2xl font-bold text-white">Starter</h3>
                                 <div class="flex items-baseline justify-center mt-2">
-                                    <span class="text-4xl font-extrabold">$9.99</span>
+                                    <span class="text-4xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">$9.99</span>
                                     <span class="opacity-70 ml-1">/month</span>
                                 </div>
                             </div>
@@ -250,22 +280,13 @@
                                     <div class="badge badge-accent badge-sm">✓</div>
                                     <span class="text-sm">Email notifications</span>
                                 </li>
-                                <li class="flex items-center gap-3">
-                                    <div class="badge badge-accent badge-sm">✓</div>
-                                    <span class="text-sm">Calendar & timeline views</span>
-                                </li>
-                                <li class="flex items-center gap-3">
-                                    <div class="badge badge-accent badge-sm">✓</div>
-                                    <span class="text-sm">Advanced filtering</span>
-                                </li>
-                                <li class="flex items-center gap-3">
-                                    <div class="badge badge-accent badge-sm">✓</div>
-                                    <span class="text-sm">Custom labels & colors</span>
-                                </li>
-                            </ul>
-
                             <div class="card-actions justify-center">
-                                <button class="btn btn-accent btn-block">Start Free Trial</button>
+                                <a href="#" class="px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 
+                                   hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 
+                                   text-white font-semibold rounded-xl transition-all duration-300 
+                                   shadow-xl hover:shadow-cyan-500/30 transform hover:scale-105 hover:-translate-y-0.5 w-full text-center">
+                                   Start Free Trial
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -277,17 +298,19 @@
 
                 <!-- Premium Plan Slide -->
                 <div id="slide3" class="carousel-item relative w-full flex justify-center">
-                    <div class="card bg-base-100 shadow-xl border border-base-300 w-80 mx-4">
+                    <div class="card bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg shadow-blue-500/10 w-80 mx-4 transform hover:scale-105 hover:shadow-cyan-500/20 transition-all duration-300">
                         <div class="card-body">
                             <div class="text-center mb-6">
                                 <div class="avatar placeholder mb-4">
                                     <div class="bg-gradient-to-br from-primary to-secondary text-white rounded-full w-16">
-                                        <span class="text-2xl">👑</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10l4 2 3-6 4 8 3-4 4 2-2 6H5l-2-8z" />
+                                        </svg>
                                     </div>
                                 </div>
-                                <h3 class="text-2xl font-bold">Premium</h3>
+                                <h3 class="text-2xl font-bold text-white">Premium</h3>
                                 <div class="flex items-baseline justify-center mt-2">
-                                    <span class="text-4xl font-extrabold">$19.99</span>
+                                    <span class="text-4xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">$19.99</span>
                                     <span class="text-base-content/60 ml-1">/month</span>
                                 </div>
                             </div>
@@ -307,7 +330,7 @@
                                     <div class="badge badge-success badge-sm">✓</div>
                                     <span class="text-sm">Advanced integrations</span>
                                 </li>
-                                <li class="flex items-center gap-3">
+                                                                <li class="flex items-center gap-3">
                                     <div class="badge badge-success badge-sm">✓</div>
                                     <span class="text-sm">Priority support</span>
                                 </li>
@@ -318,7 +341,12 @@
                             </ul>
 
                             <div class="card-actions justify-center">
-                                <button class="btn btn-primary btn-block">Upgrade Now</button>
+                                <a href="#" class="px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 
+                                   hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 
+                                   text-white font-semibold rounded-xl transition-all duration-300 
+                                   shadow-xl hover:shadow-cyan-500/30 transform hover:scale-105 hover:-translate-y-0.5 w-full text-center">
+                                   Upgrade Now
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -336,25 +364,24 @@
                 <a href="#slide3" class="btn btn-xs">3</a>
             </div>
         </div>
-
         <!-- Features Comparison Table -->
         <div class="mt-16">
             <div class="text-center mb-8">
-                <h3 class="text-3xl font-bold mb-4">Compare all features</h3>
-                <p class="text-base-content/70">See what's included in each plan</p>
+                <h3 class="text-3xl font-bold text-white mb-4">Compare all features</h3>
+                <p class="text-slate-300">See what's included in each plan</p>
             </div>
 
             <div class="overflow-x-auto">
-                <table class="table table-zebra bg-base-100 rounded-lg shadow-lg">
+                <table class="table bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg shadow-lg shadow-blue-500/10">
                     <thead>
-                        <tr>
+                        <tr class="text-white">
                             <th class="text-left">Features</th>
                             <th class="text-center">Free</th>
                             <th class="text-center">Starter</th>
                             <th class="text-center">Premium</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-slate-300">
                         <tr>
                             <td class="font-medium">Task Management</td>
                             <td class="text-center"><div class="badge badge-success badge-sm">✓</div></td>
@@ -389,7 +416,6 @@
                 </table>
             </div>
         </div>
-
     </div>
 </div>
 {% endblock %}
