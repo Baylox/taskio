@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Card;
+use App\Enum\CardStatus;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
@@ -50,7 +51,7 @@ final class CardFactory extends PersistentProxyObjectFactory
         $title = self::faker()->randomElement(array_keys($titles));
 
         return [
-            'status' => self::faker()->randomElement(['todo', 'in-progress', 'review', 'done', 'blocked']),
+            'status' => self::faker()->randomElement(CardStatus::cases()),
             'title' => $title,
             'description' => self::faker()->optional(0.7)->sentence(). '' .$titles[$title],
             'position' => null,

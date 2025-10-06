@@ -9,16 +9,8 @@
 			</a>
 		</div>
 
-		<!-- Center: BURGER opens drawer (mobile) -->
+		<!-- Center: desktop menu -->
 		<div class="navbar-center">
-			<label for="main-drawer" class="btn btn-ghost btn-circle md:hidden aria-expanded:rotate-90 transition-transform duration-300" aria-label="Open menu" aria-expanded="false">
-				<div class="flex flex-col items-center justify-center space-y-1">
-					<span class="block h-0.5 w-5 bg-base-content"></span>
-					<span class="block h-0.5 w-5 bg-base-content"></span>
-					<span class="block h-0.5 w-5 bg-base-content"></span>
-				</div>
-			</label>
-
 			<!-- Centered desktop menu -->
 			<ul class="menu menu-horizontal hidden md:flex px-1 font-medium text-base-content/90">
 				<li>
@@ -42,15 +34,25 @@
                     {# Admin visible only for admin #}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li>
-                            <a href="{{ path('admin_board_index') }}" class="hover:underline text-red-400 hover:text-red-300">All Boards</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('admin_account_index') }}" class="hover:underline text-red-400 hover:text-red-300">Accounts</a>
+                            <details>
+                                <summary class="hover:underline text-red-400 hover:text-red-300">Admin</summary>
+                                <ul class="bg-base-100 rounded-box shadow-lg p-2">
+                                    <li><a href="{{ path('admin_board_index') }}" class="hover:underline">Boards</a></li>
+                                    <li><a href="{{ path('admin_account_index') }}" class="hover:underline">Accounts</a></li>
+                                </ul>
+                            </details>
                         </li>
                     {% endif %}
 
+                    {# Account dropdown #}
                     <li>
-                        <a href="{{ path('app_logout') }}" class="hover:underline">Logout</a>
+                        <details>
+                            <summary class="hover:underline">Account</summary>
+                            <ul class="bg-base-100 rounded-box shadow-lg p-2">
+                                <li><a href="{{ path('app_account_edit') }}" class="hover:underline">Profile</a></li>
+                                <li><a href="{{ path('app_logout') }}" class="hover:underline">Logout</a></li>
+                            </ul>
+                        </details>
                     </li>
                 {% else %}
                     <li>
@@ -60,14 +62,24 @@
 			</ul>
 		</div>
 
-		<!-- Right: profile -->
+		<!-- Right: burger (mobile) / profile (desktop) -->
 		<div class="navbar-end flex-1 justify-end">
+			<!-- Burger menu (mobile only) -->
+			<label for="main-drawer" class="btn btn-ghost btn-circle md:hidden aria-expanded:rotate-90 transition-transform duration-300" aria-label="Open menu" aria-expanded="false">
+				<div class="flex flex-col items-center justify-center space-y-1">
+					<span class="block h-0.5 w-5 bg-base-content"></span>
+					<span class="block h-0.5 w-5 bg-base-content"></span>
+					<span class="block h-0.5 w-5 bg-base-content"></span>
+				</div>
+			</label>
+
+			<!-- Profile icon (desktop only) -->
 			{% if app.user %}
-				<a href="{{ path('app_account_edit') }}" class="btn btn-ghost btn-circle transition-transform duration-200 hover:scale-105 active:scale-95" aria-label="Account">
+				<a href="{{ path('app_account_edit') }}" class="btn btn-ghost btn-circle hidden md:flex transition-transform duration-200 hover:scale-105 active:scale-95" aria-label="Account">
 					<i class="fa-solid fa-user text-lg text-base-content/90 hover:text-primary transition-colors duration-200"></i>
 				</a>
 			{% else %}
-				<a href="{{ path('app_login') }}" class="btn btn-ghost btn-circle transition-transform duration-200 hover:scale-105 active:scale-95" aria-label="Login">
+				<a href="{{ path('app_login') }}" class="btn btn-ghost btn-circle hidden md:flex transition-transform duration-200 hover:scale-105 active:scale-95" aria-label="Login">
 					<i class="fa-solid fa-user text-lg text-base-content/90 hover:text-primary transition-colors duration-200"></i>
 				</a>
 			{% endif %}
@@ -109,15 +121,25 @@
                     {# Admin visible only for admin #}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li class="transition-all duration-200">
-                            <a href="{{ path('admin_board_index') }}" class="hover:bg-base-300/30 text-red-400 hover:text-red-300">All Boards</a>
-                        </li>
-                        <li class="transition-all duration-200">
-                            <a href="{{ path('admin_account_index') }}" class="hover:bg-base-300/30 text-red-400 hover:text-red-300">Accounts</a>
+                            <details>
+                                <summary class="hover:bg-base-300/30 text-red-400 hover:text-red-300">Admin</summary>
+                                <ul class="bg-base-200 rounded-box shadow-lg p-2">
+                                    <li><a href="{{ path('admin_board_index') }}" class="hover:bg-base-300/30">Boards</a></li>
+                                    <li><a href="{{ path('admin_account_index') }}" class="hover:bg-base-300/30">Accounts</a></li>
+                                </ul>
+                            </details>
                         </li>
                     {% endif %}
 
-                    <li class="transition-all duration-700">
-                        <a href="{{ path('app_logout') }}" class="hover:bg-base-300/30">Logout</a>
+                    {# Account dropdown #}
+                    <li class="transition-all duration-200">
+                        <details>
+                            <summary class="hover:bg-base-300/30">Account</summary>
+                            <ul class="bg-base-200 rounded-box shadow-lg p-2">
+                                <li><a href="{{ path('app_account_edit') }}" class="hover:bg-base-300/30">Profile</a></li>
+                                <li><a href="{{ path('app_logout') }}" class="hover:bg-base-300/30">Logout</a></li>
+                            </ul>
+                        </details>
                     </li>
                 {% else %}
                     <li class="transition-all duration-700">

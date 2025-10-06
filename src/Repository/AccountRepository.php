@@ -38,18 +38,30 @@ class AccountRepository extends ServiceEntityRepository
     }
 
     /**
-     * QueryBuilder to list accounts, possibly filtered by role.
+     * QueryBuilder to list accounts, possibly filtered by role and/or search term.
      *
      * @param string|null $role Role to filter by, or null/empty for no filtering.
+     * @param string|null $search Search term to filter by name, lastname or email.
      * @return QueryBuilder
      */
-    public function qbByRole(?string $role): QueryBuilder
+    public function qbByRoleAndSearch(?string $role, ?string $search): QueryBuilder
     {
         $qb = $this->createQueryBuilder('a');
 
         if ($role !== null && $role !== '') {
             $qb->andWhere('a.role = :role')
             ->setParameter('role', $role);
+        }
+
+        if ($search !== null && $search !== '') {
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('LOWER(a.name)', ':search'),
+                    $qb->expr()->like('LOWER(a.lastname)', ':search'),
+                    $qb->expr()->like('LOWER(a.email)', ':search')
+                )
+            )
+            ->setParameter('search', '%' . strtolower($search) . '%');
         }
 
         // default sorting
