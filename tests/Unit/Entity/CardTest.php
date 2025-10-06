@@ -4,6 +4,7 @@ namespace App\Tests\Unit\Entity;
 
 use App\Entity\Card;
 use App\Entity\Lane;
+use App\Enum\CardStatus;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +27,7 @@ final class CardTest extends TestCase
         // Requires Assert\PositiveOrZero on Card::$position
         $validator = Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
 
-        $card = (new Card())->setTitle('A')->setStatus('OPEN')->setPosition(-1);
+        $card = (new Card())->setTitle('A')->setStatus(CardStatus::TODO)->setPosition(-1);
         self::assertGreaterThan(0, $validator->validate($card)->count());
     }
 }
