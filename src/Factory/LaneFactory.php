@@ -32,13 +32,13 @@ final class LaneFactory extends PersistentProxyObjectFactory
         return [
             'title' => self::faker()->randomElement([
                 'Backlog',
-                'To Do',
-                'In Progress',
-                'Blocked',
-                'In Review',
-                'Testing',
-                'Done',
-                'Archived',
+                'Current Sprint',
+                'Development',
+                'Code Review',
+                'QA Testing',
+                'Staging',
+                'Deployed',
+                'Archive',
             ]),
             'position' => null,
         ];
