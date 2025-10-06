@@ -45,13 +45,35 @@ final class BoardsLanesCardsStory extends Story
 
     private function createLanesAndCards($board): void
     {
-        // 3 to 5 lanes per board
-        $laneCount = random_int(3, 5);
-        $lanes = LaneFactory::createMany($laneCount, ['board' => $board]);
+        // Available lane titles (each unique)
+        $laneTitles = [
+            'Backlog',
+            'Current Sprint',
+            'Development',
+            'Code Review',
+            'QA Testing',
+            'Staging',
+            'Deployed',
+            'Archive',
+        ];
 
-        // Get all available titles for this board
+        // Shuffle and pick 3 to 5 unique lanes
+        shuffle($laneTitles);
+        $laneCount = random_int(3, 5);
+        $selectedLaneTitles = array_slice($laneTitles, 0, $laneCount);
+
+        // Create lanes with unique titles
+        $lanes = [];
+        foreach ($selectedLaneTitles as $laneTitle) {
+            $lanes[] = LaneFactory::createOne([
+                'board' => $board,
+                'title' => $laneTitle,
+            ]);
+        }
+
+        // Get all available card titles
         $availableTitles = $this->getAvailableTitles();
-        shuffle($availableTitles); // Mix them up
+        shuffle($availableTitles);
 
         $titleIndex = 0;
 
