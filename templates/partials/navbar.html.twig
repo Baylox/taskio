@@ -42,10 +42,13 @@
                     {# Admin visible only for admin #}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li>
-                            <a href="{{ path('admin_board_index') }}" class="hover:underline text-red-400 hover:text-red-300">All Boards</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('admin_account_index') }}" class="hover:underline text-red-400 hover:text-red-300">Accounts</a>
+                            <details>
+                                <summary class="hover:underline text-red-400 hover:text-red-300">Admin</summary>
+                                <ul class="bg-base-100 rounded-box shadow-lg p-2">
+                                    <li><a href="{{ path('admin_board_index') }}" class="hover:underline">Boards</a></li>
+                                    <li><a href="{{ path('admin_account_index') }}" class="hover:underline">Accounts</a></li>
+                                </ul>
+                            </details>
                         </li>
                     {% endif %}
 
@@ -109,10 +112,13 @@
                     {# Admin visible only for admin #}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li class="transition-all duration-200">
-                            <a href="{{ path('admin_board_index') }}" class="hover:bg-base-300/30 text-red-400 hover:text-red-300">All Boards</a>
-                        </li>
-                        <li class="transition-all duration-200">
-                            <a href="{{ path('admin_account_index') }}" class="hover:bg-base-300/30 text-red-400 hover:text-red-300">Accounts</a>
+                            <details>
+                                <summary class="hover:bg-base-300/30 text-red-400 hover:text-red-300">Admin</summary>
+                                <ul class="bg-base-200 rounded-box shadow-lg p-2">
+                                    <li><a href="{{ path('admin_board_index') }}" class="hover:bg-base-300/30">Boards</a></li>
+                                    <li><a href="{{ path('admin_account_index') }}" class="hover:bg-base-300/30">Accounts</a></li>
+                                </ul>
+                            </details>
                         </li>
                     {% endif %}
 

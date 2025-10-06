@@ -1,5 +1,5 @@
 // Assets/app.js
-// import '@hotwired/turbo';  // Désactivé - pas utilisé dans ce projet
+// import '@hotwired/turbo';
 import { Application } from '@hotwired/stimulus';
 import { registerControllers } from 'stimulus-vite-helpers';
 import './styles/app.css';
