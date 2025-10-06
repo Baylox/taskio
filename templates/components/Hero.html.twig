@@ -32,7 +32,7 @@
         {% endif %}
 
         {% if ctaHref and ctaLabel %}
-            <a href="{{ ctaHref }}" class="btn btn-primary btn-wide shadow-lg hover:scale-105 transition-transform duration-200">
+            <a href="{{ ctaHref }}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-xl hover:shadow-cyan-500/30 cursor-pointer transform hover:scale-105 hover:-translate-y-0.5" >
                 {{ ctaLabel }}
             </a>
         {% endif %}
