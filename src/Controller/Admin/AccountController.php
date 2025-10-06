@@ -22,18 +22,20 @@ final class AccountController extends AbstractController
     {
         $availableRoles = $accountRepository->distinctRoles();
         $role = $request->query->get('role');
+        $search = $request->query->get('search');
 
         // if the passed value does not exist in the database, we remove the filter
         if ($role && !in_array($role, $availableRoles, true)) {
             $role = null;
         }
 
-        $qb = $accountRepository->qbByRole($role);
+        $qb = $accountRepository->qbByRoleAndSearch($role, $search);
         $accounts = $paginator->paginate($qb, $request->query->getInt('page', 1), 10);
 
         return $this->render('admin/account/index.html.twig', [
             'accounts'        => $accounts,
             'current_role'    => $role,
+            'current_search'  => $search,
             'available_roles' => $availableRoles,
         ]);
     }
