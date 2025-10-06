@@ -6,6 +6,7 @@ use App\Entity\Board;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Account;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Board>
@@ -69,15 +70,26 @@ class BoardRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find all boards with their owners, for admin listing.
-     * @return Board[]
+     * Find all boards with their owners, for admin listing with optional search.
+     * @param string|null $search Search term to filter by board title or owner email.
+     * @return QueryBuilder
      */
-    public function findAllForAdmin(): array
+    public function qbForAdmin(?string $search): QueryBuilder
     {
-    return $this->createQueryBuilder('b')
-        ->leftJoin('b.owner','o')->addSelect('o')
-        ->orderBy('b.title', 'ASC')
-        ->getQuery()->getResult();
+        $qb = $this->createQueryBuilder('b')
+            ->leftJoin('b.owner','o')->addSelect('o');
+
+        if ($search !== null && $search !== '') {
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('LOWER(b.title)', ':search'),
+                    $qb->expr()->like('LOWER(o.email)', ':search')
+                )
+            )
+            ->setParameter('search', '%' . strtolower($search) . '%');
+        }
+
+        return $qb->orderBy('b.title', 'ASC');
     }
 
     /**
