@@ -10,12 +10,8 @@
 	<span class="absolute inset-y-0 left-0 w-0.5 rounded-l-xl {{ statusBorderClass }}" aria-hidden="true"></span>
 
 	<div class="flex items-start gap-2">
-		{# Drag handle #}
-		<i class="fa-solid fa-grip-lines text-base-content/30 hover:text-base-content/70 mt-1 flex-shrink-0
-					cursor-grab active:cursor-grabbing select-none" aria-hidden="true" title="Drag to move"></i>
-
 		{# Card content #}
-		<div class="min-w-0 grow">
+		<div class="min-w-0 w-full">
 			<div class="flex items-start justify-between gap-2 mb-1">
 				<p id="card-title-{{ card.id }}" class="text-sm sm:text-base font-semibold text-base-content truncate flex-1" title="{{ card.title }}">
 					{{ card.title }}
