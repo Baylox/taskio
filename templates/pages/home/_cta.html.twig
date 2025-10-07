@@ -1,20 +1,18 @@
 {# templates/partials/_cta.html.twig #}
 <section class="relative bg-gradient-to-br from-[#2b3e5f] via-[#1e2d47] to-[#1a2332] py-32 text-center overflow-hidden">
-    <!-- Animated gradient background -->
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-700 via-slate-800 to-black hero-gradient-shift"></div>
+    
+    {# Subtle animated gradient overlay #}
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-transparent to-purple-900/30 animate-pulse" style="animation-duration: 6s;"></div>
 
-    <!-- Animated decorative blobs -->
-    <div class="absolute top-10 left-10 w-40 h-40 rounded-full bg-indigo-500 opacity-20 hero-float"></div>
-    <div class="absolute top-20 right-20 w-56 h-56 rounded-full bg-purple-500 opacity-20 hero-float-delayed"></div>
-    <div class="absolute bottom-10 left-32 w-48 h-48 rounded-full bg-blue-500 opacity-20 hero-float-slow"></div>
-    <div class="absolute bottom-24 right-40 w-32 h-32 rounded-full bg-pink-500 opacity-20 hero-float"></div>
-    <div class="absolute top-1/4 left-0 w-28 h-28 rounded-full bg-indigo-400 opacity-20 hero-float-delayed"></div>
-    <div class="absolute bottom-1/3 right-0 w-36 h-36 rounded-full bg-purple-400 opacity-20 hero-float-slow"></div>
-    <div class="absolute top-1/3 right-1/4 w-20 h-20 rounded-full bg-blue-400 opacity-20 hero-float"></div>
-    <div class="absolute bottom-1/4 left-1/4 w-24 h-24 rounded-full bg-pink-400 opacity-20 hero-float-delayed"></div>
     <div class="relative max-w-3xl mx-auto px-6 z-10">
 
-        
+        {# Animated star icon with glow - uses iconRotate animation #}
+        <div class="flex justify-center mb-8">
+            <div class="relative inline-block">
+                <i class="fas fa-star text-5xl text-transparent bg-gradient-to-r from-[#00d4ff] to-[#a855f7] bg-clip-text transition-all duration-300"></i>
+                <div class="absolute inset-0 blur-xl bg-gradient-to-r from-[#00d4ff]/30 to-[#a855f7]/30 rounded-full group-hover:opacity-100 opacity-70 transition-opacity"></div>
+            </div>
+        </div>
 
         {# Title - Large and bold like hero #}
         <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-white leading-tight">
@@ -26,17 +24,38 @@
             Forget clunky and cheap. Unleash your productivity with Taskio!
         </p>
 
-        {# CTA button - exactly like hero button #}
-        <a
-            href="#"
-            class="inline-block bg-gradient-to-r from-[#00d4ff] to-[#a855f7] text-white font-semibold text-lg py-4 px-10 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(0,212,255,0.4)]"
-        >
-            Now, let's build something great
-        </a>
+        {# CTA button - exactly like hero button with enhanced effects #}
+        <div class="flex justify-center mb-8">
+            <a
+                href="#"
+                class="group relative inline-block bg-gradient-to-r from-[#00d4ff] to-[#a855f7] text-white font-semibold text-lg py-4 px-10 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(0,212,255,0.5)] overflow-hidden"
+            >
+                <span class="relative z-10">Now, let's build something great</span>
+                {# Shimmer effect on hover #}
+                <div class="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+            </a>
+        </div>
 
-        {# Optional: Tagline below #}
-        <p class="mt-8 text-base text-gray-400">
-            <span class="text-white font-semibold">Taskio.</span> Your board, your power.
+        {# Tagline with gradient accent #}
+        <p class="text-base md:text-lg text-gray-400">
+            <span class="font-bold bg-gradient-to-r from-[#00d4ff] to-[#a855f7] bg-clip-text text-transparent">Taskio.</span> 
+            <span class="text-gray-300">Your board, your power.</span>
         </p>
+
+        {# Trust indicators with animated icons #}
+        <div class="mt-12 flex flex-wrap justify-center items-center gap-6 text-sm text-gray-500">
+            <div class="card group flex items-center gap-2 cursor-default">
+                <i class="fas fa-check-circle text-[#00d4ff] transition-transform duration-300"></i>
+                <span>No credit card required</span>
+            </div>
+            <div class="card group flex items-center gap-2 cursor-default">
+                <i class="fas fa-check-circle text-[#00d4ff] transition-transform duration-300"></i>
+                <span>Free forever</span>
+            </div>
+            <div class="card group flex items-center gap-2 cursor-default">
+                <i class="fas fa-check-circle text-[#00d4ff] transition-transform duration-300"></i>
+                <span>Setup in minutes</span>
+            </div>
+        </div>
     </div>
 </section>

@@ -11,8 +11,8 @@
   ctaLabel: "Start for Free"
 }) }}
 
-<div class="py-16  bg-gradient-to-br from-slate-900 via-slate-800 to-black overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4">
+<div class="py-16 bg-gradient-to-br from-slate-900 via-slate-800 to-black overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 mt-16">
         <!-- Why Taskio Section -->
         <div class="text-center mb-16">
             <h2 class="text-3xl md:text-4xl font-bold mb-12">
@@ -20,48 +20,56 @@
                 <span class="text-primary">Right Solution</span>
             </h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="stat bg-base-100 rounded-box shadow-lg border border-base-300">
+                <div class="stat rounded-box shadow-lg bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
                     <div class="stat-figure text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
                     </div>
-                    <div class="stat-title">Ultra‑Fast</div>
+                    <div class="font-bold">Ultra‑Fast</div>
                     <div class="stat-desc">Organize tasks in seconds</div>
                 </div>
 
-                <div class="stat bg-base-100 rounded-box shadow-lg border border-base-300">
+                <div class="stat rounded-box shadow-lg bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
                     <div class="stat-figure text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                         </svg>
                     </div>
-                    <div class="stat-title">Secure</div>
+                    <div class="font-bold">Secure</div>
                     <div class="stat-desc">Top‑tier security standards</div>
                 </div>
 
-                <div class="stat bg-base-100 rounded-box shadow-lg border border-base-300">
+                <div class="stat rounded-box shadow-lg bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
                     <div class="stat-figure text-accent">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         </svg>
                     </div>
-                    <div class="stat-title">Flexible</div>
+                    <div class="font-bold">Flexible</div>
                     <div class="stat-desc">Customize to fit your workflow</div>
                 </div>
 
-                <div class="stat bg-base-100 rounded-box shadow-lg border border-base-300">
+                <div class="stat rounded-box shadow-lg bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
                     <div class="stat-figure text-info">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                         </svg>
                     </div>
-                    <div class="stat-title">Scalable</div>
+                    <div class="font-bold">Scalable</div>
                     <div class="stat-desc">Solo work to global enterprises</div>
                 </div>
             </div>
         </div>
+
+        <!-- Illustration -->
+        <div class="mb-32">
+            <img src="{{ asset('assets/images/solution/illuTaskio.webp') }}" 
+                alt="Illustration showing various use cases of Taskio" 
+                class="mx-auto rounded-2xl shadow-lg border border-white/10 shadow-xl shadow-cyan-500/10 ">
+        </div>
+
         <!-- Solutions Section -->
         <div class="mb-16">
             <div class="text-center mb-12">
@@ -70,7 +78,7 @@
             </div>
             <div class="grid md:grid-cols-2 gap-8">
                 <!-- For Project Teams -->
-                <div class="card bg-base-100 shadow-xl border border-base-300 transform hover:scale-105 transition-transform">
+                <div class="card bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl transform hover:scale-105 transition-transform">
                     <div class="card-body">
                         <h2 class="card-title text-2xl mb-4">
                             <div class="badge badge-primary">Teams</div>
@@ -103,7 +111,7 @@
                 </div>
 
                 <!-- For Agencies & Freelancers -->
-                <div class="card bg-base-100 shadow-xl border border-base-300 transform hover:scale-105 transition-transform">
+                <div class="card bg-base-100 shadow-xl border border-white/10 rounded-2xl transform hover:scale-105 transition-transform">
                     <div class="card-body">
                         <h2 class="card-title text-2xl mb-4">
                             <div class="badge badge-secondary">Business</div>
@@ -136,7 +144,7 @@
                 </div>
 
                 <!-- For Product Teams -->
-                <div class="card bg-base-100 shadow-xl border border-base-300 transform hover:scale-105 transition-transform">
+                <div class="card bg-base-100 shadow-xl border border-white/10 rounded-2xl transform hover:scale-105 transition-transform">
                     <div class="card-body">
                         <h2 class="card-title text-2xl mb-4">
                             <div class="badge badge-accent">Product</div>
@@ -169,7 +177,7 @@
                 </div>
 
                 <!-- For Leaders & Managers -->
-                <div class="card bg-base-100 shadow-xl border border-base-300 transform hover:scale-105 transition-transform">
+                <div class="card bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl transform hover:scale-105 transition-transform">
                     <div class="card-body">
                         <h2 class="card-title text-2xl mb-4">
                             <div class="badge badge-error">Leadership</div>
