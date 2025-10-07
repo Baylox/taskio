@@ -37,11 +37,19 @@
 			{% endif %}
 		</div>
 
-		{# Edit button #}
-		<label for="card_edit_modal_{{ card.id }}" class="btn btn-ghost btn-xs ml-auto hover:bg-base-200/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition" aria-label="Edit card {{ card.title }}">
-			<i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
-			<span class="sr-only">Edit</span>
-		</label>
+		{# Action buttons #}
+		<div class="flex gap-1 ml-auto">
+			{# View button #}
+			<label for="card_view_modal_{{ card.id }}" class="btn btn-ghost btn-xs hover:bg-base-200/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition" aria-label="View card {{ card.title }}">
+				<i class="fa-regular fa-eye" aria-hidden="true"></i>
+				<span class="sr-only">View</span>
+			</label>
+			{# Edit button #}
+			<label for="card_edit_modal_{{ card.id }}" class="btn btn-ghost btn-xs hover:bg-base-200/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition" aria-label="Edit card {{ card.title }}">
+				<i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+				<span class="sr-only">Edit</span>
+			</label>
+		</div>
 	</div>
 
 	{# Focus ring for keyboard navigation #}
