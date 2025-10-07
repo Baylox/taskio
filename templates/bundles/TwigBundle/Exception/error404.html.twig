@@ -1,63 +1,59 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="night">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Page Not Found - 404</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Page Not Found - 404</title>
 
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
-        <!-- Font Awesome -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    {{ vite_entry_link_tags('app') }}
+    {{ vite_entry_link_tags('styles') }}
 
-        <!-- Google Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        :root { --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial; }
+        html, body { font-family: var(--font); }
+    </style>
+</head>
 
-        {{ vite_entry_link_tags('app') }}
-        {{ vite_entry_link_tags('styles') }}
-    </head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-base-200 to-base-300">
+    <main class="w-full max-w-2xl px-4">
+        <div class="text-center space-y-8">
+            <div class="space-y-6">
+                <h1 class="text-9xl font-extrabold text-primary select-none">404</h1>
+                <h2 class="text-4xl font-semibold text-base-content">Page Not Found</h2>
+                <p class="text-xl text-base-content/70 max-w-lg mx-auto">
+                    The page you're looking for doesn't exist or has been moved.
+                </p>
+            </div>
 
-    <body>
-        {% include 'partials/navbar.html.twig' %}
+            <div class="divider my-8"></div>
 
-        <main>
-            <section class="min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-base-200 to-base-300 px-4">
-                <div class="max-w-2xl w-full text-center space-y-8">
-                    <div class="space-y-6">
-                        <h1 class="text-9xl font-bold text-primary">404</h1>
-                        <h2 class="text-4xl font-semibold text-base-content">Page Not Found</h2>
-                        <p class="text-xl text-base-content/70 max-w-lg mx-auto">
-                            The page you're looking for doesn't exist or has been moved.
-                        </p>
-                    </div>
+            <div class="w-full max-w-md mx-auto">
+                <p class="text-sm text-base-content/50 font-semibold uppercase tracking-wide mb-4">Suggestions</p>
+                <ul class="text-base-content/70 space-y-2">
+                    <li>Check the URL in the address bar</li>
+                    <li>Go back to the previous page</li>
+                    <li>Visit the home page</li>
+                </ul>
+            </div>
 
-                    <div class="divider my-8"></div>
-
-                    <div class="w-full max-w-md mx-auto">
-                        <p class="text-sm text-base-content/50 font-semibold uppercase tracking-wide mb-4">Suggestions</p>
-                        <ul class="text-base-content/70 space-y-2">
-                            <li>Check the URL in the address bar</li>
-                            <li>Go back to the previous page</li>
-                            <li>Visit the home page</li>
-                        </ul>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-                        <a href="javascript:history.back()" class="btn btn-outline btn-primary btn-lg">
-                            <i class="fa-solid fa-arrow-left"></i>
-                            Go Back
-                        </a>
-                        <a href="/" class="btn btn-primary btn-lg">
-                            <i class="fa-solid fa-home"></i>
-                            Home Page
-                        </a>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        {% include 'partials/footer.html.twig' %}
-
-        {{ vite_entry_script_tags('app') }}
-    </body>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                <a href="javascript:history.back()" class="btn btn-outline btn-primary btn-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Go Back
+                </a>
+                <a href="{{ path('app_home') }}" class="btn btn-primary btn-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    Home Page
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
 </html>
