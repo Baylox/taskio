@@ -23,6 +23,7 @@
 			<div data-card-id="{{ card.id }}">
 				{% include 'components/Card.html.twig' with { card: card } %}
 			</div>
+			{% include 'dashboard/view_card.html.twig' with { card: card } only %}
 			{% include 'dashboard/update_card.html.twig' with {
                 card: card,
                 form: cardEditForms[card.id],
