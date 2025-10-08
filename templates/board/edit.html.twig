@@ -28,8 +28,75 @@
 		</div>
 
 		{# Form card #}
-		<div class="bg-gray-800 rounded-lg p-6">
+		<div class="bg-gray-800 rounded-lg p-6 mb-8">
 			{{ include('board/_form.html.twig', {'button_label': 'Update'}) }}
 		</div>
+
+		{# Collaborators section - only visible to owner #}
+		{% if is_granted('BOARD_MANAGE_COLLABORATORS', board) %}
+			<div class="bg-gray-800 rounded-lg p-6">
+				<h2 class="text-xl font-semibold text-gray-200 mb-4">Collaborators</h2>
+
+				{# Add collaborator form #}
+				<form method="post" action="{{ path('app_board_add_collaborator', {'id': board.id}) }}" class="mb-6">
+					<input type="hidden" name="_token" value="{{ csrf_token('add_collaborator' ~ board.id) }}">
+					<div class="flex gap-2">
+						<select name="user_id" required class="select select-bordered flex-1">
+							<option value="" disabled selected>Select a user to add...</option>
+							{% for user in all_users %}
+								{# Exclude owner and existing collaborators #}
+								{% if user.id != board.owner.id and user not in board.accounts %}
+									<option value="{{ user.id }}">{{ user.email }} ({{ user.name }} {{ user.lastname }})</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+						<button type="submit" class="btn btn-primary">
+							<i class="fa-solid fa-user-plus"></i>
+							Add Collaborator
+						</button>
+					</div>
+				</form>
+
+				{# Collaborators list #}
+				<div class="space-y-2">
+					{# Owner (non-removable) #}
+					<div class="flex items-center justify-between bg-gray-700 rounded-lg p-3">
+						<div class="flex items-center gap-3">
+							<i class="fa-solid fa-crown text-yellow-500"></i>
+							<div>
+								<div class="text-sm font-medium text-white">{{ board.owner.email }}</div>
+								<div class="text-xs text-gray-400">{{ board.owner.name }} {{ board.owner.lastname }}</div>
+							</div>
+						</div>
+						<span class="badge badge-warning">Owner</span>
+					</div>
+
+					{# Collaborators #}
+					{% for collaborator in board.accounts %}
+						<div class="flex items-center justify-between bg-gray-700 rounded-lg p-3">
+							<div class="flex items-center gap-3">
+								<i class="fa-solid fa-user text-gray-400"></i>
+								<div>
+									<div class="text-sm font-medium text-white">{{ collaborator.email }}</div>
+									<div class="text-xs text-gray-400">{{ collaborator.name }} {{ collaborator.lastname }}</div>
+								</div>
+							</div>
+							<form method="post" action="{{ path('app_board_remove_collaborator', {'id': board.id, 'userId': collaborator.id}) }}" class="inline">
+								<input type="hidden" name="_token" value="{{ csrf_token('remove_collaborator' ~ collaborator.id) }}">
+								<button type="submit" class="btn btn-ghost btn-sm text-error hover:bg-error hover:text-white" onclick="return confirm('Remove {{ collaborator.email }} from this board?')">
+									<i class="fa-solid fa-user-minus"></i>
+									Remove
+								</button>
+							</form>
+						</div>
+					{% else %}
+						<div class="text-center py-8 text-gray-400">
+							<i class="fa-solid fa-users text-4xl mb-2 opacity-50"></i>
+							<p>No collaborators yet. Add someone to start collaborating!</p>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		{% endif %}
 	</div>
 {% endblock %}

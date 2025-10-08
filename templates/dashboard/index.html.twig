@@ -14,14 +14,26 @@
 					<h1 class="text-2xl font-bold text-white mb-1">{{ board.name ?? 'Dashboard' }}</h1>
 					<p class="text-slate-400 text-sm">Manage your project tasks and workflows</p>
 				</div>
-				{# Add Lane Button #}
-				<label for="lane_create_modal" 
-					   class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-xl hover:shadow-cyan-500/30 cursor-pointer transform hover:scale-105 hover:-translate-y-0.5">
-					<svg class="w-5 h-5 transition-transform duration-300 hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-					</svg>
-					<span>Add Lane</span>
-				</label>
+				<div class="flex items-center gap-3">
+					{# Manage Collaborators Button - only for owner #}
+					{% if is_granted('BOARD_MANAGE_COLLABORATORS', board) %}
+						<a href="{{ path('app_board_edit', {'id': board.id}) }}"
+							   class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-xl hover:shadow-purple-500/30 transform hover:scale-105 hover:-translate-y-0.5">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+							</svg>
+							<span>Manage Collaborators</span>
+						</a>
+					{% endif %}
+					{# Add Lane Button #}
+					<label for="lane_create_modal"
+						   class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-xl hover:shadow-cyan-500/30 cursor-pointer transform hover:scale-105 hover:-translate-y-0.5">
+						<svg class="w-5 h-5 transition-transform duration-300 hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+						</svg>
+						<span>Add Lane</span>
+					</label>
+				</div>
 			</div>
 		</div>
 
