@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[IsGranted('ROLE_USER')]
@@ -88,8 +89,15 @@ final class BoardController extends AbstractController
 
     #[IsGranted('BOARD_MANAGE_COLLABORATORS', subject: 'board')]
     #[Route('/{id}/collaborator/add', name: 'app_board_add_collaborator', methods: ['POST'])]
-    public function addCollaborator(Request $request, Board $board, EntityManagerInterface $em): Response
+    public function addCollaborator(Request $request, Board $board, EntityManagerInterface $em, RateLimiterFactory $addCollaboratorLimiter): Response
     {
+        // Rate limiting per IP
+        $limiter = $addCollaboratorLimiter->create($request->getClientIp());
+        if (false === $limiter->consume(1)->isAccepted()) {
+            $this->addFlash('error', 'Too many attempts. Please try again later.');
+            return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
+        }
+
         $form = $this->createForm(AddCollaboratorType::class, null, ['board' => $board]);
         $form->handleRequest($request);
 
@@ -97,27 +105,16 @@ final class BoardController extends AbstractController
             $email = $form->get('email')->getData();
             $collaborator = $em->getRepository(Account::class)->findOneBy(['email' => $email]);
 
-            if (!$collaborator) {
-                $this->addFlash('error', 'No user found with this email address.');
-                return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
-            }
-
-            // Validation: Cannot add owner
-            if ($collaborator === $board->getOwner()) {
-                $this->addFlash('error', 'Cannot add the owner as a collaborator.');
-                return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
-            }
-
-            // Validation: Prevent duplicates
-            if ($board->getAccounts()->contains($collaborator)) {
-                $this->addFlash('warning', 'This user is already a collaborator.');
+            // Generic error message to prevent enumeration
+            if (!$collaborator || $collaborator === $board->getOwner() || $board->getAccounts()->contains($collaborator)) {
+                $this->addFlash('error', 'Unable to add this collaborator. Please verify the email address.');
                 return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
             }
 
             $board->addAccount($collaborator);
             $em->flush();
 
-            $this->addFlash('success', sprintf('%s has been added as a collaborator.', $collaborator->getEmail()));
+            $this->addFlash('success', 'Collaborator added successfully.');
         }
 
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);

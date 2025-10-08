@@ -60,7 +60,6 @@
 							<i class="fa-solid fa-crown text-yellow-500"></i>
 							<div>
 								<div class="text-sm font-medium text-white">{{ board.owner.email }}</div>
-								<div class="text-xs text-gray-400">{{ board.owner.name }} {{ board.owner.lastname }}</div>
 							</div>
 						</div>
 						<span class="badge badge-warning">Owner</span>
@@ -73,12 +72,11 @@
 								<i class="fa-solid fa-user text-gray-400"></i>
 								<div>
 									<div class="text-sm font-medium text-white">{{ collaborator.email }}</div>
-									<div class="text-xs text-gray-400">{{ collaborator.name }} {{ collaborator.lastname }}</div>
 								</div>
 							</div>
 							<form method="post" action="{{ path('app_board_remove_collaborator', {'id': board.id, 'userId': collaborator.id}) }}" class="inline">
 								<input type="hidden" name="_token" value="{{ csrf_token('remove_collaborator' ~ collaborator.id) }}">
-								<button type="submit" class="btn btn-ghost btn-sm text-error hover:bg-error hover:text-white" onclick="return confirm('Remove {{ collaborator.email }} from this board?')">
+								<button type="submit" class="btn btn-ghost btn-sm text-error hover:bg-error hover:text-white" onclick="return confirm('Remove this collaborator from the board?')">
 									<i class="fa-solid fa-user-minus"></i>
 									Remove
 								</button>
