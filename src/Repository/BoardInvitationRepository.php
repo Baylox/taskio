@@ -3,9 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Board;
+use DateTimeImmutable;
 use App\Entity\BoardInvitation;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<BoardInvitation>
@@ -31,7 +32,7 @@ class BoardInvitationRepository extends ServiceEntityRepository
             ->andWhere('i.expiresAt > :now')
             ->setParameter('token', $token)
             ->setParameter('false', false)
-            ->setParameter('now', new \DateTimeImmutable())
+            ->setParameter('now', new DateTimeImmutable())
             ->getQuery()
             ->getOneOrNullResult();
     }
@@ -52,7 +53,7 @@ class BoardInvitationRepository extends ServiceEntityRepository
             ->setParameter('email', mb_strtolower(trim($email)))
             ->setParameter('board', $board)
             ->setParameter('false', false)
-            ->setParameter('now', new \DateTimeImmutable())
+            ->setParameter('now', new DateTimeImmutable())
             ->getQuery()
             ->getOneOrNullResult();
     }
@@ -70,7 +71,7 @@ class BoardInvitationRepository extends ServiceEntityRepository
             ->andWhere('i.expiresAt > :now')
             ->setParameter('board', $board)
             ->setParameter('false', false)
-            ->setParameter('now', new \DateTimeImmutable())
+            ->setParameter('now', new DateTimeImmutable())
             ->orderBy('i.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
@@ -90,7 +91,7 @@ class BoardInvitationRepository extends ServiceEntityRepository
             ->andWhere('i.expiresAt > :now')
             ->setParameter('email', mb_strtolower(trim($email)))
             ->setParameter('false', false)
-            ->setParameter('now', new \DateTimeImmutable())
+            ->setParameter('now', new DateTimeImmutable())
             ->orderBy('i.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
@@ -106,7 +107,7 @@ class BoardInvitationRepository extends ServiceEntityRepository
             ->delete()
             ->andWhere('i.expiresAt < :now')
             ->andWhere('i.isAccepted = :false')
-            ->setParameter('now', new \DateTimeImmutable())
+            ->setParameter('now', new DateTimeImmutable())
             ->setParameter('false', false)
             ->getQuery()
             ->execute();
