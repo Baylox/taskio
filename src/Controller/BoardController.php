@@ -196,6 +196,7 @@ final class BoardController extends AbstractController
      * @param BoardInvitationService $invitationService
      * @return Response
      */
+    #[IsGranted('ROLE_USER')]
     #[Route('/invitation/{token}/accept', name: 'app_board_accept_invitation', methods: ['GET'])]
     public function acceptInvitation(string $token, BoardInvitationRepository $invitationRepository, BoardInvitationService $invitationService): Response
     {
