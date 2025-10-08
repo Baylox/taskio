@@ -131,7 +131,8 @@ final class BoardController extends AbstractController
 
         $collaborator = $em->getRepository(Account::class)->find($userId);
 
-        if (!$collaborator || $collaborator === $board->getOwner()) {
+        // IDOR Protection: Verify user can be removed
+        if (!$this->canRemoveCollaborator($board, $collaborator)) {
             $this->addFlash('error', 'Invalid user.');
             return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
         }
@@ -154,6 +155,23 @@ final class BoardController extends AbstractController
         }
 
         if ($board->getAccounts()->contains($collaborator)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function canRemoveCollaborator(Board $board, ?Account $collaborator): bool
+    {
+        if (!$collaborator) {
+            return false;
+        }
+
+        if ($collaborator === $board->getOwner()) {
+            return false;
+        }
+
+        if (!$board->getAccounts()->contains($collaborator)) {
             return false;
         }
 
