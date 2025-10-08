@@ -19,6 +19,9 @@ class BoardInvitationRepository extends ServiceEntityRepository
 
     /**
      * Find a valid invitation by token
+     * An invitation is valid if it exists, is not accepted yet and not expired
+     * @param string $token
+     * @return BoardInvitation|null
      */
     public function findValidByToken(string $token): ?BoardInvitation
     {
@@ -35,6 +38,9 @@ class BoardInvitationRepository extends ServiceEntityRepository
 
     /**
      * Find pending invitations for a specific email and board
+     * @param string $email
+     * @param Board $board
+     * @return BoardInvitation|null
      */
     public function findPendingByEmailAndBoard(string $email, Board $board): ?BoardInvitation
     {
@@ -53,6 +59,8 @@ class BoardInvitationRepository extends ServiceEntityRepository
 
     /**
      * Find all pending invitations for a board
+     * @param Board $board
+     * @return BoardInvitation[]
      */
     public function findPendingByBoard(Board $board): array
     {
@@ -70,6 +78,8 @@ class BoardInvitationRepository extends ServiceEntityRepository
 
     /**
      * Find all pending invitations for an email
+     * @param string $email
+     * @return BoardInvitation[]
      */
     public function findPendingByEmail(string $email): array
     {
@@ -88,6 +98,7 @@ class BoardInvitationRepository extends ServiceEntityRepository
 
     /**
      * Delete expired invitations
+     * @return int Number of deleted invitations
      */
     public function deleteExpired(): int
     {
