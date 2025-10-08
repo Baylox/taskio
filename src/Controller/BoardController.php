@@ -24,6 +24,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class BoardController extends AbstractController
 {
 
+    /**
+     * Display all boards visible to the current user (owned and shared)
+     *
+     * @param BoardRepository $boardRepository
+     * @return Response
+     */
     #[Route(name: 'app_board_index', methods: ['GET'])]
     public function index(BoardRepository $boardRepository): Response
     {
@@ -32,6 +38,13 @@ final class BoardController extends AbstractController
         ]);
     }
 
+    /**
+     * Create a new board and set the current user as owner
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/new', name: 'app_board_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -53,14 +66,19 @@ final class BoardController extends AbstractController
         ]);
     }
 
+    /**
+     * Edit a board's information and display collaborator management interface
+     * Requires BOARD_EDIT permission
+     *
+     * @param Request $request
+     * @param Board $board
+     * @param EntityManagerInterface $entityManager
+     * @param BoardInvitationRepository $invitationRepository
+     * @return Response
+     */
     #[IsGranted('BOARD_EDIT', subject: 'board')]
     #[Route('/{id}/edit', name: 'app_board_edit', methods: ['GET', 'POST'])]
-    public function edit(
-        Request $request,
-        Board $board,
-        EntityManagerInterface $entityManager,
-        BoardInvitationRepository $invitationRepository
-    ): Response
+    public function edit(Request $request, Board $board, EntityManagerInterface $entityManager, BoardInvitationRepository $invitationRepository): Response
     {
         $form = $this->createForm(BoardType::class, $board);
         $form->handleRequest($request);
@@ -78,6 +96,15 @@ final class BoardController extends AbstractController
         ]);
     }
 
+    /**
+     * Delete a board permanently
+     * Requires BOARD_DELETE permission and valid CSRF token
+     *
+     * @param Request $request
+     * @param Board $board
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[IsGranted('BOARD_DELETE', subject: 'board')]
     #[Route('/{id}', name: 'app_board_delete', methods: ['POST'])]
     public function delete(Request $request, Board $board, EntityManagerInterface $entityManager): Response
@@ -90,14 +117,21 @@ final class BoardController extends AbstractController
         return $this->redirectToRoute('app_board_index', [], Response::HTTP_SEE_OTHER);
     }
 
+// Collaborator Management
+
+    /**
+     * Send an invitation email to add a new collaborator to the board
+     * Requires BOARD_MANAGE_COLLABORATORS permission and applies rate limiting
+     *
+     * @param Request $request
+     * @param Board $board
+     * @param RateLimiterFactory $addCollaboratorLimiter
+     * @param BoardInvitationService $invitationService
+     * @return Response
+     */
     #[IsGranted('BOARD_MANAGE_COLLABORATORS', subject: 'board')]
     #[Route('/{id}/collaborator/invite', name: 'app_board_invite_collaborator', methods: ['POST'])]
-    public function inviteCollaborator(
-        Request $request,
-        Board $board,
-        RateLimiterFactory $addCollaboratorLimiter,
-        BoardInvitationService $invitationService
-    ): Response
+    public function inviteCollaborator(Request $request, Board $board, RateLimiterFactory $addCollaboratorLimiter, BoardInvitationService $invitationService): Response
     {
         if (!$this->checkRateLimit($addCollaboratorLimiter)) {
             return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
@@ -115,6 +149,17 @@ final class BoardController extends AbstractController
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
     }
 
+    /**
+     * Remove a collaborator from the board
+     * Requires BOARD_MANAGE_COLLABORATORS permission and valid CSRF token
+     * Prevents removal of board owner and validates collaborator membership
+     *
+     * @param Request $request
+     * @param Board $board
+     * @param int $userId
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
     #[IsGranted('BOARD_MANAGE_COLLABORATORS', subject: 'board')]
     #[Route('/{id}/collaborator/{userId}/remove', name: 'app_board_remove_collaborator', methods: ['POST'])]
     public function removeCollaborator(Request $request, Board $board, int $userId, EntityManagerInterface $em): Response
@@ -139,12 +184,20 @@ final class BoardController extends AbstractController
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
     }
 
+// Invitation Management
+
+    /**
+     * Accept a board invitation using its unique token
+     * Validates the invitation, checks user email matches and adds them as collaborator
+     * Handles cases where user is already a member
+     *
+     * @param string $token
+     * @param BoardInvitationRepository $invitationRepository
+     * @param BoardInvitationService $invitationService
+     * @return Response
+     */
     #[Route('/invitation/{token}/accept', name: 'app_board_accept_invitation', methods: ['GET'])]
-    public function acceptInvitation(
-        string $token,
-        BoardInvitationRepository $invitationRepository,
-        BoardInvitationService $invitationService
-    ): Response
+    public function acceptInvitation(string $token, BoardInvitationRepository $invitationRepository, BoardInvitationService $invitationService): Response
     {
         $invitation = $invitationRepository->findValidByToken($token);
 
@@ -173,14 +226,20 @@ final class BoardController extends AbstractController
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
     }
 
+    /**
+     * Cancel a pending invitation
+     * Requires BOARD_MANAGE_COLLABORATORS permission and valid CSRF token
+     * Validates invitation belongs to the specified board
+     *
+     * @param Request $request
+     * @param Board $board
+     * @param int $invitationId
+     * @param BoardInvitationService $invitationService
+     * @return Response
+     */
     #[IsGranted('BOARD_MANAGE_COLLABORATORS', subject: 'board')]
     #[Route('/{id}/invitation/{invitationId}/cancel', name: 'app_board_cancel_invitation', methods: ['POST'])]
-    public function cancelInvitation(
-        Request $request,
-        Board $board,
-        int $invitationId,
-        BoardInvitationService $invitationService
-    ): Response
+    public function cancelInvitation(Request $request, Board $board, int $invitationId, BoardInvitationService $invitationService): Response
     {
         if (!$this->validateCsrfForInvitation($request, $invitationId)) {
             return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
@@ -196,6 +255,15 @@ final class BoardController extends AbstractController
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
     }
 
+// Private Helper Methods
+
+    /**
+     * Check rate limit for the current user
+     * Adds flash message if limit is exceeded
+     *
+     * @param RateLimiterFactory $limiterFactory
+     * @return bool True if request is allowed, false if rate limit exceeded
+     */
     private function checkRateLimit(RateLimiterFactory $limiterFactory): bool
     {
         $limiter = $limiterFactory->create($this->getUser()->getUserIdentifier());
@@ -208,6 +276,12 @@ final class BoardController extends AbstractController
         return true;
     }
 
+    /**
+     * Create collaborator invitation form if user has permission
+     *
+     * @param Board $board
+     * @return \Symfony\Component\Form\FormView|null Form view or null if user lacks permission
+     */
     private function createCollaboratorForm(Board $board): ?\Symfony\Component\Form\FormView
     {
         if (!$this->isGranted('BOARD_MANAGE_COLLABORATORS', $board)) {
@@ -217,6 +291,13 @@ final class BoardController extends AbstractController
         return $this->createForm(AddCollaboratorType::class, null, ['board' => $board])->createView();
     }
 
+    /**
+     * Get pending invitations for a board if user has permission
+     *
+     * @param Board $board
+     * @param BoardInvitationRepository $repository
+     * @return array List of pending invitations or empty array if user lacks permission
+     */
     private function getPendingInvitations(Board $board, BoardInvitationRepository $repository): array
     {
         if (!$this->isGranted('BOARD_MANAGE_COLLABORATORS', $board)) {
@@ -226,6 +307,13 @@ final class BoardController extends AbstractController
         return $repository->findPendingByBoard($board);
     }
 
+    /**
+     * Validate that the invitation email matches the current user's email
+     *
+     * @param BoardInvitation $invitation
+     * @param Account $user
+     * @return bool True if email matches, false otherwise
+     */
     private function validateInvitationForUser(BoardInvitation $invitation, Account $user): bool
     {
         if ($user->getEmail() !== $invitation->getEmail()) {
@@ -236,6 +324,13 @@ final class BoardController extends AbstractController
         return true;
     }
 
+    /**
+     * Validate CSRF token for invitation operations
+     *
+     * @param Request $request
+     * @param int $invitationId
+     * @return bool True if token is valid, false otherwise
+     */
     private function validateCsrfForInvitation(Request $request, int $invitationId): bool
     {
         if (!$this->isCsrfTokenValid('cancel_invitation' . $invitationId, $request->request->get('_token'))) {
@@ -246,6 +341,14 @@ final class BoardController extends AbstractController
         return true;
     }
 
+    /**
+     * Check if a collaborator can be removed from the board
+     * Prevents removal of null accounts, board owner, and non-members
+     *
+     * @param Board $board
+     * @param Account|null $collaborator
+     * @return bool True if collaborator can be removed, false otherwise
+     */
     private function canRemoveCollaborator(Board $board, ?Account $collaborator): bool
     {
         if (!$collaborator) {
