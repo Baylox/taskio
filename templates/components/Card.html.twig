@@ -5,53 +5,46 @@
 {% set statusLabel = card.status ? card.status.label : '' %}
 
 	<li
-	class="relative group card bg-base-100/95 ring-1 ring-base-200/60 hover:ring-primary/30 shadow-sm hover:shadow-md rounded-xl p-3 sm:p-4 transition-all duration-200 ease-out
-			hover:-translate-y-0.5 focus-within:ring-2 focus-within:ring-primary/50" data-id="{{ card.id }}" role="listitem" tabindex="0" aria-labelledby="card-title-{{ card.id }}"> {# Status color stripe #}
-	<span class="absolute inset-y-0 left-0 w-1 rounded-l-xl {{ statusBorderClass }}" aria-hidden="true"></span>
+	class="relative group card bg-base-100 border border-base-200/50 hover:border-primary/40 shadow-sm hover:shadow-lg rounded-xl p-3 sm:p-4 transition-all duration-200 ease-out
+			hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2" data-id="{{ card.id }}" role="listitem" tabindex="0" aria-labelledby="card-title-{{ card.id }}"> {# Status color stripe #}
+	<span class="absolute inset-y-0 left-0 w-0.5 rounded-l-xl {{ statusBorderClass }}" aria-hidden="true"></span>
 
-	<div
-		class="flex items-start gap-3 sm:gap-4">
-		{# Drag handle #}
-		<i class="fa-solid fa-grip-lines text-base-content/30 hover:text-base-content/70 mt-1.5 sm:mt-1.5
-					cursor-grab active:cursor-grabbing select-none" aria-hidden="true" title="Drag to move"></i>
-
+	<div class="flex items-start gap-2">
 		{# Card content #}
-		<div class="min-w-0 grow">
-			<p id="card-title-{{ card.id }}" class="text-sm sm:text-base font-semibold text-base-content break-words" title="{{ card.title }}">
-				{{ card.title }}
-			</p>
+		<div class="min-w-0 w-full">
+			<div class="flex items-start justify-between gap-2 mb-1">
+				<p id="card-title-{{ card.id }}" class="text-sm sm:text-base font-semibold text-base-content truncate flex-1" title="{{ card.title }}">
+					{{ card.title }}
+				</p>
+
+				{# Action buttons - compact and on same line as title #}
+				<div class="flex gap-0.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+					<label for="card_view_modal_{{ card.id }}" class="btn btn-ghost btn-xs p-1 h-6 min-h-0 hover:bg-base-200/70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/50 transition" aria-label="View card {{ card.title }}">
+						<i class="fa-regular fa-eye text-xs" aria-hidden="true"></i>
+						<span class="sr-only">View</span>
+					</label>
+					<label for="card_edit_modal_{{ card.id }}" class="btn btn-ghost btn-xs p-1 h-6 min-h-0 hover:bg-base-200/70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/50 transition" aria-label="Edit card {{ card.title }}">
+						<i class="fa-regular fa-pen-to-square text-xs" aria-hidden="true"></i>
+						<span class="sr-only">Edit</span>
+					</label>
+				</div>
+			</div>
 
 			{% if card.description %}
-				<p class="mt-0.5 text-sm text-base-content/70 line-clamp-2">
+				<p class="text-sm text-base-content/70 line-clamp-2">
 					{{ card.description }}
 				</p>
 			{% endif %}
 
 			{% if card.status %}
 				<div class="mt-2">
-					<span class="badge {{ statusBadgeClass }} gap-1">
+					<span class="badge {{ statusBadgeClass }} gap-1 badge-sm">
 						<i class="fa-solid {{ statusIcon }}" aria-hidden="true"></i>
 						{{ statusLabel }}
 					</span>
 				</div>
 			{% endif %}
 		</div>
-
-		{# Action buttons #}
-		<div class="flex gap-1 ml-auto">
-			{# View button #}
-			<label for="card_view_modal_{{ card.id }}" class="btn btn-ghost btn-xs hover:bg-base-200/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition" aria-label="View card {{ card.title }}">
-				<i class="fa-regular fa-eye" aria-hidden="true"></i>
-				<span class="sr-only">View</span>
-			</label>
-			{# Edit button #}
-			<label for="card_edit_modal_{{ card.id }}" class="btn btn-ghost btn-xs hover:bg-base-200/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition" aria-label="Edit card {{ card.title }}">
-				<i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
-				<span class="sr-only">Edit</span>
-			</label>
-		</div>
 	</div>
 
-	{# Focus ring for keyboard navigation #}
-	<span class="pointer-events-none absolute inset-0 rounded-xl ring-0 group-focus-within:ring-2 group-focus-within:ring-primary/40" aria-hidden="true"></span>
 </li>
