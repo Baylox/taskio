@@ -1,9 +1,25 @@
 {# --- CARD MODAL (DaisyUI checkbox modal) --- #}
 {# The checkbox controls the opening. "checked" if errors to keep the modal open. #}
 <input type="checkbox" id="card_create_modal_{{ lane.id }}" class="modal-toggle" {% if openCardModalId is defined and openCardModalId == lane.id %} checked {% endif %} />
-<div class="modal" role="dialog">
-    <div class="modal-box">
-        <h3 class="text-lg font-bold mb-4">Add Card to {{ lane.title }}</h3>
+<div class="modal backdrop-blur-sm">
+    <div class="modal-box bg-slate-800 border border-slate-700/50 shadow-2xl max-w-lg w-full mx-4">
+        
+        {# Header with close button #}
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-700/50">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-blue-500/20 rounded-lg">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-white">Add Card to {{ lane.title }}</h3>
+            </div>
+            <label for="card_create_modal_{{ lane.id }}" class="btn btn-sm btn-ghost text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-full p-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </label>
+        </div>
 
         {# Symfony form for card creation #}
         {{ form_start(cardForm, {
@@ -12,31 +28,38 @@
         }) }}
 
         {# Display form fields manually for better control #}
-        <div class="space-y-4">
-            <div class="form-control">
-                {{ form_label(cardForm.title) }}
-                {{ form_widget(cardForm.title) }}
-                {{ form_errors(cardForm.title) }}
-            </div>
+        <div class="space-y-5 mb-6">
+            <div class="styled-form-fields space-y-4">
+                <div class="form-control">
+                    {{ form_label(cardForm.title) }}
+                    {{ form_widget(cardForm.title) }}
+                    {{ form_errors(cardForm.title) }}
+                </div>
 
-            <div class="form-control">
-                {{ form_label(cardForm.description) }}
-                {{ form_widget(cardForm.description) }}
-                {{ form_errors(cardForm.description) }}
-            </div>
+                <div class="form-control">
+                    {{ form_label(cardForm.description) }}
+                    {{ form_widget(cardForm.description) }}
+                    {{ form_errors(cardForm.description) }}
+                </div>
 
-            <div class="form-control">
-                {{ form_label(cardForm.status) }}
-                {{ form_widget(cardForm.status) }}
-                {{ form_errors(cardForm.status) }}
+                <div class="form-control">
+                    {{ form_label(cardForm.status) }}
+                    {{ form_widget(cardForm.status) }}
+                    {{ form_errors(cardForm.status) }}
+                </div>
             </div>
-
         </div>
 
-        <div class="modal-action mt-6">
-            <button type="submit" class="btn btn-primary">Save Card</button>
-            {# Close the modal: click the label linked to the checkbox #}
-            <label for="card_create_modal_{{ lane.id }}" class="btn">Cancel</label>
+        <div class="flex items-center justify-between pt-4">
+            <div class="flex gap-3">
+                <button type="submit" class="btn bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400 text-white border-none shadow-md hover:shadow-lg transition-all duration-200 px-6">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Save Card
+                </button>
+                <label for="card_create_modal_{{ lane.id }}" class="btn btn-ghost text-slate-300 hover:text-white hover:bg-slate-700/50 border border-slate-600 px-6">Cancel</label>
+            </div>
         </div>
 
         {{ form_end(cardForm) }}
