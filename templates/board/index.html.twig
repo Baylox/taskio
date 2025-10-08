@@ -81,9 +81,13 @@
                     {% for board in boards %}
                         <tr class="hover:bg-gray-750 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
+                                <div class="flex items-center gap-2">
                                     {# Board Title with link to dashboard #}
                                     <a href="{{ path('app_board_edit', {'id': board.id}) }}" class="text-sm font-medium text-white">{{ board.title }}</a>
+                                    {# Owner badge #}
+                                    {% if board.owner.id == app.user.id %}
+                                        <span class="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs px-2 py-0.5 rounded-full font-medium">Owner</span>
+                                    {% endif %}
                                 </div>
                             </td>
                             {% if adminMode|default(false) %}
