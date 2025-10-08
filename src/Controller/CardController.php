@@ -28,7 +28,7 @@ final class CardController extends AbstractController
         CardRepository $cardRepo
     ): Response {
 
-        // $this->denyAccessUnlessGranted('EDIT', $lane->getBoard());
+        $this->denyAccessUnlessGranted('BOARD_EDIT', $lane->getBoard());
 
         $card = new Card();
         $card->setLane($lane);
@@ -77,7 +77,7 @@ final class CardController extends AbstractController
     {
         $lane = $card->getLane();
         $board = $lane->getBoard();
-        //$this->denyAccessUnlessGranted('EDIT', $board);
+        $this->denyAccessUnlessGranted('BOARD_EDIT', $board);
 
         $form = $this->createForm(CardType::class, $card);
         $form->handleRequest($request);
@@ -129,7 +129,7 @@ final class CardController extends AbstractController
 
         if (!$card || !$lane) return $this->json(['error' => 'not found'], 404);
 
-        // $this->denyAccessUnlessGranted('BOARD_EDIT', $lane->getBoard());
+        $this->denyAccessUnlessGranted('BOARD_EDIT', $lane->getBoard());
         $mover->move($card, $lane, $new);
         $em->flush();
 
