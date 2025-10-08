@@ -1,21 +1,52 @@
 {# --- LANE MODAL (DaisyUI checkbox modal) --- #}
 {# The checkbox controls the opening. "checked" if errors to keep the modal open. #}
-<input type="checkbox" id="lane_create_modal" class="modal-toggle" {% if openLaneModal|default(false) %} checked {% endif %}/> <div class="modal" role="dialog">
-	<div class="modal-box">
-		<h3 class="text-lg font-bold mb-4">Create Lane</h3>
+<input type="checkbox" id="lane_create_modal" class="modal-toggle" {% if openLaneModal|default(false) %} checked {% endif %}/>
+<div class="modal backdrop-blur-sm">
+	<div class="modal-box bg-slate-800 border border-slate-700/50 shadow-2xl max-w-lg w-full mx-4">
+		
+		{# Header with close button #}
+		<div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-700/50">
+			<div class="flex items-center gap-3">
+				<div class="p-2 bg-blue-500/20 rounded-lg">
+					<svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+					</svg>
+				</div>
+				<h3 class="text-xl font-bold text-white">Create Lane</h3>
+			</div>
+			<label for="lane_create_modal" class="btn btn-sm btn-ghost text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-full p-2">
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+				</svg>
+			</label>
+		</div>
 
 		{# Symfony form directly in the modal #}
 		{{ form_start(form, {
-                action: path('lane_new', { id: board.id }),
-                attr: { novalidate: 'novalidate' }
-            }) }}
-		{{ form_widget(form) }}
-		<div class="modal-action">
-			<button class="btn btn-primary">Save</button>
-			{# Close the modal: click the label linked to the checkbox #}
-			<label for="lane_create_modal" class="btn">Cancel</label>
+			action: path('lane_new', { id: board.id }),
+			attr: { novalidate: 'novalidate' }
+		}) }}
+		
+		<div class="space-y-5 mb-6">
+			<div class="styled-form-fields">
+				{{ form_widget(form) }}
+			</div>
 		</div>
+
+		<div class="flex items-center justify-between pt-4">
+			<div class="flex gap-3">
+				<button class="btn bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400 text-white border-none shadow-md hover:shadow-lg transition-all duration-200 px-6" type="submit">
+					<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+					</svg>
+					Save
+				</button>
+				<label for="lane_create_modal" class="btn btn-ghost text-slate-300 hover:text-white hover:bg-slate-700/50 border border-slate-600 px-6">Cancel</label>
+			</div>
+		</div>
+		
 		{{ form_end(form) }}
+
 	</div>
 
 	{# Click outside to close (overlay) #}
