@@ -10,11 +10,6 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
  */
 final class LaneFactory extends PersistentProxyObjectFactory
 {
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @inject services if required
-     */
     public function __construct() {}
 
     public static function class(): string
@@ -23,9 +18,7 @@ final class LaneFactory extends PersistentProxyObjectFactory
     }
 
     /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @return array<string, mixed>|callable<string, mixed> Default values for the Lane entity.
+     * @return array Default values for the Lane entity.
      */
     protected function defaults(): array
     {
@@ -46,7 +39,7 @@ final class LaneFactory extends PersistentProxyObjectFactory
 
 
     /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
+     * @return static
      */
     protected function initialize(): static
     {

@@ -12,11 +12,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
  */
 final class AccountFactory extends PersistentProxyObjectFactory
 {
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
-     */
     public function __construct(private UserPasswordHasherInterface $passwordHasher) {}
 
     public static function class(): string
@@ -25,9 +20,7 @@ final class AccountFactory extends PersistentProxyObjectFactory
     }
 
     /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @todo add your default values here
+     * @return array Default values for the Account entity.
      */
     protected function defaults(): array|callable
     {
@@ -42,7 +35,7 @@ final class AccountFactory extends PersistentProxyObjectFactory
     }
 
     /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
+     * @return static
      */
     protected function initialize(): static
     {
