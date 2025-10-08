@@ -91,8 +91,8 @@ final class BoardController extends AbstractController
     #[Route('/{id}/collaborator/add', name: 'app_board_add_collaborator', methods: ['POST'])]
     public function addCollaborator(Request $request, Board $board, EntityManagerInterface $em, RateLimiterFactory $addCollaboratorLimiter): Response
     {
-        // Rate limiting per IP
-        $limiter = $addCollaboratorLimiter->create($request->getClientIp());
+        // Rate limiting per user
+        $limiter = $addCollaboratorLimiter->create($this->getUser()->getUserIdentifier());
         if (false === $limiter->consume(1)->isAccepted()) {
             $this->addFlash('error', 'Too many attempts. Please try again later.');
             return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
@@ -105,8 +105,8 @@ final class BoardController extends AbstractController
             $email = $form->get('email')->getData();
             $collaborator = $em->getRepository(Account::class)->findOneBy(['email' => $email]);
 
-            // Generic error message to prevent enumeration
-            if (!$collaborator || $collaborator === $board->getOwner() || $board->getAccounts()->contains($collaborator)) {
+            // Validation: generic error message to prevent user enumeration
+            if (!$this->canAddCollaborator($board, $collaborator)) {
                 $this->addFlash('error', 'Unable to add this collaborator. Please verify the email address.');
                 return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
             }
@@ -139,7 +139,24 @@ final class BoardController extends AbstractController
         $board->removeAccount($collaborator);
         $em->flush();
 
-        $this->addFlash('success', sprintf('%s has been removed.', $collaborator->getEmail()));
+        $this->addFlash('success', 'Collaborator removed successfully.');
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
+    }
+
+    private function canAddCollaborator(Board $board, ?Account $collaborator): bool
+    {
+        if (!$collaborator) {
+            return false;
+        }
+
+        if ($collaborator === $board->getOwner()) {
+            return false;
+        }
+
+        if ($board->getAccounts()->contains($collaborator)) {
+            return false;
+        }
+
+        return true;
     }
 }
