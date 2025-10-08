@@ -46,23 +46,54 @@
 			<div class="bg-gray-800 rounded-lg p-6">
 				<h2 class="text-xl font-semibold text-gray-200 mb-4">Collaborators</h2>
 
-				{# Add collaborator form #}
+				{# Invite collaborator form #}
 				{{ form_start(collaborator_form, {
-					'action': path('app_board_add_collaborator', {'id': board.id}),
+					'action': path('app_board_invite_collaborator', {'id': board.id}),
 					'attr': {'class': 'mb-6'}
 				}) }}
 				<div class="flex gap-2">
 					{{ form_widget(collaborator_form.email) }}
 					<button type="submit" class="btn btn-primary">
-						<i class="fa-solid fa-user-plus"></i>
-						Add
+						<i class="fa-solid fa-envelope"></i>
+						Send Invitation
 					</button>
 				</div>
 				{{ form_errors(collaborator_form.email) }}
 				{{ form_end(collaborator_form) }}
 
+				{# Pending invitations #}
+				{% if pending_invitations is not empty %}
+					<div class="mb-6">
+						<h3 class="text-lg font-medium text-gray-300 mb-3">Pending Invitations</h3>
+						<div class="space-y-2">
+							{% for invitation in pending_invitations %}
+								<div class="flex items-center justify-between bg-gray-700 rounded-lg p-3">
+									<div class="flex items-center gap-3">
+										<i class="fa-solid fa-clock text-blue-400"></i>
+										<div>
+											<div class="text-sm font-medium text-white">{{ invitation.email }}</div>
+											<div class="text-xs text-gray-400">
+												Invited {{ invitation.createdAt|date('M d, Y') }} • Expires {{ invitation.expiresAt|date('M d, Y') }}
+											</div>
+										</div>
+									</div>
+									<form method="post" action="{{ path('app_board_cancel_invitation', {'id': board.id, 'invitationId': invitation.id}) }}" class="inline">
+										<input type="hidden" name="_token" value="{{ csrf_token('cancel_invitation' ~ invitation.id) }}">
+										<button type="submit" class="btn btn-ghost btn-sm text-error hover:bg-error hover:text-white" onclick="return confirm('Cancel this invitation?')">
+											<i class="fa-solid fa-times"></i>
+											Cancel
+										</button>
+									</form>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				{% endif %}
+
 				{# Collaborators list #}
 				<div class="space-y-2">
+					<h3 class="text-lg font-medium text-gray-300 mb-3">Active Members</h3>
+
 					{# Owner (non-removable) #}
 					<div class="flex items-center justify-between bg-gray-700 rounded-lg p-3">
 						<div class="flex items-center gap-3">
@@ -94,7 +125,7 @@
 					{% else %}
 						<div class="text-center py-8 text-gray-400">
 							<i class="fa-solid fa-users text-4xl mb-2 opacity-50"></i>
-							<p>No collaborators yet. Add someone to start collaborating!</p>
+							<p>No collaborators yet. Send an invitation to start collaborating!</p>
 						</div>
 					{% endfor %}
 				</div>

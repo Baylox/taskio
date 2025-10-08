@@ -4,15 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Board;
 use App\Entity\Account;
+use App\Entity\BoardInvitation;
 use App\Form\BoardType;
 use App\Form\AddCollaboratorType;
 use App\Repository\BoardRepository;
+use App\Repository\BoardInvitationRepository;
+use App\Service\BoardInvitationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[IsGranted('ROLE_USER')]
@@ -51,27 +55,26 @@ final class BoardController extends AbstractController
 
     #[IsGranted('BOARD_EDIT', subject: 'board')]
     #[Route('/{id}/edit', name: 'app_board_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Board $board, EntityManagerInterface $entityManager): Response
+    public function edit(
+        Request $request,
+        Board $board,
+        EntityManagerInterface $entityManager,
+        BoardInvitationRepository $invitationRepository
+    ): Response
     {
         $form = $this->createForm(BoardType::class, $board);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
             return $this->redirectToRoute('app_board_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        // Create collaborator form if user is owner
-        $collaboratorForm = null;
-        if ($this->isGranted('BOARD_MANAGE_COLLABORATORS', $board)) {
-            $collaboratorForm = $this->createForm(AddCollaboratorType::class, null, ['board' => $board]);
         }
 
         return $this->render('board/edit.html.twig', [
             'board' => $board,
             'form' => $form,
-            'collaborator_form' => $collaboratorForm?->createView(),
+            'collaborator_form' => $this->createCollaboratorForm($board),
+            'pending_invitations' => $this->getPendingInvitations($board, $invitationRepository),
         ]);
     }
 
@@ -88,13 +91,16 @@ final class BoardController extends AbstractController
     }
 
     #[IsGranted('BOARD_MANAGE_COLLABORATORS', subject: 'board')]
-    #[Route('/{id}/collaborator/add', name: 'app_board_add_collaborator', methods: ['POST'])]
-    public function addCollaborator(Request $request, Board $board, EntityManagerInterface $em, RateLimiterFactory $addCollaboratorLimiter): Response
+    #[Route('/{id}/collaborator/invite', name: 'app_board_invite_collaborator', methods: ['POST'])]
+    public function inviteCollaborator(
+        Request $request,
+        Board $board,
+        RateLimiterFactory $addCollaboratorLimiter,
+        BoardInvitationService $invitationService,
+        LoggerInterface $logger
+    ): Response
     {
-        // Rate limiting per user
-        $limiter = $addCollaboratorLimiter->create($this->getUser()->getUserIdentifier());
-        if (false === $limiter->consume(1)->isAccepted()) {
-            $this->addFlash('error', 'Too many attempts. Please try again later.');
+        if (!$this->checkRateLimit($addCollaboratorLimiter)) {
             return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
         }
 
@@ -103,18 +109,24 @@ final class BoardController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->get('email')->getData();
-            $collaborator = $em->getRepository(Account::class)->findOneBy(['email' => $email]);
 
-            // Validation: generic error message to prevent user enumeration
-            if (!$this->canAddCollaborator($board, $collaborator)) {
-                $this->addFlash('error', 'Unable to add this collaborator. Please verify the email address.');
+            if (!$invitationService->canInvite($email, $board)) {
+                $this->addFlash('success', 'An invitation has been sent to this email address.');
                 return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
             }
 
-            $board->addAccount($collaborator);
-            $em->flush();
-
-            $this->addFlash('success', 'Collaborator added successfully.');
+            try {
+                $invitation = $invitationService->createInvitation($email, $board, $this->getUser());
+                $invitationService->sendInvitationEmail($invitation);
+                $this->addFlash('success', 'An invitation has been sent to this email address.');
+            } catch (\Exception $e) {
+                $logger->error('Failed to process invitation', [
+                    'error' => $e->getMessage(),
+                    'board_id' => $board->getId(),
+                    'email' => $email
+                ]);
+                $this->addFlash('success', 'An invitation has been sent to this email address.');
+            }
         }
 
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
@@ -144,17 +156,102 @@ final class BoardController extends AbstractController
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
     }
 
-    private function canAddCollaborator(Board $board, ?Account $collaborator): bool
+    #[Route('/invitation/{token}/accept', name: 'app_board_accept_invitation', methods: ['GET'])]
+    public function acceptInvitation(
+        string $token,
+        BoardInvitationRepository $invitationRepository,
+        BoardInvitationService $invitationService
+    ): Response
     {
-        if (!$collaborator) {
+        $invitation = $invitationRepository->findValidByToken($token);
+
+        if (!$invitation) {
+            $this->addFlash('error', 'This invitation is invalid or has expired.');
+            return $this->redirectToRoute('app_board_index');
+        }
+
+        $user = $this->getUser();
+
+        if (!$this->validateInvitationForUser($invitation, $user)) {
+            return $this->redirectToRoute('app_board_index');
+        }
+
+        $board = $invitation->getBoard();
+
+        if ($board->getAccounts()->contains($user) || $board->getOwner() === $user) {
+            $invitationService->acceptInvitation($invitation, $user);
+            $this->addFlash('info', 'You are already a member of this board.');
+            return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
+        }
+
+        $invitationService->acceptInvitation($invitation, $user);
+        $this->addFlash('success', sprintf('You have successfully joined the board "%s".', $board->getTitle()));
+
+        return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
+    }
+
+    #[IsGranted('BOARD_MANAGE_COLLABORATORS', subject: 'board')]
+    #[Route('/{id}/invitation/{invitationId}/cancel', name: 'app_board_cancel_invitation', methods: ['POST'])]
+    public function cancelInvitation(
+        Request $request,
+        Board $board,
+        int $invitationId,
+        BoardInvitationRepository $invitationRepository,
+        BoardInvitationService $invitationService
+    ): Response
+    {
+        if (!$this->isCsrfTokenValid('cancel_invitation' . $invitationId, $request->request->get('_token'))) {
+            $this->addFlash('error', 'Invalid CSRF token.');
+            return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
+        }
+
+        $invitation = $invitationRepository->find($invitationId);
+
+        if (!$invitation || $invitation->getBoard()->getId() !== $board->getId()) {
+            $this->addFlash('error', 'Invalid invitation.');
+            return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
+        }
+
+        $invitationService->cancelInvitation($invitation);
+        $this->addFlash('success', 'Invitation cancelled.');
+
+        return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
+    }
+
+    private function checkRateLimit(RateLimiterFactory $limiterFactory): bool
+    {
+        $limiter = $limiterFactory->create($this->getUser()->getUserIdentifier());
+
+        if (!$limiter->consume(1)->isAccepted()) {
+            $this->addFlash('error', 'Too many attempts. Please try again later.');
             return false;
         }
 
-        if ($collaborator === $board->getOwner()) {
-            return false;
+        return true;
+    }
+
+    private function createCollaboratorForm(Board $board): ?\Symfony\Component\Form\FormView
+    {
+        if (!$this->isGranted('BOARD_MANAGE_COLLABORATORS', $board)) {
+            return null;
         }
 
-        if ($board->getAccounts()->contains($collaborator)) {
+        return $this->createForm(AddCollaboratorType::class, null, ['board' => $board])->createView();
+    }
+
+    private function getPendingInvitations(Board $board, BoardInvitationRepository $repository): array
+    {
+        if (!$this->isGranted('BOARD_MANAGE_COLLABORATORS', $board)) {
+            return [];
+        }
+
+        return $repository->findPendingByBoard($board);
+    }
+
+    private function validateInvitationForUser(BoardInvitation $invitation, Account $user): bool
+    {
+        if ($user->getEmail() !== $invitation->getEmail()) {
+            $this->addFlash('error', 'This invitation was sent to a different email address.');
             return false;
         }
 
