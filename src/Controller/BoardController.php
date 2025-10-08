@@ -96,8 +96,7 @@ final class BoardController extends AbstractController
         Request $request,
         Board $board,
         RateLimiterFactory $addCollaboratorLimiter,
-        BoardInvitationService $invitationService,
-        LoggerInterface $logger
+        BoardInvitationService $invitationService
     ): Response
     {
         if (!$this->checkRateLimit($addCollaboratorLimiter)) {
@@ -109,24 +108,8 @@ final class BoardController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->get('email')->getData();
-
-            if (!$invitationService->canInvite($email, $board)) {
-                $this->addFlash('success', 'An invitation has been sent to this email address.');
-                return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
-            }
-
-            try {
-                $invitation = $invitationService->createInvitation($email, $board, $this->getUser());
-                $invitationService->sendInvitationEmail($invitation);
-                $this->addFlash('success', 'An invitation has been sent to this email address.');
-            } catch (\Exception $e) {
-                $logger->error('Failed to process invitation', [
-                    'error' => $e->getMessage(),
-                    'board_id' => $board->getId(),
-                    'email' => $email
-                ]);
-                $this->addFlash('success', 'An invitation has been sent to this email address.');
-            }
+            $invitationService->processInvitation($email, $board, $this->getUser());
+            $this->addFlash('success', 'An invitation has been sent to this email address.');
         }
 
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
@@ -196,24 +179,19 @@ final class BoardController extends AbstractController
         Request $request,
         Board $board,
         int $invitationId,
-        BoardInvitationRepository $invitationRepository,
         BoardInvitationService $invitationService
     ): Response
     {
-        if (!$this->isCsrfTokenValid('cancel_invitation' . $invitationId, $request->request->get('_token'))) {
-            $this->addFlash('error', 'Invalid CSRF token.');
+        if (!$this->validateCsrfForInvitation($request, $invitationId)) {
             return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
         }
 
-        $invitation = $invitationRepository->find($invitationId);
-
-        if (!$invitation || $invitation->getBoard()->getId() !== $board->getId()) {
+        try {
+            $invitationService->cancelInvitationById($invitationId, $board);
+            $this->addFlash('success', 'Invitation cancelled.');
+        } catch (\InvalidArgumentException $e) {
             $this->addFlash('error', 'Invalid invitation.');
-            return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
         }
-
-        $invitationService->cancelInvitation($invitation);
-        $this->addFlash('success', 'Invitation cancelled.');
 
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
     }
@@ -252,6 +230,16 @@ final class BoardController extends AbstractController
     {
         if ($user->getEmail() !== $invitation->getEmail()) {
             $this->addFlash('error', 'This invitation was sent to a different email address.');
+            return false;
+        }
+
+        return true;
+    }
+
+    private function validateCsrfForInvitation(Request $request, int $invitationId): bool
+    {
+        if (!$this->isCsrfTokenValid('cancel_invitation' . $invitationId, $request->request->get('_token'))) {
+            $this->addFlash('error', 'Invalid CSRF token.');
             return false;
         }
 

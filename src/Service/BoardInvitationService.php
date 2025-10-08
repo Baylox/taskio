@@ -123,6 +123,37 @@ class BoardInvitationService
         $this->entityManager->flush();
     }
 
+    public function cancelInvitationById(int $invitationId, Board $board): void
+    {
+        $invitation = $this->invitationRepository->find($invitationId);
+
+        if (!$invitation || $invitation->getBoard()->getId() !== $board->getId()) {
+            throw new \InvalidArgumentException('Invalid invitation');
+        }
+
+        $this->cancelInvitation($invitation);
+    }
+
+    public function processInvitation(string $email, Board $board, Account $invitedBy): void
+    {
+        // Always return success message to prevent enumeration
+        if (!$this->canInvite($email, $board)) {
+            return;
+        }
+
+        try {
+            $invitation = $this->createInvitation($email, $board, $invitedBy);
+            $this->sendInvitationEmail($invitation);
+        } catch (\Exception $e) {
+            $this->logger->error('Failed to process invitation', [
+                'error' => $e->getMessage(),
+                'board_id' => $board->getId(),
+                'email' => $email
+            ]);
+            // Don't throw - return success to prevent enumeration
+        }
+    }
+
     private function isUserAlreadyMember(Account $user, Board $board): bool
     {
         return $user === $board->getOwner() || $board->getAccounts()->contains($user);
