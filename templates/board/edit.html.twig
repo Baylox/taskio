@@ -43,13 +43,13 @@
 					'attr': {'class': 'mb-6'}
 				}) }}
 				<div class="flex gap-2">
-					{{ form_widget(collaborator_form.collaborator) }}
+					{{ form_widget(collaborator_form.email) }}
 					<button type="submit" class="btn btn-primary">
 						<i class="fa-solid fa-user-plus"></i>
-						Add Collaborator
+						Add
 					</button>
 				</div>
-				{{ form_errors(collaborator_form.collaborator) }}
+				{{ form_errors(collaborator_form.email) }}
 				{{ form_end(collaborator_form) }}
 
 				{# Collaborators list #}

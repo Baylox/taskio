@@ -94,7 +94,26 @@ final class BoardController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $collaborator = $form->get('collaborator')->getData();
+            $email = $form->get('email')->getData();
+            $collaborator = $em->getRepository(Account::class)->findOneBy(['email' => $email]);
+
+            if (!$collaborator) {
+                $this->addFlash('error', 'No user found with this email address.');
+                return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
+            }
+
+            // Validation: Cannot add owner
+            if ($collaborator === $board->getOwner()) {
+                $this->addFlash('error', 'Cannot add the owner as a collaborator.');
+                return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
+            }
+
+            // Validation: Prevent duplicates
+            if ($board->getAccounts()->contains($collaborator)) {
+                $this->addFlash('warning', 'This user is already a collaborator.');
+                return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
+            }
+
             $board->addAccount($collaborator);
             $em->flush();
 
