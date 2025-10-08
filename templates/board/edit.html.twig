@@ -38,24 +38,19 @@
 				<h2 class="text-xl font-semibold text-gray-200 mb-4">Collaborators</h2>
 
 				{# Add collaborator form #}
-				<form method="post" action="{{ path('app_board_add_collaborator', {'id': board.id}) }}" class="mb-6">
-					<input type="hidden" name="_token" value="{{ csrf_token('add_collaborator' ~ board.id) }}">
-					<div class="flex gap-2">
-						<select name="user_id" required class="select select-bordered flex-1">
-							<option value="" disabled selected>Select a user to add...</option>
-							{% for user in all_users %}
-								{# Exclude owner and existing collaborators #}
-								{% if user.id != board.owner.id and user not in board.accounts %}
-									<option value="{{ user.id }}">{{ user.email }} ({{ user.name }} {{ user.lastname }})</option>
-								{% endif %}
-							{% endfor %}
-						</select>
-						<button type="submit" class="btn btn-primary">
-							<i class="fa-solid fa-user-plus"></i>
-							Add Collaborator
-						</button>
-					</div>
-				</form>
+				{{ form_start(collaborator_form, {
+					'action': path('app_board_add_collaborator', {'id': board.id}),
+					'attr': {'class': 'mb-6'}
+				}) }}
+				<div class="flex gap-2">
+					{{ form_widget(collaborator_form.collaborator) }}
+					<button type="submit" class="btn btn-primary">
+						<i class="fa-solid fa-user-plus"></i>
+						Add Collaborator
+					</button>
+				</div>
+				{{ form_errors(collaborator_form.collaborator) }}
+				{{ form_end(collaborator_form) }}
 
 				{# Collaborators list #}
 				<div class="space-y-2">

@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Entity\Board;
 use App\Entity\Account;
 use App\Form\BoardType;
+use App\Form\AddCollaboratorType;
 use App\Repository\BoardRepository;
-use App\Repository\AccountRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,7 +50,7 @@ final class BoardController extends AbstractController
 
     #[IsGranted('BOARD_EDIT', subject: 'board')]
     #[Route('/{id}/edit', name: 'app_board_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Board $board, EntityManagerInterface $entityManager, AccountRepository $accountRepository): Response
+    public function edit(Request $request, Board $board, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(BoardType::class, $board);
         $form->handleRequest($request);
@@ -61,10 +61,16 @@ final class BoardController extends AbstractController
             return $this->redirectToRoute('app_board_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        // Create collaborator form if user is owner
+        $collaboratorForm = null;
+        if ($this->isGranted('BOARD_MANAGE_COLLABORATORS', $board)) {
+            $collaboratorForm = $this->createForm(AddCollaboratorType::class, null, ['board' => $board]);
+        }
+
         return $this->render('board/edit.html.twig', [
             'board' => $board,
             'form' => $form,
-            'all_users' => $accountRepository->findAll(),
+            'collaborator_form' => $collaboratorForm?->createView(),
         ]);
     }
 
@@ -82,77 +88,42 @@ final class BoardController extends AbstractController
 
     #[IsGranted('BOARD_MANAGE_COLLABORATORS', subject: 'board')]
     #[Route('/{id}/collaborator/add', name: 'app_board_add_collaborator', methods: ['POST'])]
-    public function addCollaborator(
-        Request $request,
-        Board $board,
-        AccountRepository $accountRepository,
-        EntityManagerInterface $entityManager
-    ): Response {
-        // CSRF validation
-        if (!$this->isCsrfTokenValid('add_collaborator' . $board->getId(), $request->request->get('_token'))) {
-            $this->addFlash('error', 'Invalid CSRF token.');
-            return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
+    public function addCollaborator(Request $request, Board $board, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(AddCollaboratorType::class, null, ['board' => $board]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $collaborator = $form->get('collaborator')->getData();
+            $board->addAccount($collaborator);
+            $em->flush();
+
+            $this->addFlash('success', sprintf('%s has been added as a collaborator.', $collaborator->getEmail()));
         }
 
-        $userId = $request->request->get('user_id');
-        $collaborator = $accountRepository->find($userId);
-
-        if (!$collaborator) {
-            $this->addFlash('error', 'User not found.');
-            return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
-        }
-
-        // Validation: Cannot add owner as collaborator
-        if ($collaborator->getId() === $board->getOwner()->getId()) {
-            $this->addFlash('error', 'Cannot add the owner as a collaborator.');
-            return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
-        }
-
-        // Validation: Prevent duplicates
-        if ($board->getAccounts()->contains($collaborator)) {
-            $this->addFlash('warning', 'User is already a collaborator.');
-            return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
-        }
-
-        $board->addAccount($collaborator);
-        $entityManager->flush();
-
-        $this->addFlash('success', sprintf('%s has been added as a collaborator.', $collaborator->getEmail()));
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
     }
 
     #[IsGranted('BOARD_MANAGE_COLLABORATORS', subject: 'board')]
     #[Route('/{id}/collaborator/{userId}/remove', name: 'app_board_remove_collaborator', methods: ['POST'])]
-    public function removeCollaborator(
-        Request $request,
-        Board $board,
-        int $userId,
-        AccountRepository $accountRepository,
-        EntityManagerInterface $entityManager
-    ): Response {
-        // CSRF validation
+    public function removeCollaborator(Request $request, Board $board, int $userId, EntityManagerInterface $em): Response
+    {
         if (!$this->isCsrfTokenValid('remove_collaborator' . $userId, $request->request->get('_token'))) {
             $this->addFlash('error', 'Invalid CSRF token.');
             return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
         }
 
-        $collaborator = $accountRepository->find($userId);
+        $collaborator = $em->getRepository(Account::class)->find($userId);
 
-        if (!$collaborator) {
-            $this->addFlash('error', 'User not found.');
-            return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
-        }
-
-        // Validation: Cannot remove owner
-        if ($collaborator->getId() === $board->getOwner()->getId()) {
-            $this->addFlash('error', 'Cannot remove the owner.');
+        if (!$collaborator || $collaborator === $board->getOwner()) {
+            $this->addFlash('error', 'Invalid user.');
             return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
         }
 
         $board->removeAccount($collaborator);
-        $entityManager->flush();
+        $em->flush();
 
-        $this->addFlash('success', sprintf('%s has been removed from collaborators.', $collaborator->getEmail()));
+        $this->addFlash('success', sprintf('%s has been removed.', $collaborator->getEmail()));
         return $this->redirectToRoute('app_board_edit', ['id' => $board->getId()]);
     }
 }
