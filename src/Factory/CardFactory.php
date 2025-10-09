@@ -11,11 +11,6 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
  */
 final class CardFactory extends PersistentProxyObjectFactory
 {
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
-     */
     public function __construct() {}
 
     public static function class(): string
@@ -24,9 +19,8 @@ final class CardFactory extends PersistentProxyObjectFactory
     }
 
     /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
      *
-     * @return array<string, mixed>|callable<string, mixed> Default values for the Card entity.
+     * @return array Default values for the Card entity.
      */
     protected function defaults(): array
     {
@@ -61,7 +55,7 @@ final class CardFactory extends PersistentProxyObjectFactory
 
 
     /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
+     * @return static
      */
     protected function initialize(): static
     {

@@ -11,6 +11,12 @@ framework:
     #esi: true
     #fragments: true
 
+    rate_limiter:
+        add_collaborator:
+            policy: 'sliding_window'
+            limit: 5
+            interval: '1 minute'
+
 
 when@test:
     framework:
