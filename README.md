@@ -107,10 +107,6 @@ taskio/
 └── SECURITY.md          # Security policy
 ```
 
-## Contributing
-
-We welcome contributions from the community! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting pull requests.
-
 ### Development Workflow
 
 1. Fork the repository
