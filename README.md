@@ -281,7 +281,6 @@ taskio/
 ├── tests/                # PHPUnit tests
 │   ├── Unit/            # Unit tests
 │   └── Functional/      # Functional tests
-├── var/                  # Cache, logs
 ├── compose.yaml          # Docker Compose config
 ├── Dockerfile            # Production Docker image
 └── README.md            # This file
@@ -345,28 +344,6 @@ You can also load test data using Foundry factories:
 php bin/console foundry:load-fixtures --env=test
 ```
 
-## Security Features
-
-### Authentication & Authorization
-- Secure password hashing (bcrypt)
-- Email verification for new accounts
-- Password reset functionality
-- Role-based access control (ROLE_USER, ROLE_ADMIN)
-- Fine-grained permissions with Voters
-
-### Protection Mechanisms
-- CSRF token validation on all forms
-- XSS protection via Twig auto-escaping
-- SQL injection prevention via Doctrine ORM
-- Rate limiting on sensitive endpoints
-- Secure session management
-
-### Data Privacy
-- Owner verification for all board operations
-- Collaborator validation (IDOR protection)
-- Email-based invitation system
-- Secure password reset tokens
-
 ## Contributing
 
 Contributions are welcome! Please follow these guidelines:
@@ -385,13 +362,6 @@ Contributions are welcome! Please follow these guidelines:
 - Update documentation as needed
 - Keep commits atomic and well-described
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-### MIT License Summary
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software.
 
 **You are free to:**
 - Use commercially
@@ -402,9 +372,13 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 **Under the condition:**
 - Include the original copyright notice and license in any copy of the software/source
-
 ---
-
-**Built with** by the Taskio Team
+### **Built with** by the Taskio Team
 
 For questions or support, please open an issue on [GitHub](https://github.com/Baylox/taskio/issues).
+
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
