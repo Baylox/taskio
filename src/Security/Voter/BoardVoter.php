@@ -13,11 +13,12 @@ final class BoardVoter extends Voter
     public const VIEW   = 'BOARD_VIEW';
     public const EDIT   = 'BOARD_EDIT';
     public const DELETE = 'BOARD_DELETE';
+    public const MANAGE_COLLABORATORS = 'BOARD_MANAGE_COLLABORATORS';
 
     public function __construct(private readonly BoardRepository $boardRepository) {}
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::VIEW, self::EDIT, self::DELETE], true)
+        return in_array($attribute, [self::VIEW, self::EDIT, self::DELETE, self::MANAGE_COLLABORATORS], true)
             && $subject instanceof Board;
     }
 
@@ -47,6 +48,7 @@ final class BoardVoter extends Voter
             self::VIEW   => $isMember,
             self::EDIT   => $isMember,
             self::DELETE => false,
+            self::MANAGE_COLLABORATORS => false, // Only owner and admins can manage collaborators
         };
     }
 }

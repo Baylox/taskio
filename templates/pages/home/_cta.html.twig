@@ -1,43 +1,61 @@
 {# templates/partials/_cta.html.twig #}
-<section class="relative bg-base-200 py-20 text-center">
-    <div class="max-w-2xl mx-auto px-6">
+<section class="relative bg-gradient-to-br from-[#2b3e5f] via-[#1e2d47] to-[#1a2332] py-32 text-center overflow-hidden">
+    
+    {# Subtle animated gradient overlay #}
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-transparent to-purple-900/30 animate-pulse" style="animation-duration: 6s;"></div>
 
-        {# Small animated decorative icon #}
-        <div class="flex justify-center mb-4">
-            <i class="fas fa-star text-primary text-4xl animate-bounce"></i>
+    <div class="relative max-w-3xl mx-auto px-6 z-10">
+
+        {# Animated star icon with glow - uses iconRotate animation #}
+        <div class="flex justify-center mb-8">
+            <div class="relative inline-block">
+                <i class="fas fa-star text-5xl text-transparent bg-gradient-to-r from-[#00d4ff] to-[#a855f7] bg-clip-text transition-all duration-300"></i>
+                <div class="absolute inset-0 blur-xl bg-gradient-to-r from-[#00d4ff]/30 to-[#a855f7]/30 rounded-full group-hover:opacity-100 opacity-70 transition-opacity"></div>
+            </div>
         </div>
 
-        {# Title #}
-        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-base-content">
+        {# Title - Large and bold like hero #}
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-white leading-tight">
             Ready when you are
         </h2>
 
         {# Main description #}
-        <p class="text-lg text-base-content/80 mb-4">
-            Taskio is built for teams that want to move fast, work smart, and stay aligned.
-            Sign up, create your first board, and discover a new way to work.
+        <p class="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed max-w-2xl mx-auto">
+            Forget clunky and cheap. Unleash your productivity with Taskio!
         </p>
 
-        {# Tagline #}
-        <p class="text-base text-base-content/80 font-semibold mb-8">
-            <span class="text-primary font-bold">Taskio.</span> Your board, your power.
+        {# CTA button - exactly like hero button with enhanced effects #}
+        <div class="flex justify-center mb-8">
+            <a
+                href="#"
+                class="group relative inline-block bg-gradient-to-r from-[#00d4ff] to-[#a855f7] text-white font-semibold text-lg py-4 px-10 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(0,212,255,0.5)] overflow-hidden"
+            >
+                <span class="relative z-10">Now, let's build something great</span>
+                {# Shimmer effect on hover #}
+                <div class="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+            </a>
+        </div>
+
+        {# Tagline with gradient accent #}
+        <p class="text-base md:text-lg text-gray-400">
+            <span class="font-bold bg-gradient-to-r from-[#00d4ff] to-[#a855f7] bg-clip-text text-transparent">Taskio.</span> 
+            <span class="text-gray-300">Your board, your power.</span>
         </p>
 
-        {# CTA button #}
-        <a
-            href="#"
-            class="inline-block bg-primary text-base-100 font-medium py-3 px-6 rounded-lg transition hover:bg-primary/90"
-        >
-            Now, let’s build something great.
-        </a>
-    </div>
-
-    {# Subtle background decoration #}
-    <div class="absolute inset-0 pointer-events-none">
-        <div class="w-64 h-64 bg-primary/10 rounded-full blur-3xl -top-10 -left-10 absolute"></div>
-        <div class="w-64 h-64 bg-secondary/10 rounded-full blur-3xl -bottom-10 -right-10 absolute"></div>
+        {# Trust indicators with animated icons #}
+        <div class="mt-12 flex flex-wrap justify-center items-center gap-6 text-sm text-gray-500">
+            <div class="card group flex items-center gap-2 cursor-default">
+                <i class="fas fa-check-circle text-[#00d4ff] transition-transform duration-300"></i>
+                <span>No credit card required</span>
+            </div>
+            <div class="card group flex items-center gap-2 cursor-default">
+                <i class="fas fa-check-circle text-[#00d4ff] transition-transform duration-300"></i>
+                <span>Free forever</span>
+            </div>
+            <div class="card group flex items-center gap-2 cursor-default">
+                <i class="fas fa-check-circle text-[#00d4ff] transition-transform duration-300"></i>
+                <span>Setup in minutes</span>
+            </div>
+        </div>
     </div>
 </section>
-
-
-

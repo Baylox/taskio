@@ -12,8 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/lane')]
+#[IsGranted('ROLE_USER')]
 final class LaneController extends AbstractController
 {
     // PRG from the dashboard (adding a lane)
@@ -21,6 +23,7 @@ final class LaneController extends AbstractController
     #[Route('/boards/{id}/lanes/new', name: 'lane_new', methods: ['POST', 'GET'])]
     public function new(Board $board, Request $request, EntityManagerInterface $em, LaneRepository $repo): Response
     {
+        $this->denyAccessUnlessGranted('BOARD_EDIT', $board);
 
         $lane = new Lane();
         $lane->setBoard($board);
@@ -60,7 +63,7 @@ final class LaneController extends AbstractController
     public function edit(Request $request, Lane $lane, EntityManagerInterface $em): Response
     {
         $board = $lane->getBoard();
-        //$this->denyAccessUnlessGranted('EDIT', $board);
+        $this->denyAccessUnlessGranted('BOARD_EDIT', $board);
 
         $form = $this->createForm(LaneType::class, $lane);
         $form->handleRequest($request);

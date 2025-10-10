@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Card;
+use App\Enum\CardStatus;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
@@ -10,11 +11,6 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
  */
 final class CardFactory extends PersistentProxyObjectFactory
 {
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
-     */
     public function __construct() {}
 
     public static function class(): string
@@ -23,9 +19,8 @@ final class CardFactory extends PersistentProxyObjectFactory
     }
 
     /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
      *
-     * @return array<string, mixed>|callable<string, mixed> Default values for the Card entity.
+     * @return array Default values for the Card entity.
      */
     protected function defaults(): array
     {
@@ -50,7 +45,7 @@ final class CardFactory extends PersistentProxyObjectFactory
         $title = self::faker()->randomElement(array_keys($titles));
 
         return [
-            'status' => self::faker()->randomElement(['todo', 'in-progress', 'review', 'done', 'blocked']),
+            'status' => self::faker()->randomElement(CardStatus::cases()),
             'title' => $title,
             'description' => self::faker()->optional(0.7)->sentence(). '' .$titles[$title],
             'position' => null,
@@ -60,7 +55,7 @@ final class CardFactory extends PersistentProxyObjectFactory
 
 
     /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
+     * @return static
      */
     protected function initialize(): static
     {

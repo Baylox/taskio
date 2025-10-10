@@ -11,11 +11,6 @@ use App\Factory\AccountFactory;
  */
 final class BoardFactory extends PersistentProxyObjectFactory
 {
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
-     */
     public function __construct() {}
 
     public static function class(): string
@@ -24,9 +19,7 @@ final class BoardFactory extends PersistentProxyObjectFactory
     }
 
     /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @todo add your default values here
+     * @return array Default values for the Board entity.
      */
     protected function defaults(): array
     {
@@ -53,7 +46,7 @@ final class BoardFactory extends PersistentProxyObjectFactory
     }
 
     /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
+     * @return static
      */
     public function initialize(): static
     {

@@ -1,0 +1,73 @@
+{# templates/dashboard/view_card.html.twig #}
+<input type="checkbox" id="card_view_modal_{{ card.id }}" class="modal-toggle" />
+<div class="modal backdrop-blur-sm">
+	<div class="modal-box bg-slate-800 border border-slate-700/50 shadow-2xl max-w-2xl w-full mx-4">
+
+		{# Header with close button #}
+		<div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-700/50">
+			<div class="flex items-center gap-3">
+				<div class="p-2 bg-primary/20 rounded-lg">
+					<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+					</svg>
+				</div>
+				<h3 class="text-xl font-bold text-white">Card Details</h3>
+			</div>
+			<div class="flex items-center gap-2">
+				{# Edit button #}
+				<label for="card_edit_modal_{{ card.id }}" onclick="document.getElementById('card_view_modal_{{ card.id }}').checked = false;" class="btn btn-sm bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border-none">
+					<i class="fa-regular fa-pen-to-square mr-1"></i>
+					Edit
+				</label>
+				{# Close button #}
+				<label for="card_view_modal_{{ card.id }}" class="btn btn-sm btn-ghost text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-full p-2">
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+					</svg>
+				</label>
+			</div>
+		</div>
+
+		{# Card content #}
+		<div class="space-y-6 mb-4">
+			{# Title section #}
+			<div>
+				<h4 class="text-sm font-medium text-slate-400 mb-2 uppercase tracking-wide">Title</h4>
+				<p class="text-lg font-semibold text-white">{{ card.title }}</p>
+			</div>
+
+			{# Description section #}
+			<div>
+				<h4 class="text-sm font-medium text-slate-400 mb-2 uppercase tracking-wide">Description</h4>
+				{% if card.description %}
+					<p class="text-base text-slate-200 leading-relaxed whitespace-pre-wrap">{{ card.description }}</p>
+				{% else %}
+					<p class="text-base text-slate-500 italic">No description provided</p>
+				{% endif %}
+			</div>
+
+			{# Status section #}
+			{% if card.status %}
+				{% set statusBadgeClass = card.status.badgeClass %}
+				{% set statusIcon = card.status.icon %}
+				{% set statusLabel = card.status.label %}
+				<div>
+					<h4 class="text-sm font-medium text-slate-400 mb-2 uppercase tracking-wide">Status</h4>
+					<span class="badge {{ statusBadgeClass }} gap-2 text-sm px-4 py-3">
+						<i class="fa-solid {{ statusIcon }}" aria-hidden="true"></i>
+						{{ statusLabel }}
+					</span>
+				</div>
+			{% endif %}
+
+			{# Lane information #}
+			<div>
+				<h4 class="text-sm font-medium text-slate-400 mb-2 uppercase tracking-wide">Lane</h4>
+				<p class="text-base text-slate-200">{{ card.lane.title }}</p>
+			</div>
+
+		</div>
+
+	</div>
+	<label class="modal-backdrop" for="card_view_modal_{{ card.id }}">Close</label>
+</div>

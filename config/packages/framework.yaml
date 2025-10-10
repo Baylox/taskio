@@ -1,6 +1,7 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
+    error_controller: 'App\Controller\ErrorController::show'
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true
@@ -9,6 +10,12 @@ framework:
         version_strategy: 'Pentatrion\ViteBundle\Asset\ViteAssetVersionStrategy'
     #esi: true
     #fragments: true
+
+    rate_limiter:
+        add_collaborator:
+            policy: 'sliding_window'
+            limit: 5
+            interval: '1 minute'
 
 
 when@test:

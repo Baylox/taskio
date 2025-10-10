@@ -6,19 +6,17 @@ document.addEventListener('submit', function (event) {
     generateCsrfToken(event.target);
 }, true);
 
-// When @hotwired/turbo handles form submissions, send the CSRF token in a header in addition to a cookie
-// The `framework.csrf_protection.check_header` config option needs to be enabled for the header to be checked
-document.addEventListener('turbo:submit-start', function (event) {
-    const h = generateCsrfHeaders(event.detail.formSubmission.formElement);
-    Object.keys(h).map(function (k) {
-        event.detail.formSubmission.fetchRequest.headers[k] = h[k];
-    });
-});
+// Turbo disabled - turbo:* events removed
+// document.addEventListener('turbo:submit-start', function (event) {
+//     const h = generateCsrfHeaders(event.detail.formSubmission.formElement);
+//     Object.keys(h).map(function (k) {
+//         event.detail.formSubmission.fetchRequest.headers[k] = h[k];
+//     });
+// });
 
-// When @hotwired/turbo handles form submissions, remove the CSRF cookie once a form has been submitted
-document.addEventListener('turbo:submit-end', function (event) {
-    removeCsrfToken(event.detail.formSubmission.formElement);
-});
+// document.addEventListener('turbo:submit-end', function (event) {
+//     removeCsrfToken(event.detail.formSubmission.formElement);
+// });
 
 export function generateCsrfToken (formElement) {
     const csrfField = formElement.querySelector('input[data-controller="csrf-protection"], input[name="_csrf_token"]');

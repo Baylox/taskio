@@ -1,13 +1,13 @@
 // Assets/app.js
-import '@hotwired/turbo';
+// import '@hotwired/turbo';
 import { Application } from '@hotwired/stimulus';
 import { registerControllers } from 'stimulus-vite-helpers';
 import './styles/app.css';
 import './styles/styles.scss';
 
 
-// Enable Turbo (replaces traditional redirects)
-Turbo.start()
+// Turbo disabled - forms use standard submissions
+// Turbo.start()
 
 // Stimulus
 const app = Application.start();

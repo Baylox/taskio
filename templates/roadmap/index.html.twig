@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Roadmap{% endblock %}
+
+{% block body %}
+
+{{ component('Hero', {
+  title: 'Our Journey Forward',
+  subtitle: "Discover what we're building to revolutionize your workflow.
+            From powerful AI features to enterprise-grade solutions, we're committed to making Taskio the ultimate productivity platform.",
+  ctaHref: path('app_register'),
+  ctaLabel: "Join Beta Program"
+}) }}
+
+{# Timeline Section #}
+<div id="timeline" class="relative py-32 overflow-hidden">
+    {# Decorative Background Elements #}
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-20 left-20 w-96 h-96 bg-cyan-500/20 rounded-full filter blur-[100px] animate-pulse"></div>
+        <div class="absolute top-40 right-32 w-80 h-80 bg-blue-500/20 rounded-full filter blur-[100px] animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-40 left-40 w-72 h-72 bg-purple-500/20 rounded-full filter blur-[100px] animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-20 right-20 w-96 h-96 bg-pink-500/20 rounded-full filter blur-[100px] animate-pulse" style="animation-delay: 3s;"></div>
+        <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-indigo-500/20 rounded-full filter blur-[100px] animate-pulse" style="animation-delay: 4s;"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+        {# Section Header #}
+        <div class="text-center mb-20">
+            <div class="inline-block mb-4 animate-bounce">
+                <div class="badge badge-lg bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/50 text-cyan-300 font-bold px-6 py-4">
+                    <i class="fa-solid fa-calendar-days mr-2"></i>
+                    2025 - 2026
+                </div>
+            </div>
+            <h2 class="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
+                Our <span class="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">Development Journey</span>
+            </h2>
+            <p class="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto mb-4">
+                Click on any milestone to discover the exciting features we're building
+            </p>
+            <div class="flex items-center justify-center gap-2 text-slate-500">
+                <i class="fa-solid fa-arrow-down animate-bounce"></i>
+                <span class="text-sm">Scroll to explore</span>
+            </div>
+        </div>
+
+        {# Desktop Timeline with Central Line #}
+        <div class="relative">
+            {# Central Timeline Line with Gradient #}
+            <div class="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 transform -translate-x-1/2">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/50 to-transparent"></div>
+                {# Animated glow effect #}
+                <div class="absolute inset-0 bg-gradient-to-b from-cyan-400 via-purple-500 to-yellow-400 blur-sm opacity-50 animate-pulse"></div>
+            </div>
+
+            <div class="space-y-32">
+                {% include 'roadmap/timeline.html.twig' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'roadmap/stats.html.twig' %}
+
+{% include 'roadmap/community.html.twig' %}
+
+{% endblock %}

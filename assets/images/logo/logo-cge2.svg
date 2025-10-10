@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" role="img" aria-labelledby="title desc">
-  <title id="title">CGE — Wordmark (dark)</title>
-  <desc id="desc">Logo corporate CGE inversé pour fond sombre</desc>
-  <rect x="0" y="10" width="6" height="40" rx="3" fill="#8B5CF6"></rect>
-  <text x="18" y="43" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji','Segoe UI Emoji'" font-size="36" font-weight="800" letter-spacing=".02em" fill="#FFFFFF">
-    CGE
-  </text>
-</svg>

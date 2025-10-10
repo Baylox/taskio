@@ -71,4 +71,39 @@ final class AccountTest extends TestCase
         self::assertCount(0, $a->getBoards());
     }
 
+    public function testGetFullName(): void
+    {
+        $account = new Account();
+        $account->setName('John');
+        $account->setLastname('Doe');
+
+        $this->assertEquals('John Doe', $account->getFullName());
+
+        // Test with null values
+        $account2 = new Account();
+        $this->assertEquals('', $account2->getFullName());
+
+        // Test with only name
+        $account3 = new Account();
+        $account3->setName('Jane');
+        $this->assertEquals('Jane', $account3->getFullName());
+    }
+
+    public function testEmailNormalization(): void
+    {
+        $account = new Account();
+        $account->setEmail('  User@Example.COM  ');
+
+        $this->assertEquals('user@example.com', $account->getEmail());
+    }
+
+    public function testSetRoleNormalizesToUppercase(): void
+    {
+        $account = new Account();
+        $account->setRole('role_admin');
+
+        $this->assertEquals('ROLE_ADMIN', $account->getRole());
+        $this->assertContains('ROLE_ADMIN', $account->getRoles());
+    }
+
 }

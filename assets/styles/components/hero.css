@@ -1,0 +1,80 @@
+/* Hero Component Animations */
+@keyframes hero-float {
+    0%, 100% {
+        transform: translateY(0) translateX(0);
+    }
+    25% {
+        transform: translateY(-20px) translateX(10px);
+    }
+    50% {
+        transform: translateY(-10px) translateX(-10px);
+    }
+    75% {
+        transform: translateY(-30px) translateX(5px);
+    }
+}
+
+@keyframes hero-fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes hero-gradient-shift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes hero-pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(6, 182, 212, 0.6);
+    }
+}
+
+.hero-float {
+    animation: hero-float 6s ease-in-out infinite;
+}
+
+.hero-float-delayed {
+    animation: hero-float 6s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+.hero-float-slow {
+    animation: hero-float 8s ease-in-out infinite;
+}
+
+.hero-fade-in-up {
+    animation: hero-fade-in-up 0.8s ease-out forwards;
+}
+
+.hero-gradient-shift {
+    background-size: 200% 200%;
+    animation: hero-gradient-shift 15s ease infinite;
+}
+
+.hero-pulse-glow {
+    animation: hero-pulse-glow 2s ease-in-out infinite;
+}
+
+.hero-delay-200 {
+    animation-delay: 0.2s;
+    opacity: 0;
+}
+
+.hero-delay-400 {
+    animation-delay: 0.4s;
+    opacity: 0;
+}
