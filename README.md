@@ -8,8 +8,6 @@
 
 A professional, full-featured Kanban-style board management system built with Symfony 7.3, designed for team collaboration and project management. Create boards, organize tasks into lanes, manage cards with drag-and-drop functionality, and collaborate with team members in real-time.
 
-![Taskio Screenshot](https://via.placeholder.com/800x400?text=Taskio+Board+View)
-
 ## Features
 
 - **Board Management**: Create, edit, and organize project boards with customizable workflows
