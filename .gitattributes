@@ -1,0 +1,24 @@
+# Linguist configuration - Set PHP as primary language
+*.php linguist-language=PHP
+
+# Mark documentation files as documentation
+*.md linguist-documentation
+
+# Mark vendor and generated files as vendored (excluded from stats)
+vendor/** linguist-vendored
+node_modules/** linguist-vendored
+public/build/** linguist-vendored
+var/** linguist-vendored
+
+# Mark configuration files
+*.json linguist-language=JSON
+*.yaml linguist-language=YAML
+*.yml linguist-language=YAML
+
+# Mark JavaScript and CSS files (Vite/Symfony assets)
+*.js linguist-language=JavaScript
+*.ts linguist-language=TypeScript
+*.css linguist-language=CSS
+
+# Mark template files
+*.twig linguist-language=Twig
