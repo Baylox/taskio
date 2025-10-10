@@ -149,6 +149,14 @@ Security is a top priority for Taskio. If you discover a security vulnerability,
 - Role-based access control
 - Email verification
 
+**Under the condition:**
+- Include the original copyright notice and license in any copy of the software/source
+
+## Support & Community
+
+- **Documentation**: Check the [docs/](docs/) folder
+- **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/Baylox/taskio/issues)
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -159,26 +167,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Distribute
 - Use privately
 - Sublicense
-
-**Under the condition:**
-- Include the original copyright notice and license in any copy of the software/source
-
-Copyright (c) 2025 Baylox (@baylox), Yolrie (@yolrie)
-
-## Support & Community
-
-- **Documentation**: Check the [docs/](docs/) folder
-- **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/Baylox/taskio/issues)
-
-
-## Acknowledgments
-
-Built with by the Taskio Team using modern web technologies and open-source tools.
-
-Special thanks to:
-- Symfony and the PHP community
-- Tailwind CSS and DaisyUI teams
-- All contributors and supporters
 
 ---
 
