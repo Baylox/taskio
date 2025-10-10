@@ -45,72 +45,119 @@ HELP
     {
         $io = new SymfonyStyle($input, $output);
 
-        if (!$io->confirm('This will destroy all data in your database. Continue?', false)) {
-            $io->warning('Operation cancelled.');
+        if (!$this->confirmReset($io, $input)) {
             return Command::SUCCESS;
         }
 
         $io->title('Resetting Development Environment');
 
-        // Drop database
+        $this->resetDatabase($io);
+        $this->runMigrations($io);
+        $this->loadFixtures($io, $input);
+        $this->clearCache($io, $input);
+        $this->buildAssets($io, $input);
+        $this->displaySuccessMessage($io);
+
+        return Command::SUCCESS;
+    }
+
+    private function confirmReset(SymfonyStyle $io, InputInterface $input): bool
+    {
+        if ($input->getOption('force')) {
+            return true;
+        }
+
+        if (!$io->confirm('This will destroy all data in your database. Continue?', false)) {
+            $io->warning('Operation cancelled.');
+            return false;
+        }
+
+        return true;
+    }
+
+    private function resetDatabase(SymfonyStyle $io): void
+    {
         $io->section('Step 1/6: Dropping database...');
         $this->runCommand($io, 'doctrine:database:drop', ['--force' => true, '--if-exists' => true]);
 
-        // Create database
         $io->section('Step 2/6: Creating database...');
         $this->runCommand($io, 'doctrine:database:create');
+    }
 
-        // Run migrations
+    private function runMigrations(SymfonyStyle $io): void
+    {
         $io->section('Step 3/6: Running migrations...');
         $this->runCommand($io, 'doctrine:migrations:migrate', ['--no-interaction' => true]);
+    }
 
-        // Load fixtures
-        if (!$input->getOption('no-fixtures')) {
-            $io->section('Step 4/6: Loading fixtures...');
-            $app = $this->getApplication();
-
-            $ran = false;
-            foreach (['foundry:load-fixtures', 'foundry:load-stories', 'doctrine:fixtures:load'] as $cmd) {
-                if ($app && $app->has($cmd)) {
-                    $args = $cmd === 'doctrine:fixtures:load' ? ['--no-interaction' => true] : [];
-                    $this->runCommand($io, $cmd, $args);
-                    $ran = true;
-                    break;
-                }
-            }
-            if (!$ran) {
-                $io->warning('No fixtures command found (Foundry/Doctrine). Skipping.');
-            }
+    private function loadFixtures(SymfonyStyle $io, InputInterface $input): void
+    {
+        if ($input->getOption('no-fixtures')) {
+            return;
         }
 
-        // Clear cache
-        if (!$input->getOption('no-cache')) {
-            $io->section('Step 5/6: Clearing cache...');
-            $this->runCommand($io, 'cache:clear');
+        $io->section('Step 4/6: Loading fixtures...');
+
+        $fixtureCommand = $this->findAvailableFixtureCommand();
+
+        if ($fixtureCommand === null) {
+            $io->warning('No fixtures command found (Foundry/Doctrine). Skipping.');
+            return;
         }
 
-        // Build assets
-        if (!$input->getOption('no-assets')) {
-            $io->section('Step 6/6: Building frontend assets...');
-            $process = new Process(['npm', 'run', 'build']);
-            $process->setTimeout(300);
-            $process->run(function ($type, $buffer) use ($io) {
-                $io->write($buffer);
-            });
+        $args = $fixtureCommand === 'doctrine:fixtures:load' ? ['--no-interaction' => true] : [];
+        $this->runCommand($io, $fixtureCommand, $args);
+    }
 
-            if (!$process->isSuccessful()) {
-                $io->warning('Asset build failed, but continuing...');
+    private function findAvailableFixtureCommand(): ?string
+    {
+        $commands = ['foundry:load-fixtures', 'foundry:load-stories', 'doctrine:fixtures:load'];
+        $app = $this->getApplication();
+
+        foreach ($commands as $command) {
+            if ($app && $app->has($command)) {
+                return $command;
             }
         }
 
+        return null;
+    }
+
+    private function clearCache(SymfonyStyle $io, InputInterface $input): void
+    {
+        if ($input->getOption('no-cache')) {
+            return;
+        }
+
+        $io->section('Step 5/6: Clearing cache...');
+        $this->runCommand($io, 'cache:clear');
+    }
+
+    private function buildAssets(SymfonyStyle $io, InputInterface $input): void
+    {
+        if ($input->getOption('no-assets')) {
+            return;
+        }
+
+        $io->section('Step 6/6: Building frontend assets...');
+
+        $process = new Process(['npm', 'run', 'build']);
+        $process->setTimeout(300);
+        $process->run(fn($type, $buffer) => $io->write($buffer));
+
+        if (!$process->isSuccessful()) {
+            $io->warning('Asset build failed, but continuing...');
+        }
+    }
+
+    private function displaySuccessMessage(SymfonyStyle $io): void
+    {
         $io->success('Development environment reset successfully!');
         $io->info('Default credentials:');
         $io->listing([
             'Admin: admin@example.com / adminpassword',
             'User: user@example.com / userpassword',
         ]);
-
-        return Command::SUCCESS;
     }
 
     private function runCommand(SymfonyStyle $io, string $commandName, array $arguments = []): int
