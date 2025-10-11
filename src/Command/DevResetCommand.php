@@ -27,10 +27,10 @@ class DevResetCommand extends Command
             ->setHelp(<<<'HELP'
 This command automates the full reset of your development environment:
 
-1. Drops and recreates the database
-2. Runs migrations
-3. Loads fixtures (optional)
-4. Clears cache (optional)
+1. Clears cache (optional)
+2. Drops and recreates the database
+3. Runs migrations
+4. Loads fixtures (optional)
 5. Builds frontend assets (optional)
 
 Usage:
@@ -51,10 +51,10 @@ HELP
 
         $io->title('Resetting Development Environment');
 
+        $this->clearCache($io, $input);
         $this->resetDatabase($io);
         $this->runMigrations($io);
         $this->loadFixtures($io, $input);
-        $this->clearCache($io, $input);
         $this->buildAssets($io, $input);
         $this->displaySuccessMessage($io);
 
@@ -77,16 +77,16 @@ HELP
 
     private function resetDatabase(SymfonyStyle $io): void
     {
-        $io->section('Step 1/6: Dropping database...');
+        $io->section('Step 2/5: Dropping database...');
         $this->runCommand($io, 'doctrine:database:drop', ['--force' => true, '--if-exists' => true]);
 
-        $io->section('Step 2/6: Creating database...');
+        $io->section('Step 2/5: Creating database...');
         $this->runCommand($io, 'doctrine:database:create');
     }
 
     private function runMigrations(SymfonyStyle $io): void
     {
-        $io->section('Step 3/6: Running migrations...');
+        $io->section('Step 3/5: Running migrations...');
         $this->runCommand($io, 'doctrine:migrations:migrate', ['--no-interaction' => true]);
     }
 
@@ -96,7 +96,7 @@ HELP
             return;
         }
 
-        $io->section('Step 4/6: Loading fixtures...');
+        $io->section('Step 4/5: Loading fixtures...');
 
         $fixtureCommand = $this->findAvailableFixtureCommand();
 
@@ -129,7 +129,7 @@ HELP
             return;
         }
 
-        $io->section('Step 5/6: Clearing cache...');
+        $io->section('Step 1/5: Clearing cache...');
         $this->runCommand($io, 'cache:clear');
     }
 
@@ -139,7 +139,7 @@ HELP
             return;
         }
 
-        $io->section('Step 6/6: Building frontend assets...');
+        $io->section('Step 5/5: Building frontend assets...');
 
         $process = new Process(['npm', 'run', 'build']);
         $process->setTimeout(300);
