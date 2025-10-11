@@ -138,7 +138,7 @@ class DevCheckCommand extends Command
 
         // Check PHP version
         $phpVersion = PHP_VERSION;
-        $requiredVersion = '8.1.0';
+        $requiredVersion = '8.3.0';
         $isPhpOk = version_compare($phpVersion, $requiredVersion, '>=');
 
         $this->addCheck('Environment', 'PHP Version', $isPhpOk, "PHP $phpVersion");
