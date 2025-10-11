@@ -41,8 +41,8 @@ open http://localhost:8080
 ```
 
 **Default credentials** (after loading fixtures):
-- Admin: `admin@example.com` / `password`
-- User: `user@example.com` / `password`
+- Admin: `admin@example.com` / `adminpassword`
+- User: `user@example.com` / `userpassword`
 
 ### Using Symfony CLI
 
