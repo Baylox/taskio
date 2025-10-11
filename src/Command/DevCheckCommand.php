@@ -3,6 +3,9 @@
 namespace App\Command;
 
 use Doctrine\DBAL\Connection;
+use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,6 +20,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class DevCheckCommand extends Command
 {
     private array $checks = [];
+    private int $totalChecks = 17; // Nombre total estimé de checks
+    private SymfonyStyle $io;
 
     public function __construct(
         private readonly Connection $connection,
@@ -32,16 +37,16 @@ class DevCheckCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-        $io->title('Development Environment Check');
+        $this->io = new SymfonyStyle($input, $output);
+        $this->io->title('Development Environment Check');
 
-        $this->checkDatabase($io);
-        $this->checkCache($io);
-        $this->checkEnvironment($io);
-        $this->checkDependencies($io);
-        $this->checkPermissions($io);
+        $this->checkDatabase($this->io);
+        $this->checkCache($this->io);
+        $this->checkEnvironment($this->io);
+        $this->checkDependencies($this->io);
+        $this->checkPermissions($this->io);
 
-        $this->displaySummary($io);
+        $this->displaySummary($this->io);
 
         return $this->hasErrors() ? Command::FAILURE : Command::SUCCESS;
     }
@@ -69,7 +74,7 @@ class DevCheckCommand extends Command
             // Check if migrations are up to date
             $this->checkMigrations($io);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->addCheck('Database', 'Connection', false, $e->getMessage());
         }
     }
@@ -225,6 +230,21 @@ class DevCheckCommand extends Command
             'success' => $success,
             'message' => $message,
         ];
+
+        // Afficher la progression en temps réel
+        $this->displayProgress();
+    }
+
+    private function displayProgress(): void
+    {
+        $currentCount = count($this->checks);
+        $percentage = round(($currentCount / $this->totalChecks) * 100);
+
+        $this->io->write("\r<comment>Progress:</comment> {$percentage}% ({$currentCount}/{$this->totalChecks})", false);
+
+        if ($currentCount === $this->totalChecks) {
+            $this->io->newLine();
+        }
     }
 
     private function displaySummary(SymfonyStyle $io): void
@@ -250,10 +270,13 @@ class DevCheckCommand extends Command
         $failureCount = $totalChecks - $successCount;
 
         $io->newLine();
+
+        $percentage = $totalChecks > 0 ? round(($successCount / $totalChecks) * 100, 1) : 0;
+
         if ($failureCount === 0) {
-            $io->success("All checks passed! ($successCount/$totalChecks)");
+            $io->success("All checks passed! {$percentage}% ({$successCount}/{$totalChecks})");
         } else {
-            $io->warning("$failureCount check(s) failed. ($successCount/$totalChecks passed)");
+            $io->warning("{$failureCount} check(s) failed. {$percentage}% passed ({$successCount}/{$totalChecks})");
         }
     }
 
@@ -271,8 +294,8 @@ class DevCheckCommand extends Command
         }
 
         try {
-            $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS)
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS)
             );
 
             foreach ($iterator as $file) {
@@ -280,7 +303,7 @@ class DevCheckCommand extends Command
                     $size += $file->getSize();
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Ignore errors reading directory
         }
 
