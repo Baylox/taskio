@@ -86,63 +86,85 @@ class DevTestCommand extends Command
 
     private function buildTestCommand(InputInterface $input, string $projectDir): string
     {
+        $command = $this->getBaseCommand($input, $projectDir);
+        $command .= $this->buildTestPathOption($input);
+        $command .= $this->buildFilterOptions($input);
+        $command .= $this->buildCoverageOptions($input);
+        $command .= $this->buildExecutionOptions($input);
+
+        return $command;
+    }
+
+    private function getBaseCommand(InputInterface $input, string $projectDir): string
+    {
         $useParallel = $input->getOption('parallel');
         $isWindows = DIRECTORY_SEPARATOR === '\\';
 
-        // Check if we should use paratest or phpunit
         if ($useParallel && $this->isParatestAvailable($projectDir)) {
-            $command = $isWindows ? 'vendor\\bin\\paratest.bat' : 'vendor/bin/paratest';
-        } else {
-            $command = $isWindows ? 'vendor\\bin\\phpunit.bat' : 'vendor/bin/phpunit';
-
-            if ($useParallel) {
-                // Fallback message will be shown later
-            }
+            return $isWindows ? 'vendor\\bin\\paratest.bat' : 'vendor/bin/paratest';
         }
 
-        // Add filter by type
-        if ($type = $input->getOption('type')) {
-            $testPath = $this->getTestPathByType($type);
-            if ($testPath) {
-                $command .= ' ' . $testPath;
-            }
+        return $isWindows ? 'vendor\\bin\\phpunit.bat' : 'vendor/bin/phpunit';
+    }
+
+    private function buildTestPathOption(InputInterface $input): string
+    {
+        $type = $input->getOption('type');
+        if (!$type) {
+            return '';
         }
 
-        // Add filter by name pattern
+        $testPath = $this->getTestPathByType($type);
+        return $testPath ? ' ' . $testPath : '';
+    }
+
+    private function buildFilterOptions(InputInterface $input): string
+    {
+        $options = '';
+
         if ($filter = $input->getOption('filter')) {
-            $command .= ' --filter=' . escapeshellarg($filter);
+            $options .= ' --filter=' . escapeshellarg($filter);
         }
 
-        // Add group filter
         if ($group = $input->getOption('group')) {
-            $command .= ' --group=' . escapeshellarg($group);
+            $options .= ' --group=' . escapeshellarg($group);
         }
 
-        // Add coverage options
+        return $options;
+    }
+
+    private function buildCoverageOptions(InputInterface $input): string
+    {
+        $options = '';
+
         if ($input->getOption('coverage')) {
-            $command .= ' --coverage-html=coverage';
+            $options .= ' --coverage-html=coverage';
         }
 
         if ($input->getOption('coverage-text')) {
-            $command .= ' --coverage-text';
+            $options .= ' --coverage-text';
         }
 
-        // Add stop on failure
+        return $options;
+    }
+
+    private function buildExecutionOptions(InputInterface $input): string
+    {
+        $options = '';
+
         if ($input->getOption('stop-on-failure')) {
-            $command .= ' --stop-on-failure';
+            $options .= ' --stop-on-failure';
         }
 
-        // Add testdox format
         if ($input->getOption('testdox')) {
-            $command .= ' --testdox';
+            $options .= ' --testdox';
         }
 
-        // Add verbose if specified (using Symfony's built-in verbose option)
         if ($input->getOption('verbose')) {
-            $command .= ' --verbose';
+            $options .= ' --verbose';
         }
 
-        return $command;
+        return $options;
     }
 
     private function getTestPathByType(?string $type): ?string
@@ -172,49 +194,67 @@ class DevTestCommand extends Command
 
     private function getConfigSummary(InputInterface $input): array
     {
-        $summary = [];
+        return array_filter([
+            $this->getTestTypeSummary($input),
+            $this->getFilterSummary($input),
+            $this->getGroupSummary($input),
+            $this->getCoverageSummary($input),
+            $this->getCoverageTextSummary($input),
+            $this->getExecutionModeSummary($input),
+            $this->getStopOnFailureSummary($input),
+            $this->getTestDoxSummary($input),
+        ]);
+    }
 
-        if ($type = $input->getOption('type')) {
-            $summary[] = "Test type: $type";
-        } else {
-            $summary[] = "Test type: all";
+    private function getTestTypeSummary(InputInterface $input): string
+    {
+        $type = $input->getOption('type');
+        return "Test type: " . ($type ?: 'all');
+    }
+
+    private function getFilterSummary(InputInterface $input): ?string
+    {
+        $filter = $input->getOption('filter');
+        return $filter ? "Filter: $filter" : null;
+    }
+
+    private function getGroupSummary(InputInterface $input): ?string
+    {
+        $group = $input->getOption('group');
+        return $group ? "Group: $group" : null;
+    }
+
+    private function getCoverageSummary(InputInterface $input): ?string
+    {
+        return $input->getOption('coverage') ? "Coverage: HTML report enabled" : null;
+    }
+
+    private function getCoverageTextSummary(InputInterface $input): ?string
+    {
+        return $input->getOption('coverage-text') ? "Coverage: Text output enabled" : null;
+    }
+
+    private function getExecutionModeSummary(InputInterface $input): string
+    {
+        if (!$input->getOption('parallel')) {
+            return "Execution: Sequential";
         }
 
-        if ($filter = $input->getOption('filter')) {
-            $summary[] = "Filter: $filter";
+        $projectDir = $this->params->get('kernel.project_dir');
+        if ($this->isParatestAvailable($projectDir)) {
+            return "Execution: Parallel (using paratest)";
         }
 
-        if ($group = $input->getOption('group')) {
-            $summary[] = "Group: $group";
-        }
+        return "Execution: Sequential (paratest not installed)";
+    }
 
-        if ($input->getOption('coverage')) {
-            $summary[] = "Coverage: HTML report enabled";
-        }
+    private function getStopOnFailureSummary(InputInterface $input): ?string
+    {
+        return $input->getOption('stop-on-failure') ? "Stop on failure: enabled" : null;
+    }
 
-        if ($input->getOption('coverage-text')) {
-            $summary[] = "Coverage: Text output enabled";
-        }
-
-        if ($input->getOption('parallel')) {
-            $projectDir = $this->params->get('kernel.project_dir');
-            if ($this->isParatestAvailable($projectDir)) {
-                $summary[] = "Execution: Parallel (using paratest)";
-            } else {
-                $summary[] = "Execution: Sequential (paratest not installed)";
-            }
-        } else {
-            $summary[] = "Execution: Sequential";
-        }
-
-        if ($input->getOption('stop-on-failure')) {
-            $summary[] = "Stop on failure: enabled";
-        }
-
-        if ($input->getOption('testdox')) {
-            $summary[] = "Output format: TestDox";
-        }
-
-        return $summary;
+    private function getTestDoxSummary(InputInterface $input): ?string
+    {
+        return $input->getOption('testdox') ? "Output format: TestDox" : null;
     }
 }
