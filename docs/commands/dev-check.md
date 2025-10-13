@@ -52,7 +52,3 @@ chmod -R 777 var/cache var/log  # Linux/Mac
 composer install
 npm install
 ```
-
----
-
-[← Commandes](README.md) | [dev:reset →](dev-reset.md)

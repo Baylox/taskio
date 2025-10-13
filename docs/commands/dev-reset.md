@@ -59,6 +59,3 @@ php bin/console doctrine:migrations:migrate
 # (skip fixtures)
 ```
 
----
-
-[← dev:check](dev-check.md) | [Commandes](README.md) | [dev:test →](dev-test.md)

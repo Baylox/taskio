@@ -92,6 +92,3 @@ composer require --dev brianium/paratest
 pecl install pcov
 ```
 
----
-
-[← dev:reset](dev-reset.md) | [Commandes](README.md)
