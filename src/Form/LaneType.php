@@ -12,7 +12,9 @@ class LaneType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
+            // empty_data '' keeps the non-nullable DTO property satisfied on
+            // empty submissions (NotBlank then reports the error).
+            ->add('title', null, ['empty_data' => ''])
         ;
     }
 

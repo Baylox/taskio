@@ -17,11 +17,15 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('name', null, [
                 'label' => 'First Name',
+                'empty_data' => '',
             ])
             ->add('lastname', null, [
                 'label' => 'Last Name',
+                'empty_data' => '',
             ])
-            ->add('email')
+            ->add('email', null, [
+                'empty_data' => '',
+            ])
             ->add('agreeTerms', CheckboxType::class)
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,

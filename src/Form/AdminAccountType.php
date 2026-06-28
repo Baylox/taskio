@@ -17,6 +17,7 @@ class AdminAccountType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
+                'empty_data' => '',
                 'attr' => [
                     'autocomplete' => 'email',
                     'inputmode' => 'email', // Mobile-friendly keyboard
@@ -24,11 +25,13 @@ class AdminAccountType extends AbstractType
             ])
             ->add('name', TextType::class, [
                 'required' => true,
+                'empty_data' => '',
                 'label'    => 'First name',
                 'attr'     => ['autocomplete' => 'given-name'],
             ])
             ->add('lastname', TextType::class, [
                 'required' => true,
+                'empty_data' => '',
                 'label'    => 'Last name',
                 'attr'     => ['autocomplete' => 'family-name'],
             ])

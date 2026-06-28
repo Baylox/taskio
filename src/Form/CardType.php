@@ -24,6 +24,7 @@ class CardType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
+                'empty_data' => '',
                 'label'    => 'Card title',
                 'attr'     => [
                     'placeholder' => 'Enter a title',

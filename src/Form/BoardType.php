@@ -15,6 +15,9 @@ class BoardType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
+                // Map an empty submission to '' (not null) so the non-nullable
+                // DTO property is satisfied and NotBlank reports it cleanly.
+                'empty_data' => '',
                 'label'    => 'Board title',
                 'attr'     => [
                     'placeholder' => 'Enter a title',

@@ -16,6 +16,7 @@ class AddCollaboratorType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'required' => true,
+                'empty_data' => '',
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Enter user email address...',

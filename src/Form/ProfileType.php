@@ -16,9 +16,11 @@ class ProfileType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'empty_data' => '',
                 'attr' => ['autocomplete' => 'given-name'],
             ])
             ->add('lastname', TextType::class, [
+                'empty_data' => '',
                 'attr' => ['autocomplete' => 'family-name'],
             ])
             ->add('plainPassword', RepeatedType::class, [
