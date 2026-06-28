@@ -5,7 +5,7 @@
 > depuis un contrôleur via `EntityManager`, ni via un formulaire mappé sur une entité Doctrine.
 
 - **Stack** : Symfony 7.3, PHP 8.2+, Doctrine ORM 3.5, MariaDB.
-- **Branche de travail** : `claude/repo-architecture-refactor-9yljts`.
+- **Branche de travail** : `refactor/dto-service-repository`.
 
 ---
 
