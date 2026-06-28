@@ -7,7 +7,7 @@ use App\Repository\CardRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\DBAL\LockMode;
 
-final class CardMover
+class CardMover
 {
     public function __construct(
         private EntityManagerInterface $em,
