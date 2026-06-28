@@ -199,7 +199,7 @@ HTTP Request
 - [x] Aucun `data_class` pointant vers une entité dans `src/Form/` (les 10 formulaires mappent un DTO).
 - [x] Chaque mutation passe par `Service → Repository::save()/remove()`.
 - [x] DTO validés pour chaque flux d'entrée.
-- [x] Tests unitaires (services + DTO) au vert.
+- [x] Tests unitaires (services + DTO + formulaires) **et fonctionnels** (chaîne HTTP complète) au vert — 131 tests.
 - [x] `docs/ARCHITECTURE.md` mis à jour.
 
 ## 10. État de la mise en œuvre (implémenté)
