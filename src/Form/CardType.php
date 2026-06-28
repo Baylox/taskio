@@ -2,8 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Card;
-use App\Entity\Lane;
+use App\Dto\Card\CardInput;
 use App\Enum\CardStatus;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -33,11 +32,6 @@ class CardType extends AbstractType
                 'label_attr' => [
                     'class' => 'label-text text-base-content font-medium'
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'The title field cannot be empty.'
-                    ])
-                ]
             ])
             ->add('description', TextareaType::class, [
                 'label'    => 'Description',
@@ -66,8 +60,9 @@ class CardType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        // The form maps to the DTO, not to the Doctrine entity.
         $resolver->setDefaults([
-            'data_class' => Card::class,
+            'data_class' => CardInput::class,
         ]);
     }
 }

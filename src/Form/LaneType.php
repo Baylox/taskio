@@ -2,9 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Board;
-use App\Entity\Lane;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Dto\Lane\LaneInput;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,8 +18,9 @@ class LaneType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        // The form maps to the DTO, not to the Doctrine entity.
         $resolver->setDefaults([
-            'data_class' => Lane::class,
+            'data_class' => LaneInput::class,
         ]);
     }
 }
