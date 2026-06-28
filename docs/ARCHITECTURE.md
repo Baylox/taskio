@@ -158,6 +158,62 @@ taskio/
 
 ## Design Patterns
 
+### Layered write flow: DTO → Service → Repository (mandatory)
+
+Every write in the application flows through the same layered chain. Controllers
+are thin: they handle routing, security, forms, flash messages and redirects, and
+**never** touch `EntityManager` directly.
+
+```
+HTTP Request
+   │  Form maps to a dedicated Input DTO (data_class = XxxInput), not the entity
+   ▼
+Controller ── $dto ──► Service ── entity ──► Repository::save()/remove() ──► Doctrine
+ (thin)              (business logic,        (single persistence
+                      owns the transaction)   entry point)
+```
+
+Rules enforced across `src/`:
+
+1. Each form is mapped to a DTO (`App\Dto\...`), never to a Doctrine entity.
+2. No `EntityManagerInterface` / `persist` / `flush` / `remove` in `src/Controller/`.
+3. Persistence goes exclusively through a Repository `save()` / `remove()` method.
+4. Every mutation is orchestrated by a Service (`App\Service\...`).
+5. Input validation (`Assert\*`) lives on the DTO; entities keep only integrity
+   guards (`UniqueEntity`, column constraints) as defense in depth.
+
+> **Note on naming:** the user entity is `App\Entity\Account` (it implements
+> `UserInterface`). Some legacy diagrams below still say "User" — read it as `Account`.
+
+Example for the Board domain:
+
+```php
+// Controller (thin)
+public function new(Request $request, BoardService $boardService): Response
+{
+    $input = new BoardInput();
+    $form = $this->createForm(BoardType::class, $input);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $boardService->create($input, $this->getUser());
+        return $this->redirectToRoute('app_board_index');
+    }
+    return $this->render('board/new.html.twig', ['form' => $form]);
+}
+
+// Service (business logic + transaction)
+public function create(BoardInput $input, Account $owner): Board
+{
+    $board = (new Board())->setTitle($input->title)->setOwner($owner);
+    $this->boards->save($board);          // Repository owns persistence
+    return $board;
+}
+```
+
+The AJAX `card_move` endpoint receives its DTO straight from the JSON body via
+`#[MapRequestPayload] CardMoveInput`, then delegates to `CardService`.
+
 ### Repository Pattern
 
 **Purpose**: Separate data access logic from business logic.

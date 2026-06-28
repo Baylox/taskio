@@ -195,9 +195,29 @@ HTTP Request
 
 ## 9. Definition of Done
 
-- [ ] Aucun `persist/flush/remove` ni `EntityManagerInterface` dans `src/Controller/`.
-- [ ] Aucun `data_class` pointant vers une entité dans `src/Form/`.
-- [ ] Chaque mutation passe par `Service → Repository::save()/remove()`.
-- [ ] DTO validés pour chaque flux d'entrée.
-- [ ] Tests unitaires (services/mappers/DTO) + fonctionnels au vert.
-- [ ] `docs/ARCHITECTURE.md` mis à jour.
+- [x] Aucun `persist/flush/remove` ni `EntityManagerInterface` dans `src/Controller/`.
+- [x] Aucun `data_class` pointant vers une entité dans `src/Form/` (les 10 formulaires mappent un DTO).
+- [x] Chaque mutation passe par `Service → Repository::save()/remove()`.
+- [x] DTO validés pour chaque flux d'entrée.
+- [x] Tests unitaires (services + DTO) au vert.
+- [x] `docs/ARCHITECTURE.md` mis à jour.
+
+## 10. État de la mise en œuvre (implémenté)
+
+Tous les domaines sont migrés vers la chaîne `Controller → DTO → Service → Repository` :
+
+| Domaine | DTO(s) | Service | Repository (save/remove) |
+|--------|--------|---------|--------------------------|
+| Board | `Board\BoardInput` | `Service\Board\BoardService` | `BoardRepository` |
+| Lane | `Lane\LaneInput` | `Service\Lane\LaneService` | `LaneRepository` |
+| Card | `Card\CardInput`, `Card\CardMoveInput` | `Service\Card\CardService` (+ `CardMover`) | `CardRepository` |
+| Account (profil) | `Account\ProfileInput` | `Service\Account\AccountService` | `AccountRepository` |
+| Account (admin) | `Account\AdminAccountInput` | `Service\Account\AccountService` | `AccountRepository` |
+| Registration | `Account\RegistrationInput` | `Service\Account\RegistrationService` | `AccountRepository` |
+| Reset password | `Account\PasswordResetRequestInput`, `Account\NewPasswordInput` | `Service\Account\AccountService` | `AccountRepository` |
+| Invitation / collab. | `Board\InvitationInput` | `Service\BoardInvitationService` | `BoardInvitationRepository`, `AccountRepository` |
+| Contact | `ContactData` | `Service\ContactMailer` | n/a (mail) |
+
+Le endpoint AJAX `card_move` reçoit son DTO via `#[MapRequestPayload] CardMoveInput`.
+La validation a été déplacée des entités/formulaires vers les DTO (les contraintes
+d'intégrité et `UniqueEntity` restent côté entité comme défense en profondeur).
